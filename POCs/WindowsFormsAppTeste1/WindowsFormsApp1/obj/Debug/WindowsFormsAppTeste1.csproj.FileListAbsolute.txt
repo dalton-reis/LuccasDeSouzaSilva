@@ -1,0 +1,10 @@
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto\tcc2_project\WindowsFormsAppTeste1\WindowsFormsApp1\bin\Debug\WindowsFormsAppTeste1.exe.config
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto\tcc2_project\WindowsFormsAppTeste1\WindowsFormsApp1\bin\Debug\WindowsFormsAppTeste1.exe
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto\tcc2_project\WindowsFormsAppTeste1\WindowsFormsApp1\bin\Debug\WindowsFormsAppTeste1.pdb
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto\tcc2_project\WindowsFormsAppTeste1\WindowsFormsApp1\obj\Debug\WindowsFormsAppTeste1.csprojResolveAssemblyReference.cache
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto\tcc2_project\WindowsFormsAppTeste1\WindowsFormsApp1\obj\Debug\WindowsFormsAppTeste1.TestForm.resources
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto\tcc2_project\WindowsFormsAppTeste1\WindowsFormsApp1\obj\Debug\WindowsFormsAppTeste1.Properties.Resources.resources
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto\tcc2_project\WindowsFormsAppTeste1\WindowsFormsApp1\obj\Debug\WindowsFormsAppTeste1.csproj.GenerateResource.Cache
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto\tcc2_project\WindowsFormsAppTeste1\WindowsFormsApp1\obj\Debug\WindowsFormsAppTeste1.csproj.CoreCompileInputs.cache
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto\tcc2_project\WindowsFormsAppTeste1\WindowsFormsApp1\obj\Debug\WindowsFormsAppTeste1.exe
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto\tcc2_project\WindowsFormsAppTeste1\WindowsFormsApp1\obj\Debug\WindowsFormsAppTeste1.pdb

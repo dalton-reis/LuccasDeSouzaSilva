@@ -1,0 +1,25 @@
+d:\documents\visual studio 2012\Projects\thinkgear_testapp_csharp\thinkgear_testapp_csharp\bin\x86\Debug\thinkgear_testapp_csharp.exe.config
+d:\documents\visual studio 2012\Projects\thinkgear_testapp_csharp\thinkgear_testapp_csharp\bin\x86\Debug\thinkgear_testapp_csharp.exe
+d:\documents\visual studio 2012\Projects\thinkgear_testapp_csharp\thinkgear_testapp_csharp\bin\x86\Debug\thinkgear_testapp_csharp.pdb
+d:\documents\visual studio 2012\Projects\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\x86\Debug\thinkgear_testapp_csharp.exe
+d:\documents\visual studio 2012\Projects\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\x86\Debug\thinkgear_testapp_csharp.pdb
+E:\MDT\20150709\comm release\Stream SDK for PC V1.2.0\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\bin\x86\Debug\thinkgear_testapp_csharp.exe.config
+E:\MDT\20150709\comm release\Stream SDK for PC V1.2.0\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\x86\Debug\thinkgear_testapp_csharp.exe
+E:\MDT\20150709\comm release\Stream SDK for PC V1.2.0\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\x86\Debug\thinkgear_testapp_csharp.pdb
+E:\MDT\20150709\comm release\Stream SDK for PC V1.2.0\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\bin\x86\Debug\thinkgear_testapp_csharp.exe
+E:\MDT\20150709\comm release\Stream SDK for PC V1.2.0\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\bin\x86\Debug\thinkgear_testapp_csharp.pdb
+E:\MDT\20150709\comm release\Stream SDK for PC V1.2.0\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\x86\Debug\thinkgear_testapp_csharp.csprojResolveAssemblyReference.cache
+C:\Users\Luccas\Desktop\TCC\Windows-Developer-Tools-3.2\Windows Developer Tools 3.2\Stream SDK for PC\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\bin\x86\Debug\thinkgear_testapp_csharp.exe.config
+C:\Users\Luccas\Desktop\TCC\Windows-Developer-Tools-3.2\Windows Developer Tools 3.2\Stream SDK for PC\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\bin\x86\Debug\thinkgear_testapp_csharp.exe
+C:\Users\Luccas\Desktop\TCC\Windows-Developer-Tools-3.2\Windows Developer Tools 3.2\Stream SDK for PC\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\bin\x86\Debug\thinkgear_testapp_csharp.pdb
+C:\Users\Luccas\Desktop\TCC\Windows-Developer-Tools-3.2\Windows Developer Tools 3.2\Stream SDK for PC\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\x86\Debug\thinkgear_testapp_csharp.csprojResolveAssemblyReference.cache
+C:\Users\Luccas\Desktop\TCC\Windows-Developer-Tools-3.2\Windows Developer Tools 3.2\Stream SDK for PC\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\x86\Debug\thinkgear_testapp_csharp.csproj.CoreCompileInputs.cache
+C:\Users\Luccas\Desktop\TCC\Windows-Developer-Tools-3.2\Windows Developer Tools 3.2\Stream SDK for PC\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\x86\Debug\thinkgear_testapp_csharp.exe
+C:\Users\Luccas\Desktop\TCC\Windows-Developer-Tools-3.2\Windows Developer Tools 3.2\Stream SDK for PC\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\x86\Debug\thinkgear_testapp_csharp.pdb
+C:\Users\Luccas\Desktop\TCC\Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\bin\x86\Debug\thinkgear_testapp_csharp.exe.config
+C:\Users\Luccas\Desktop\TCC\Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\bin\x86\Debug\thinkgear_testapp_csharp.exe
+C:\Users\Luccas\Desktop\TCC\Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\bin\x86\Debug\thinkgear_testapp_csharp.pdb
+C:\Users\Luccas\Desktop\TCC\Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\x86\Debug\thinkgear_testapp_csharp.csprojResolveAssemblyReference.cache
+C:\Users\Luccas\Desktop\TCC\Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\x86\Debug\thinkgear_testapp_csharp.csproj.CoreCompileInputs.cache
+C:\Users\Luccas\Desktop\TCC\Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\x86\Debug\thinkgear_testapp_csharp.exe
+C:\Users\Luccas\Desktop\TCC\Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\x86\Debug\thinkgear_testapp_csharp.pdb

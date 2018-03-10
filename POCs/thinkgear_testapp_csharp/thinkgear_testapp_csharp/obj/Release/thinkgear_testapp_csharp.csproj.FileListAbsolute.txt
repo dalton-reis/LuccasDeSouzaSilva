@@ -1,0 +1,6 @@
+C:\Users\Luccas\Desktop\TCC\Windows-Developer-Tools-3.2\Windows Developer Tools 3.2\Stream SDK for PC\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\bin\Release\thinkgear_testapp_csharp.exe.config
+C:\Users\Luccas\Desktop\TCC\Windows-Developer-Tools-3.2\Windows Developer Tools 3.2\Stream SDK for PC\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\bin\Release\thinkgear_testapp_csharp.exe
+C:\Users\Luccas\Desktop\TCC\Windows-Developer-Tools-3.2\Windows Developer Tools 3.2\Stream SDK for PC\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\bin\Release\thinkgear_testapp_csharp.pdb
+C:\Users\Luccas\Desktop\TCC\Windows-Developer-Tools-3.2\Windows Developer Tools 3.2\Stream SDK for PC\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\Release\thinkgear_testapp_csharp.csproj.CoreCompileInputs.cache
+C:\Users\Luccas\Desktop\TCC\Windows-Developer-Tools-3.2\Windows Developer Tools 3.2\Stream SDK for PC\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\Release\thinkgear_testapp_csharp.exe
+C:\Users\Luccas\Desktop\TCC\Windows-Developer-Tools-3.2\Windows Developer Tools 3.2\Stream SDK for PC\Sample Project\win32\thinkgear_testapp_csharp\thinkgear_testapp_csharp\obj\Release\thinkgear_testapp_csharp.pdb
