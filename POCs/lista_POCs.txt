@@ -1,0 +1,25 @@
+POCs:
+Conexão MindWave
+[1]-> Conexão e pega dados MindWave V
+[1.1]--> Concentração/Atenção V 
+[1.2]--> Meditação V
+[1.3]--> Piscar
+[1.4]--> Dados brutos
+[2]-> Graficos pelos dados captados
+
+Cadastro Pessoa
+[1]-> Preencher cadastro e salva em arquivo V [POC_Cadastro]
+[2]-> Abre arquivo arquivo e preenche cadastro V [POC_Cadastro]
+
+Login e senha
+[1]-> Salva/Lê de arquivo V [POC_Cadastro]
+[2]-> Banco de dados
+
+Tela dupla
+[1]-> Interação entre duas telas V
+[2]-> Ação em ambas as telas ao mesmo tempo
+
+Visual
+[1]-> Projeto WindowsForms [POC_Cadastro]
+[2]-> Projeto WPF V
+[3]-> Api 3D

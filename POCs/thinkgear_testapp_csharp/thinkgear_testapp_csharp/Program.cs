@@ -11,10 +11,11 @@ namespace thinkgear_testapp_csharp
     {
         static void Main(string[] args)
         {
-       
+            //string[] ports = SerialPort.GetPortNames();
             NativeThinkgear thinkgear = new NativeThinkgear();
 
             /* Print driver version number */
+            Console.WriteLine("Aqui?");
             Console.WriteLine("Version: " + NativeThinkgear.TG_GetVersion());
 
             /* Get a connection ID handle to ThinkGear */
