@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C7BC6E80-FF52-477E-AE6C-65089B652866}</ProjectGuid>
+    <ProjectGuid>{1BAEAB4B-57B9-475B-98D0-C675DCEB6DCB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>POC_TelaDupla</RootNamespace>
-    <AssemblyName>POC_TelaDupla</AssemblyName>
+    <RootNamespace>ProjetoTCC</RootNamespace>
+    <AssemblyName>ProjetoTCC</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,20 +45,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TelaMain.cs">
+    <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TelaMain.Designer.cs">
-      <DependentUpon>TelaMain.cs</DependentUpon>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Paciente.cs" />
+    <Compile Include="PainelPaciente .cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PainelPadrao.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TelaSide.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TelaSide.Designer.cs">
-      <DependentUpon>TelaSide.cs</DependentUpon>
-    </Compile>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -71,14 +72,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="TelaMain.resx">
-      <DependentUpon>TelaMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TelaSide.resx">
-      <DependentUpon>TelaSide.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="OpenTK.dll.config" />
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

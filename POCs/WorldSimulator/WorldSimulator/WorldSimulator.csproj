@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C7BC6E80-FF52-477E-AE6C-65089B652866}</ProjectGuid>
+    <ProjectGuid>{6FEC6186-339D-438A-A0D5-057BEDEA4733}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>POC_TelaDupla</RootNamespace>
-    <AssemblyName>POC_TelaDupla</AssemblyName>
+    <RootNamespace>WorldSimulator</RootNamespace>
+    <AssemblyName>WorldSimulator</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,11 +32,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DirectShowLib-2005">
+      <HintPath>..\..\..\..\DirectShowLibV2-1\lib\DirectShowLib-2005.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics, Version=4.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.4.4.0\lib\net461\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,20 +57,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TelaMain.cs">
+    <Compile Include="Camera.cs" />
+    <Compile Include="Capture.cs" />
+    <Compile Include="NativeThinkgear.cs" />
+    <Compile Include="TextCharacters.cs" />
+    <Compile Include="NeuroData.cs" />
+    <Compile Include="NeuroController.cs" />
+    <Compile Include="Sierpinski.cs" />
+    <Compile Include="Tetra.cs" />
+    <Compile Include="ColorCube.cs" />
+    <Compile Include="Cube.cs" />
+    <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TelaMain.Designer.cs">
-      <DependentUpon>TelaMain.cs</DependentUpon>
+    <Compile Include="MainWindow.Designer.cs">
+      <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Mundo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TelaSide.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TelaSide.Designer.cs">
-      <DependentUpon>TelaSide.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Volume.cs" />
+    <EmbeddedResource Include="MainWindow.resx">
+      <DependentUpon>MainWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -70,13 +88,8 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="TelaMain.resx">
-      <DependentUpon>TelaMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TelaSide.resx">
-      <DependentUpon>TelaSide.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -91,6 +104,31 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\shaders\fs.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\shaders\vs.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="resources\icons\connected.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\icons\connecting_1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\icons\connecting_2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\icons\connecting_3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\icons\nosignal.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
