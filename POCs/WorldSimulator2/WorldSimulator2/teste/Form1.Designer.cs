@@ -1,4 +1,4 @@
-﻿namespace ProjetoTCC
+﻿namespace WorldSimulator
 {
     partial class Form1
     {
@@ -28,16 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.pnlGraf = new System.Windows.Forms.Panel();
             this.btConfig = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            //            this.pnlSessao = new ProjetoTCC.PainelSessao();
-            //            this.pnlPaciente = new ProjetoTCC.PainelPaciente();
+            this.pnlSessao = new PainelSessao();
+            this.pnlPaciente = new PainelPaciente();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pnlGraf.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
+            // 
+            // pnlGraf
+            // 
+            this.pnlGraf.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pnlGraf.BackColor = System.Drawing.SystemColors.Control;
+            this.pnlGraf.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlGraf.Controls.Add(this.pictureBox1);
+            this.pnlGraf.Location = new System.Drawing.Point(12, 453);
+            this.pnlGraf.Name = "pnlGraf";
+            this.pnlGraf.Size = new System.Drawing.Size(592, 256);
+            this.pnlGraf.TabIndex = 2;
             // 
             // btConfig
             // 
@@ -52,7 +65,7 @@
             // 
             // button2
             // 
-            this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.Location = new System.Drawing.Point(832, 669);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(100, 40);
@@ -70,7 +83,6 @@
             this.button3.TabIndex = 5;
             this.button3.Text = "button3";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 
@@ -94,33 +106,34 @@
             // 
             // pnlSessao
             // 
-            //this.pnlSessao.Anchor = System.Windows.Forms.AnchorStyles.None;
-            //this.pnlSessao.BackColor = System.Drawing.SystemColors.Control;
-            //this.pnlSessao.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            //this.pnlSessao.Location = new System.Drawing.Point(610, 12);
-            //this.pnlSessao.MinimumSize = new System.Drawing.Size(500, 2);
-            //this.pnlSessao.Name = "pnlSessao";
-            //this.pnlSessao.Size = new System.Drawing.Size(640, 651);
-            //this.pnlSessao.TabIndex = 1;
-            //// 
-            //// pnlPaciente
-            //// 
-            //this.pnlPaciente.Anchor = System.Windows.Forms.AnchorStyles.None;
-            //this.pnlPaciente.BackColor = System.Drawing.SystemColors.Control;
-            //this.pnlPaciente.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            //this.pnlPaciente.Location = new System.Drawing.Point(12, 12);
-            //this.pnlPaciente.MinimumSize = new System.Drawing.Size(500, 2);
-            //this.pnlPaciente.Name = "pnlPaciente";
-            //this.pnlPaciente.Size = new System.Drawing.Size(592, 435);
-            //this.pnlPaciente.TabIndex = 0;
+            this.pnlSessao.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pnlSessao.BackColor = System.Drawing.SystemColors.Control;
+            this.pnlSessao.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlSessao.Location = new System.Drawing.Point(610, 12);
+            this.pnlSessao.MinimumSize = new System.Drawing.Size(500, 2);
+            this.pnlSessao.Name = "pnlSessao";
+            this.pnlSessao.Size = new System.Drawing.Size(640, 651);
+            this.pnlSessao.TabIndex = 1;
+            // 
+            // pnlPaciente
+            // 
+            this.pnlPaciente.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.pnlPaciente.BackColor = System.Drawing.SystemColors.Control;
+            this.pnlPaciente.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlPaciente.Location = new System.Drawing.Point(12, 12);
+            this.pnlPaciente.MinimumSize = new System.Drawing.Size(500, 2);
+            this.pnlPaciente.Name = "pnlPaciente";
+            this.pnlPaciente.Size = new System.Drawing.Size(592, 435);
+            this.pnlPaciente.TabIndex = 0;
             // 
             // pictureBox1
             // 
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(13, 454);
+            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(591, 255);
-            this.pictureBox1.TabIndex = 18;
+            this.pictureBox1.Size = new System.Drawing.Size(584, 248);
+            this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
             // Form1
@@ -128,16 +141,18 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1262, 721);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.btConfig);
-            //            this.Controls.Add(this.pnlSessao);
-            //            this.Controls.Add(this.pnlPaciente);
+            this.Controls.Add(this.pnlGraf);
+            this.Controls.Add(this.pnlSessao);
+            this.Controls.Add(this.pnlPaciente);
+            this.MinimumSize = new System.Drawing.Size(1280, 768);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.pnlGraf.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
@@ -145,8 +160,9 @@
 
         #endregion
 
-        //        private PainelPaciente pnlPaciente;
-        //        private PainelSessao pnlSessao;
+        private PainelPaciente pnlPaciente;
+        private PainelSessao pnlSessao;
+        private System.Windows.Forms.Panel pnlGraf;
         private System.Windows.Forms.Button btConfig;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
@@ -155,3 +171,4 @@
         private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
+

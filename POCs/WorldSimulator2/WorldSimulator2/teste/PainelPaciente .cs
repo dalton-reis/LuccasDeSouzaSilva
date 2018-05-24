@@ -9,7 +9,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
-namespace ProjetoTCC
+namespace WorldSimulator
 {
     class PainelPaciente : PainelPadrao
     {
@@ -76,10 +76,10 @@ namespace ProjetoTCC
             ((System.ComponentModel.ISupportInitialize)(this.dtGrid)).BeginInit();
             pnlArea.Controls.Add(dtGrid);
 
-            //this.dtGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top
-            //| System.Windows.Forms.AnchorStyles.Bottom)
-            //| System.Windows.Forms.AnchorStyles.Left)
-            //| System.Windows.Forms.AnchorStyles.Right)));
+            this.dtGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top
+            | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
 
             if (this.dtGridRowSelectHandler != null)
             {
@@ -170,8 +170,8 @@ namespace ProjetoTCC
             this.pnlEdit.Controls.Add(lbDescricao);
             this.pnlEdit.Controls.Add(tbDescricao);
 
-            //pbFoto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top
-            //| System.Windows.Forms.AnchorStyles.Right)));
+            pbFoto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top
+            | System.Windows.Forms.AnchorStyles.Right)));
             pbFoto.Size = new System.Drawing.Size(200, 200);
             pbFoto.Location = new System.Drawing.Point(this.pnlEdit.Size.Width - pbFoto.Size.Width, 0);
             pbFoto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -200,27 +200,27 @@ namespace ProjetoTCC
             lbID.Name = "lbID";
             lbID.Size = new System.Drawing.Size(210, 20);
             lbID.Text = "ID: " + this.pacienteSelecionado.ID;
-            //lbID.Anchor = ((System.Windows.Forms.AnchorStyles)
-            //    ((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom))
-            //);
+            lbID.Anchor = ((System.Windows.Forms.AnchorStyles)
+                ((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom))
+            );
 
             lbNome.AutoSize = false;
             lbNome.Location = new System.Drawing.Point(lbID.Location.X, lbID.Location.Y + lbID.Size.Height + 2);
             lbNome.Name = "lbNome";
             lbNome.Size = new System.Drawing.Size(40, 20);
             lbNome.Text = "Nome: ";
-            //lbNome.Anchor = ((System.Windows.Forms.AnchorStyles)
-            //    ((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom))
-            //);
+            lbNome.Anchor = ((System.Windows.Forms.AnchorStyles)
+                ((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom))
+            );
 
             tbNome.Location = new System.Drawing.Point(lbNome.Location.X + lbNome.Size.Width, lbNome.Location.Y);
             tbNome.Name = "tbNome";
             tbNome.Text = this.pacienteSelecionado.nome;
             tbNome.Size = new System.Drawing.Size(175, lbNome.Size.Height);
             tbNome.TabIndex = 1;
-            //tbNome.Anchor = ((System.Windows.Forms.AnchorStyles)
-            //    ((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom))
-            //);
+            tbNome.Anchor = ((System.Windows.Forms.AnchorStyles)
+                ((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom))
+            );
 
             lbDataNasc.AutoSize = false;
             lbDataNasc.Location = new System.Drawing.Point(lbNome.Location.X, lbNome.Location.Y + lbNome.Size.Height + 2);
@@ -228,9 +228,9 @@ namespace ProjetoTCC
             lbDataNasc.Size = new System.Drawing.Size(40, 20);
             lbDataNasc.TabIndex = 0;
             lbDataNasc.Text = "Data Nasc: ";
-            //lbDataNasc.Anchor = ((System.Windows.Forms.AnchorStyles)
-            //    ((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom))
-            //);
+            lbDataNasc.Anchor = ((System.Windows.Forms.AnchorStyles)
+                ((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom))
+            );
 
             dtpDataNasc.Location = new System.Drawing.Point(lbDataNasc.Location.X + lbDataNasc.Size.Width, lbDataNasc.Location.Y);
             dtpDataNasc.Name = "dtpDataNasc";
@@ -242,9 +242,9 @@ namespace ProjetoTCC
             dtpDataNasc.Format = DateTimePickerFormat.Custom;
             dtpDataNasc.CustomFormat = "dd/MM/yyyy";
             dtpDataNasc.Value = this.pacienteSelecionado.dataNasc;
-            //dtpDataNasc.Anchor = ((System.Windows.Forms.AnchorStyles)
-            //    ((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom))
-            //);
+            dtpDataNasc.Anchor = ((System.Windows.Forms.AnchorStyles)
+                ((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom))
+            );
 
             lbDescricao.AutoSize = false;
             lbDescricao.Location = new System.Drawing.Point(lbDataNasc.Location.X, lbDataNasc.Location.Y + lbDataNasc.Size.Height + 2);
@@ -252,9 +252,9 @@ namespace ProjetoTCC
             lbDescricao.Size = new System.Drawing.Size(40, 20);
             lbDescricao.TabIndex = 0;
             lbDescricao.Text = "Descrição:";
-            //lbDescricao.Anchor = ((System.Windows.Forms.AnchorStyles)
-            //    ((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom))
-            //);
+            lbDescricao.Anchor = ((System.Windows.Forms.AnchorStyles)
+                ((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom))
+            );
 
             tbDescricao.Location = new System.Drawing.Point(lbDescricao.Location.X, lbDescricao.Location.Y + lbDescricao.Size.Height);
             tbDescricao.Name = "tbDescricao";
@@ -262,9 +262,9 @@ namespace ProjetoTCC
             tbDescricao.Size = new System.Drawing.Size(200, lbDescricao.Size.Height * 5);
             tbDescricao.Multiline = true;
             tbDescricao.TabIndex = 1;
-            //tbDescricao.Anchor = ((System.Windows.Forms.AnchorStyles)
-            //    ((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom))
-            //);
+            tbDescricao.Anchor = ((System.Windows.Forms.AnchorStyles)
+                ((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom))
+            );
         }
 
         private void alteraModo(int mod)
@@ -347,7 +347,7 @@ namespace ProjetoTCC
 
         private void clickNovo()
         {
-            this.pacienteSelecionado = new Paciente("", DateTime.Now, "", "", "", "", "");
+            this.pacienteSelecionado = new Paciente("", DateTime.Now, "", "", "", "");
             alteraModo(1);
         }
 

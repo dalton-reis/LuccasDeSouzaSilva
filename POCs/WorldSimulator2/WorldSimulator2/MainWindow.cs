@@ -43,10 +43,12 @@ namespace WorldSimulator
 
         public MainWindow()
         {
-//            mundo = new Mundo(this);
+            mundo = new Mundo(this);
+            this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            this.AutoScaleMode = AutoScaleMode.Dpi;
+            
 
-            
-            
+
             InitializeComponent();
 
             neuroControl = new NeuroController();
@@ -228,12 +230,12 @@ namespace WorldSimulator
 
                     th.Start();
 
-                    if (mundo == null || newSimulation)
-                    {
-                        mundo = new Mundo(this);
-                    }
+                    //if (mundo == null || newSimulation)
+                    //{
+                    //    mundo = new Mundo(this);
+                    //}
                     newSimulation = true;
-                    mundo.Start();
+//                    mundo.Start();
                 } else
                 {
                     MessageBox.Show("Não foi possível estabelecer uma conexão com o dispositivo.\n" +
@@ -302,16 +304,16 @@ namespace WorldSimulator
 
         private void btFecharMundo_Click(object sender, EventArgs e)
         {
-            if (IsReadMindWaveData)
-            {
-                finishSimul();
-                if (mundo != null)
-                {
-                    mundo.Stop();
-                }
-                mundo = null;
-                newSimulation = false;
-            }
+            //if (IsReadMindWaveData)
+            //{
+            //    finishSimul();
+            //    if (mundo != null)
+            //    {
+            //        mundo.Stop();
+            //    }
+            //    mundo = null;
+            //    newSimulation = false;
+            //}
         }
 
         private void finishSimul()
@@ -339,8 +341,8 @@ namespace WorldSimulator
                 {
 
                     int VIDEODEVICE = lbCamDevices.SelectedIndex; // zero based index of video capture device to use
-                    const int VIDEOWIDTH = 1024; // Depends on video device caps
-                    const int VIDEOHEIGHT = 768; // Depends on video device caps
+                    const int VIDEOWIDTH = 640; // Depends on video device caps
+                    const int VIDEOHEIGHT = 480; // Depends on video device caps
                     const int VIDEOBITSPERPIXEL = 24; // BitsPerPixel values determined by device
 
                     int[] VIDEOCONFIG = new int[] { VIDEODEVICE, VIDEOWIDTH, VIDEOHEIGHT, VIDEOBITSPERPIXEL };

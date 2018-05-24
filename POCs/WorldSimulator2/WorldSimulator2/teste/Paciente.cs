@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjetoTCC
+namespace WorldSimulator
 {
     class Paciente
     {
@@ -17,9 +17,8 @@ namespace ProjetoTCC
         public string cpf { get; private set; }
         public string rg { get; private set; }
         public string descricao { get; private set; }
-        public string sexo { get; private set; }
 
-        public Paciente(string nome, DateTime dataNasc, string caminhoFoto, string cpf, string rg, string descricao, string sexo)
+        public Paciente(string nome, DateTime dataNasc, string caminhoFoto, string cpf, string rg, string descricao)
         {
             Paciente.Count++;
             this.ID = Paciente.Count;
@@ -29,24 +28,7 @@ namespace ProjetoTCC
             this.cpf = cpf;
             this.rg = rg;
             this.descricao = descricao;
-            this.sexo = sexo;
         }
-
-        public int getDataNascMeses(DateTime dataBase)
-        {
-            if(dataBase.Year >= this.dataNasc.Year)
-            {
-                int meses = (dataBase.Year - this.dataNasc.Year) * 12;
-                meses += dataBase.Month - this.dataNasc.Month;
-                if (dataBase.Day < this.dataNasc.Day)
-                {
-                    meses += -1;
-                }
-                return meses;
-            } else
-            {
-                return -1;
-            }
-        }
+        
     }
 }

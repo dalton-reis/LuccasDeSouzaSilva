@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ProjetoTCC.Properties {
+namespace WorldSimulator.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ProjetoTCC.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ProjetoTCC.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WorldSimulator.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -59,26 +59,22 @@ namespace ProjetoTCC.Properties {
                 resourceCulture = value;
             }
         }
-
+        
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap connected
-        {
-            get
-            {
+        internal static System.Drawing.Bitmap connected {
+            get {
                 object obj = ResourceManager.GetObject("connected", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-
+        
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap nosignal
-        {
-            get
-            {
+        internal static System.Drawing.Bitmap nosignal {
+            get {
                 object obj = ResourceManager.GetObject("nosignal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ProjetoTCC
+namespace WorldSimulator
 {
     abstract class PainelPadrao : System.Windows.Forms.Panel
     {
@@ -29,9 +29,9 @@ namespace ProjetoTCC
 
             this.Controls.Add(btEsq);
 
-            //this.btEsq.Anchor = ((System.Windows.Forms.AnchorStyles)
-            //    ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left))
-            //);
+            this.btEsq.Anchor = ((System.Windows.Forms.AnchorStyles)
+                ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left))
+            );
 
             this.btEsq.Size = new System.Drawing.Size(80, 30);
             this.btEsq.Location = new System.Drawing.Point(0, 0);
@@ -42,9 +42,9 @@ namespace ProjetoTCC
 
             this.Controls.Add(btDir);
 
-            //this.btDir.Anchor = ((System.Windows.Forms.AnchorStyles)
-            //    ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right))
-            //);
+            this.btDir.Anchor = ((System.Windows.Forms.AnchorStyles)
+                ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right))
+            );
 
             this.btDir.Size = new System.Drawing.Size(80, 30);
             this.btDir.Location = new System.Drawing.Point(this.Size.Width-btDir.Size.Width-2, 0);
@@ -55,10 +55,10 @@ namespace ProjetoTCC
 
             this.Controls.Add(pnlArea);
 
-            //this.pnlArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top 
-            //| System.Windows.Forms.AnchorStyles.Bottom)
-            //| System.Windows.Forms.AnchorStyles.Left)
-            //| System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top 
+            | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
 
             this.pnlArea.BackColor = pnlOrigem.BackColor;
             this.pnlArea.BorderStyle = pnlOrigem.BorderStyle;
