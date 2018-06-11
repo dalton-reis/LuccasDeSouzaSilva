@@ -4,11 +4,10 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.IO;
 
 namespace ProjetoTCC
 {
-    class PainelPaciente : PainelPadrao
+    class PainelEspecialista : PainelPadrao
     {
         private int modo = 0;
 
@@ -16,65 +15,69 @@ namespace ProjetoTCC
         private Panel pnlEdit;
 
         //N, L, V, S, D
-        public char btEsqState { get; private set; } = 'N';
-        public char btDirState { get; private set; }  = 'L';
+        private char btEsqState = 'N';
+        private char btDirState = 'L';
 
-        private List<Paciente> listaPacientes;
-        private List<Paciente> gridListaPacientes;
+        private List<Especialista> listaEspecialistas;
+        private List<Especialista> gridListaEspecialistas;
 
         public int selectedIndex = 0;
-        public Paciente pacienteSelecionado = null;
+        public Especialista especialistaSelecionado = null;
 
         private DataGridViewCellEventHandler dtGridRowSelectHandler = null;
 
         private bool novoRegistro = false;
         private string caminhoFoto = "";
 
-        public PainelPaciente()
+        public PainelEspecialista()
         {
         }
 
-        public void iniPainelPaciente(List<Paciente> listaPacientes)
+        public void iniPainelEspecialista(List<Especialista> listaEspecialistas)
         {
             initPainel(this);
 
-            this.listaPacientes = listaPacientes;
-            this.gridListaPacientes = this.listaPacientes.OrderBy(p => p.nome).ToList();
+            this.listaEspecialistas = listaEspecialistas;
+            this.gridListaEspecialistas = this.listaEspecialistas.OrderBy(p => p.nome).ToList();
 
-            //this.btEsq.Click += new System.EventHandler(this.btEsq_Click);
-            //this.btDir.Click += new System.EventHandler(this.btDir_Click);
-            //this.btDel.Click += new System.EventHandler(this.btDel_Click);
+            this.btEsq.Click += new System.EventHandler(this.btEsq_Click);
+            this.btDir.Click += new System.EventHandler(this.btDir_Click);
 
+            this.btDel.Click += new System.EventHandler(this.btDel_Click);
             this.btDel.Enabled = false;
             this.btDel.Visible = false;
             btDel.Text = "Excluir";
 
             alteraModo(0);
 
-            if(this.gridListaPacientes.Count > 0)
+            if (this.gridListaEspecialistas.Count > 0)
             {
                 this.selectedIndex = 0;
-            } else
+            }
+            else
             {
                 this.selectedIndex = -1;
             }
         }
 
-        public void btEsq_Click()
+        private void inactivateButtons()
         {
-            executeBtClick(btEsqState);
+            this.btEsq.Enabled = false;
+            this.btEsq.Visible = false;
+
+            this.btDir.Enabled = false;
+            this.btDir.Visible = false;
+
+            this.pnlArea.Visible = false;
+            this.pnlArea.Enabled = false;
         }
 
-        public void btDir_Click()
+        public long getEspecialistaID()
         {
-            executeBtClick(btDirState);
-        }
-
-        public long getPacienteID()
-        {
-            if (this.selectedIndex >= 0 && this.gridListaPacientes.Count > this.selectedIndex)
+            if (this.selectedIndex >= 0 && this.gridListaEspecialistas.Count > this.selectedIndex)
             {
                 return long.Parse(this.dtGrid.Rows[this.selectedIndex].Cells[1].Value.ToString());
+                //                return this.gridListaEspecialistas.ElementAt(this.selectedIndex).ID;
             }
             return -1;
         }
@@ -113,13 +116,14 @@ namespace ProjetoTCC
             ColID.HeaderText = "ID";
             ColID.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             ColID.Name = "ID";
-            if(listaPacientes.Count > 0)
+            if (listaEspecialistas.Count > 0)
             {
-                ColID.Width = 15 + (listaPacientes.Max(p => p.ID).ToString().Length * 10);
-            } else
+                ColID.Width = 15 + (listaEspecialistas.Max(p => p.ID).ToString().Length * 10);
+            }
+            else
             {
                 ColID.Width = 25;
-            }            
+            }
             ColID.Visible = true;
 
             ColName.HeaderText = "Nome";
@@ -143,7 +147,7 @@ namespace ProjetoTCC
             ColBt.Width = 25;
             ColBt.MinimumWidth = 20;
             ColBt.Resizable = DataGridViewTriState.False;
-            
+
             this.dtGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 
             this.dtGrid.GridColor = Color.Black;
@@ -158,6 +162,12 @@ namespace ProjetoTCC
             this.dtGrid.Columns.Add(ColName);
             this.dtGrid.Columns.Add(ColDataNasc);
             this.dtGrid.Columns.Add(ColCpf);
+
+            foreach (Especialista p in gridListaEspecialistas)
+            {
+                string[] row = new string[] { "+", p.ID.ToString(), p.nome, p.dataNasc.ToString("dd/MM/yyyy"), p.cpf };
+                dtGrid.Rows.Add(row);
+            }
 
             this.dtGrid.Location = new System.Drawing.Point(0, 0);
             this.dtGrid.Name = "dataGridView1";
@@ -183,7 +193,8 @@ namespace ProjetoTCC
             {
                 btDel.Visible = true;
                 btDel.Enabled = true;
-            } else
+            }
+            else
             {
                 btDel.Visible = false;
                 btDel.Enabled = false;
@@ -250,7 +261,7 @@ namespace ProjetoTCC
 
             if (novoRegistro)
             {
-                lbID.Text = "ID: " + Paciente.ProxID();
+                lbID.Text = "ID: " + Especialista.ProxID();
                 tbNome.Text = "";
                 dtpDataNasc.Value = DateTime.Now;
                 tbCpf.Text = "";
@@ -262,21 +273,21 @@ namespace ProjetoTCC
             }
             else
             {
-                lbID.Text = "ID: " + this.pacienteSelecionado.ID;
-                tbNome.Text = this.pacienteSelecionado.nome;
-                dtpDataNasc.Value = this.pacienteSelecionado.dataNasc;
-                tbCpf.Text = this.pacienteSelecionado.cpf;
-                tbRg.Text = this.pacienteSelecionado.rg;
-                rbSexoF.Checked = (this.pacienteSelecionado.sexo.Equals("F"));
-                rbSexoM.Checked = (this.pacienteSelecionado.sexo.Equals("M"));
-                rbSexoO.Checked = (this.pacienteSelecionado.sexo.Equals("O"));
-                tbDescricao.Text = this.pacienteSelecionado.descricao;
+                lbID.Text = "ID: " + this.especialistaSelecionado.ID;
+                tbNome.Text = this.especialistaSelecionado.nome;
+                dtpDataNasc.Value = this.especialistaSelecionado.dataNasc;
+                tbCpf.Text = this.especialistaSelecionado.cpf;
+                tbRg.Text = this.especialistaSelecionado.rg;
+                rbSexoF.Checked = (this.especialistaSelecionado.sexo.Equals("F"));
+                rbSexoM.Checked = (this.especialistaSelecionado.sexo.Equals("M"));
+                rbSexoO.Checked = (this.especialistaSelecionado.sexo.Equals("O"));
+                tbDescricao.Text = this.especialistaSelecionado.descricao;
             }
 
             pbFoto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top
             | System.Windows.Forms.AnchorStyles.Right)));
             pbFoto.Size = new System.Drawing.Size(270, 270);
-            pbFoto.Location = new System.Drawing.Point(this.pnlEdit.Size.Width - pbFoto.Size.Width-1, 0);
+            pbFoto.Location = new System.Drawing.Point(this.pnlEdit.Size.Width - pbFoto.Size.Width - 1, 0);
             pbFoto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pbFoto.Name = "pbFoto";
             pbFoto.TabIndex = 0;
@@ -284,15 +295,15 @@ namespace ProjetoTCC
 
             string FotoFile = @"resources/img/foto.png";
 
-            if (!novoRegistro && this.pacienteSelecionado.caminhoFoto.Length > 0)
+            if (!novoRegistro && this.especialistaSelecionado.caminhoFoto.Length > 0)
             {
-                FotoFile = Biblioteca.getPacientesFolder() + "\\P_" + this.pacienteSelecionado.ID + "\\foto.png";
+                FotoFile = this.especialistaSelecionado.caminhoFoto.Trim();
             }
 
-            Image imgPaciente = ResizeImage(Image.FromFile(FotoFile), pbFoto.Size.Width, pbFoto.Size.Height);
+            Image imgEspecialista = ResizeImage(Image.FromFile(FotoFile), pbFoto.Size.Width, pbFoto.Size.Height);
             Image imgBackup = ResizeImage(Image.FromFile(@"resources/img/foto.png"), pbFoto.Size.Width, pbFoto.Size.Height);
 
-            pbFoto.Image = imgPaciente;
+            pbFoto.Image = imgEspecialista;
             pbFoto.ErrorImage = imgBackup;
             pbFoto.InitialImage = imgBackup;
 
@@ -316,7 +327,7 @@ namespace ProjetoTCC
             lbID.AutoSize = false;
             lbID.Location = new System.Drawing.Point(4, 3);
             lbID.Name = "lbID";
-            lbID.Size = new System.Drawing.Size(pnlEdit.ClientSize.Width - pbFoto.Location.X-10, 20);
+            lbID.Size = new System.Drawing.Size(pnlEdit.ClientSize.Width - pbFoto.Location.X - 10, 20);
             lbID.Anchor = anchorEdit;
 
             lbNome.AutoSize = false;
@@ -340,7 +351,7 @@ namespace ProjetoTCC
             lbDataNasc.Text = "Data Nasc: ";
             lbDataNasc.Anchor = anchorEdit;
 
-            dtpDataNasc.Location = new System.Drawing.Point(lbDataNasc.Location.X + lbDataNasc.Size.Width, lbDataNasc.Location.Y -3);
+            dtpDataNasc.Location = new System.Drawing.Point(lbDataNasc.Location.X + lbDataNasc.Size.Width, lbDataNasc.Location.Y - 3);
             dtpDataNasc.Name = "dtpDataNasc";
             dtpDataNasc.Size = new System.Drawing.Size(120, 22);
             dtpDataNasc.TabIndex = 2;
@@ -376,7 +387,7 @@ namespace ProjetoTCC
             tbRg.Size = new System.Drawing.Size(220, lbRg.Size.Height);
             tbRg.TabIndex = 1;
             tbRg.Anchor = anchorEdit;
-            
+
             //----------------------------------------------------------------------------------------------------------------------------
 
             lbSexo.AutoSize = false;
@@ -428,55 +439,41 @@ namespace ProjetoTCC
             tbDescricao.Anchor = anchorEdit;
         }
 
-        private void filtraPacientes()
-        {
-            if(dtGrid != null && gridListaPacientes != null)
-            {
-                //filtra
-
-                foreach (Paciente p in gridListaPacientes)
-                {
-                    string[] row = new string[] { "+", p.ID.ToString(), p.nome, p.dataNasc.ToString("dd/MM/yyyy"), p.cpf };
-                    dtGrid.Rows.Add(row);
-                }
-            }
-        }
-
         private void alteraModo(int mod)
         {
             modo = mod;
 
-            if(modo == 0)
+            if (modo == 0)
             {
-                if (pnlEdit != null)
+                if (this.dtGrid != null)
                 {
-                    this.pnlArea.Controls.Clear();
+                    this.disposeGrid();
+                }
+                if (this.pnlEdit != null)
+                {
                     this.disposeEdit();
                 }
+
                 createGrid();
-                filtraPacientes();
-            } else //modo == 1
+            }
+            else //modo == 1
             {
                 if (novoRegistro)
                 {
-                    this.pacienteSelecionado = null;
+                    this.especialistaSelecionado = null;
                 }
                 else
                 {
                     long ID = long.Parse(this.dtGrid.CurrentRow.Cells[1].Value.ToString());
 
-                    this.pacienteSelecionado = gridListaPacientes.Where(p => p.ID == ID).First();
+                    this.especialistaSelecionado = gridListaEspecialistas.Where(p => p.ID == ID).First();
                 }
-                this.pnlArea.Controls.Clear();
-                if(this.dtGrid != null)
-                {
-                    this.disposeGrid();
-                }
+                this.disposeGrid();
 
                 createEdit();
             }
         }
-        
+
         public void SelecionaLinha(int index)
         {
             this.selectedIndex = index;
@@ -485,10 +482,7 @@ namespace ProjetoTCC
         public void setGridRowSelectionChange(DataGridViewCellEventHandler handler)
         {
             this.dtGridRowSelectHandler = new DataGridViewCellEventHandler(handler);
-            if(this.dtGrid != null)
-            {
-                this.dtGrid.RowEnter += this.dtGridRowSelectHandler;
-            }
+            this.dtGrid.RowEnter += this.dtGridRowSelectHandler;
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -497,43 +491,40 @@ namespace ProjetoTCC
 
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
                 e.RowIndex >= 0)
-            {                
+            {
+                this.novoRegistro = false;
                 alteraModo(1);
             }
         }
 
         protected void btEsq_Click(object sender, EventArgs e)
         {
-            executeBtClick(btEsqState);            
+            executeBtClick(btEsqState);
         }
-        
+
         protected void btDir_Click(object sender, EventArgs e)
         {
             executeBtClick(btDirState);
         }
 
-        public void setExcluirPacienteEvent(EventHandler handler)
+        protected void btDel_Click(object sender, EventArgs e)
         {
-            this.btDel.Click += new System.EventHandler(handler);
-        }
+            List<Sessao> sessoes = new List<Sessao>(); //Biblioteca.getEspecialistaSessoes();
 
-        public void excluirPacienteSelecionado()
-        {            
-            List<Sessao> sessoes = Biblioteca.getPacienteSessoes();
-
-            if(sessoes.Count > 0)
+            if (sessoes.Count > 0)
             {
-                MessageBox.Show("Não é possível excluir um paciente que possui sessões.");
-            } else
+                MessageBox.Show("Não é possível excluir um especialista que está vinculado a uma sessão.");
+            }
+            else
             {
-                long ID = this.pacienteSelecionado.ID;
-                listaPacientes.Remove(listaPacientes.Where(p => p.ID == ID).First());
-                gridListaPacientes.Remove(gridListaPacientes.Where(p => p.ID == ID).First());
-                Biblioteca.excluiPacienteSelecionado(ID);
+                long ID = this.especialistaSelecionado.ID;
+                listaEspecialistas.Remove(listaEspecialistas.Where(p => p.ID == ID).First());
+                gridListaEspecialistas.Remove(gridListaEspecialistas.Where(p => p.ID == ID).First());
+                Biblioteca.excluiEspecialistaSelecionado(ID);
 
-//                MessageBox.Show("Paciente Excluído com sucesso!");
+                MessageBox.Show("Especialista Excluído com sucesso!");
 
-                if (this.gridListaPacientes.Count > 0)
+                if (this.gridListaEspecialistas.Count > 0)
                 {
                     this.selectedIndex = 0;
                 }
@@ -574,7 +565,7 @@ namespace ProjetoTCC
 
         private void clickLocaliza()
         {
-            MessageBox.Show("Localiza Paciente!");
+            MessageBox.Show("Localiza Especialista!");
         }
 
         protected void clickVolta()
@@ -591,7 +582,7 @@ namespace ProjetoTCC
 
             if (nome.Trim().Length < 1)
             {
-                MessageBox.Show("O nome do paciente não pode ser vazio!");
+                MessageBox.Show("O nome do especialista não pode ser vazio!");
                 salva = false;
             }
 
@@ -614,9 +605,9 @@ namespace ProjetoTCC
 
             string cpf = pnlEdit.Controls.Find("tbCpf", true)[0].Text.Trim();
 
-            if(cpf.Trim().Length < 1 && false)
+            if (cpf.Trim().Length < 1 && false)
             {
-                MessageBox.Show("O CPF do paciente não pode ser vazio!");
+                MessageBox.Show("O CPF do especialista não pode ser vazio!");
                 salva = false;
             }
 
@@ -624,27 +615,29 @@ namespace ProjetoTCC
 
             if (rg.Trim().Length < 1 && false)
             {
-                MessageBox.Show("O RG do paciente não pode ser vazio!");
+                MessageBox.Show("O RG do especialista não pode ser vazio!");
                 salva = false;
-            }            
+            }
 
             if (salva)
             {
-                if(this.pacienteSelecionado != null) {
-                    this.pacienteSelecionado.updateValues(nome, dataNasc, this.caminhoFoto, cpf, rg, descricao, sexo);
-
-                    long ID = this.pacienteSelecionado.ID;
-                    gridListaPacientes.Where(p => p.ID == ID).First().updateValues(nome, dataNasc, this.caminhoFoto, cpf, rg, descricao, sexo);
-
-                    Biblioteca.updatePacienteSelecionado(ID, nome, dataNasc, this.caminhoFoto, cpf, rg, descricao, sexo);
-
-//                    MessageBox.Show("Paciente Atualizado com sucesso!");
-                } else
+                if (this.especialistaSelecionado != null)
                 {
-                    Paciente pac = new Paciente(nome, dataNasc, "", cpf, rg, descricao, sexo);
-                    this.addPaciente(pac);
+                    this.especialistaSelecionado.updateValues(nome, dataNasc, this.caminhoFoto, cpf, rg, descricao, sexo);
 
-//                    MessageBox.Show("Paciente Salvo com sucesso!");
+                    long ID = this.especialistaSelecionado.ID;
+                    gridListaEspecialistas.Where(p => p.ID == ID).First().updateValues(nome, dataNasc, this.caminhoFoto, cpf, rg, descricao, sexo);
+
+                    Biblioteca.updateEspecialistaSelecionado(ID, nome, dataNasc, this.caminhoFoto, cpf, rg, descricao, sexo);
+
+                    MessageBox.Show("Especialista Atualizado com sucesso!");
+                }
+                else
+                {
+                    Especialista esp = new Especialista(nome, dataNasc, "", cpf, rg, descricao, sexo);
+                    this.addEspecialista(esp);
+
+                    MessageBox.Show("Especialista Salvo com sucesso!");
                 }
 
                 novoRegistro = false;
@@ -652,39 +645,16 @@ namespace ProjetoTCC
             }
         }
 
-        public void dispose()
+        private void disposeGrid()
         {
-            if (this.dtGrid != null)
-            {
-                disposeGrid();
-            }
-            if (this.pnlEdit != null)
-            {
-                disposeEdit();
-            }
-            this.pnlArea.Controls.Clear();
+            this.pnlArea.Controls.Remove(dtGrid);
+            this.dtGrid = null;
         }
 
         private void disposeEdit()
         {
             this.pnlArea.Controls.Remove(pnlEdit);
-            pnlEdit = null;
-        }
-
-        private void disposeGrid()
-        {
-            this.pnlArea.Controls.Remove(dtGrid);
-            dtGrid = null;
-        }
-
-        public void setBtEsqAction(EventHandler handler)
-        {
-            this.btEsq.Click += new System.EventHandler(handler);
-        }
-
-        public void setBtDirAction(EventHandler handler)
-        {
-            this.btDir.Click += new System.EventHandler(handler);
+            this.pnlEdit = null;
         }
 
         public static Image ResizeImage(Image image, int width, int height)
@@ -714,46 +684,26 @@ namespace ProjetoTCC
             {
                 this.caminhoFoto = formAlteraFoto.caminhoArq;
 
-                PictureBox pbFoto = (PictureBox) (pnlEdit.Controls.Find("pbFoto", true)[0]);
-
-                Image imgPaciente = ResizeImage(Image.FromFile(this.caminhoFoto), pbFoto.Size.Width, pbFoto.Size.Height);
-                Image imgBackup = ResizeImage(Image.FromFile(@"resources/img/foto.png"), pbFoto.Size.Width, pbFoto.Size.Height);
-
-                pbFoto.Image = imgPaciente;
-                pbFoto.ErrorImage = imgBackup;
-                pbFoto.InitialImage = imgBackup;
-            } else if (formAlteraFoto.foto != null)
-            {
                 PictureBox pbFoto = (PictureBox)(pnlEdit.Controls.Find("pbFoto", true)[0]);
 
-                Bitmap foto = formAlteraFoto.foto;
-                long ID = (this.pacienteSelecionado != null) ? this.pacienteSelecionado.ID : Paciente.ProxID();
-                string fileName = Biblioteca.getPacientesFolder() + "\\P_" + ID;
-
-                Directory.CreateDirectory(fileName);
-
-                this.caminhoFoto = fileName + "\\foto.png";
-
-                foto.Save(this.caminhoFoto, System.Drawing.Imaging.ImageFormat.Png);
-
-                Image imgPaciente = ResizeImage(Image.FromFile(this.caminhoFoto), pbFoto.Size.Width, pbFoto.Size.Height);
+                Image imgEspecialista = ResizeImage(Image.FromFile(this.caminhoFoto), pbFoto.Size.Width, pbFoto.Size.Height);
                 Image imgBackup = ResizeImage(Image.FromFile(@"resources/img/foto.png"), pbFoto.Size.Width, pbFoto.Size.Height);
 
-                pbFoto.Image = imgPaciente;
+                pbFoto.Image = imgEspecialista;
                 pbFoto.ErrorImage = imgBackup;
                 pbFoto.InitialImage = imgBackup;
             }
             formAlteraFoto = null;
         }
 
-        private void addPaciente(Paciente pac)
+        private void addEspecialista(Especialista pac)
         {
-            Biblioteca.addPaciente(pac);
+            Biblioteca.addEspecialista(pac);
 
-            this.listaPacientes.Add(pac);
-            this.gridListaPacientes = this.listaPacientes.OrderBy(p => p.nome).ToList();
+            this.listaEspecialistas.Add(pac);
+            this.gridListaEspecialistas = this.listaEspecialistas.OrderBy(p => p.nome).ToList();
 
-            if (this.gridListaPacientes.Count > 0)
+            if (this.gridListaEspecialistas.Count > 0)
             {
                 this.selectedIndex = 0;
             }

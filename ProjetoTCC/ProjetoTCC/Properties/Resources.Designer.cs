@@ -59,29 +59,5 @@ namespace ProjetoTCC.Properties {
                 resourceCulture = value;
             }
         }
-
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap connected
-        {
-            get
-            {
-                object obj = ResourceManager.GetObject("connected", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap nosignal
-        {
-            get
-            {
-                object obj = ResourceManager.GetObject("nosignal", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

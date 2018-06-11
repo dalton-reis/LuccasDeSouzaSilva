@@ -1,23 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProjetoTCC
 {
-    class Paciente
+    class Paciente : Pessoa
     {
         static private long Count = 0;
-
-        public long ID { get; private set; }
-        public string nome { get; private set; }
-        public DateTime dataNasc { get; private set; }
-        public string caminhoFoto { get; private set; }
-        public string cpf { get; private set; }
-        public string rg { get; private set; }
-        public string descricao { get; private set; }
-        public string sexo { get; private set; }
 
         public Paciente(string nome, DateTime dataNasc, string caminhoFoto, string cpf, string rg, string descricao, string sexo)
         {
@@ -47,6 +34,43 @@ namespace ProjetoTCC
             {
                 return -1;
             }
+        }
+
+        static public long ProxID()
+        {
+            return Paciente.Count + 1;
+        }
+
+        private Paciente(long ID, string nome, DateTime dataNasc, string caminhoFoto, string cpf, string rg, string descricao, string sexo)
+        {
+            this.ID = ID;
+            this.nome = nome;
+            this.dataNasc = dataNasc;
+            this.caminhoFoto = caminhoFoto;
+            this.cpf = cpf;
+            this.rg = rg;
+            this.descricao = descricao;
+            this.sexo = sexo;
+        }
+
+        public static Paciente create(long ID, string nome, DateTime dataNasc, string caminhoFoto, string cpf, string rg, string descricao, string sexo)
+        {
+            if(ID > Paciente.Count)
+            {
+                Paciente.Count = ID;
+            }
+            return new Paciente(ID, nome, dataNasc, caminhoFoto, cpf, rg, descricao, sexo);
+        }
+
+        public void updateValues(string nome, DateTime dataNasc, string caminhoFoto, string cpf, string rg, string descricao, string sexo)
+        {
+            this.nome = nome;
+            this.dataNasc = dataNasc;
+            this.caminhoFoto = caminhoFoto;
+            this.cpf = cpf;
+            this.rg = rg;
+            this.descricao = descricao;
+            this.sexo = sexo;
         }
     }
 }
