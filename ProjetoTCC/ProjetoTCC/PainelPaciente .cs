@@ -17,7 +17,7 @@ namespace ProjetoTCC
 
         //N, L, V, S, D
         public char btEsqState { get; private set; } = 'N';
-        public char btDirState { get; private set; }  = 'L';
+        public char btDirState { get; private set; } = 'L';
 
         private List<Paciente> listaPacientes;
         private List<Paciente> gridListaPacientes;
@@ -37,6 +37,9 @@ namespace ProjetoTCC
         public void iniPainelPaciente(List<Paciente> listaPacientes)
         {
             initPainel(this);
+
+            this.btEsqState = 'N';
+            this.btDirState = 'L';
 
             this.listaPacientes = listaPacientes;
             this.gridListaPacientes = this.listaPacientes.OrderBy(p => p.nome).ToList();
@@ -284,9 +287,14 @@ namespace ProjetoTCC
 
             string FotoFile = @"resources/img/foto.png";
 
-            if (!novoRegistro && this.pacienteSelecionado.caminhoFoto.Length > 0)
+            if (!novoRegistro && this.pacienteSelecionado != null)
             {
+                Directory.CreateDirectory(Biblioteca.getPacientesFolder() + "\\P_" + this.pacienteSelecionado.ID);
                 FotoFile = Biblioteca.getPacientesFolder() + "\\P_" + this.pacienteSelecionado.ID + "\\foto.png";
+                if (!File.Exists(FotoFile))
+                {
+                    FotoFile = @"resources/img/foto.png";
+                }                
             }
 
             Image imgPaciente = ResizeImage(Image.FromFile(FotoFile), pbFoto.Size.Width, pbFoto.Size.Height);
@@ -637,14 +645,10 @@ namespace ProjetoTCC
                     gridListaPacientes.Where(p => p.ID == ID).First().updateValues(nome, dataNasc, this.caminhoFoto, cpf, rg, descricao, sexo);
 
                     Biblioteca.updatePacienteSelecionado(ID, nome, dataNasc, this.caminhoFoto, cpf, rg, descricao, sexo);
-
-//                    MessageBox.Show("Paciente Atualizado com sucesso!");
                 } else
                 {
                     Paciente pac = new Paciente(nome, dataNasc, "", cpf, rg, descricao, sexo);
                     this.addPaciente(pac);
-
-//                    MessageBox.Show("Paciente Salvo com sucesso!");
                 }
 
                 novoRegistro = false;
@@ -714,7 +718,17 @@ namespace ProjetoTCC
             {
                 this.caminhoFoto = formAlteraFoto.caminhoArq;
 
-                PictureBox pbFoto = (PictureBox) (pnlEdit.Controls.Find("pbFoto", true)[0]);
+                PictureBox pbFoto = (PictureBox)(pnlEdit.Controls.Find("pbFoto", true)[0]);
+
+                Bitmap foto = (Bitmap)Image.FromFile(this.caminhoFoto);
+                long ID = (this.pacienteSelecionado != null) ? this.pacienteSelecionado.ID : Paciente.ProxID();
+                string fileName = Biblioteca.getPacientesFolder() + "\\E_" + ID;
+
+                Directory.CreateDirectory(fileName);
+
+                this.caminhoFoto = fileName + "\\foto.png";
+
+                foto.Save(this.caminhoFoto, System.Drawing.Imaging.ImageFormat.Png);
 
                 Image imgPaciente = ResizeImage(Image.FromFile(this.caminhoFoto), pbFoto.Size.Width, pbFoto.Size.Height);
                 Image imgBackup = ResizeImage(Image.FromFile(@"resources/img/foto.png"), pbFoto.Size.Width, pbFoto.Size.Height);

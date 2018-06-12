@@ -14,7 +14,7 @@ namespace ProjetoTCC
                 cp.Style |= 0x04;
                 return cp;
             }
-        }
+        }       
 
         //Property to set to decide whether to print a % or Text
         public int DisplayStyle { get; set; }

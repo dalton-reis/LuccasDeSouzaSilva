@@ -293,11 +293,9 @@ namespace ProjetoTCC
                 startFolder += "\\MindsEye";
             }
 
-            if (!Directory.Exists(startFolder + "\\Especialistas"))
-            {
-                Directory.CreateDirectory(startFolder + "\\Especialistas");
-            }
             startFolder += "\\Especialistas";
+
+            Directory.CreateDirectory(startFolder);
 
             Stream saida = File.Open(startFolder + "\\config.txt", FileMode.Create);
             StreamWriter escritor = new StreamWriter(saida);
@@ -322,6 +320,11 @@ namespace ProjetoTCC
             escritor.Close();
             saida.Close();
 
+            foreach (Especialista esp in l1)
+            {
+                string folder = startFolder + "\\E_" + esp.ID;
+                Directory.CreateDirectory(folder);
+            }
         }
 
         public static void updatePacientes()
@@ -375,6 +378,27 @@ namespace ProjetoTCC
             return startFolder + "\\Pacientes";
         }
 
+        public static string getEspecialistasFolder()
+        {
+            string startFolder = @"MindsEye";
+
+            if (Directory.Exists(caminhoArquivos))
+            {
+                startFolder = caminhoArquivos;
+            }
+
+            if (startFolder.LastIndexOf("MindsEye") == -1)
+            {
+                startFolder += "\\MindsEye";
+            }
+
+            startFolder += "\\Especialistas";
+
+            Directory.CreateDirectory(startFolder);
+
+            return startFolder;
+        }
+
         public static void updatePacienteSelecionado(long ID, string nome, DateTime dataNasc, string caminhoFoto, string cpf, string rg, string descricao, string sexo)
         {
             listaPacientes.Where(p => p.ID == ID).First().updateValues(nome, dataNasc, caminhoFoto, cpf, rg, descricao, sexo);
@@ -399,9 +423,9 @@ namespace ProjetoTCC
             updateConfigEspecialistas();
         }
 
-        public static void updateSessaoSelecionada(long ID, Especialista especialista, DateTime dataSessao, string caminhoVideo, string titulo)
+        public static void updateSessaoSelecionada(long ID, Especialista especialista, DateTime dataSessao, string caminhoVideo, string titulo, string descricao)
         {
-            listaSessoes.Where(s => s.ID == ID).First().updateValues(especialista, dataSessao, caminhoVideo, titulo);
+            listaSessoes.Where(s => s.ID == ID).First().updateValues(especialista, dataSessao, caminhoVideo, titulo, descricao);
             long IDPaciente = listaSessoes.Where(s => s.ID == ID).First().paciente.ID;
             updateConfigSessoesPaciente(IDPaciente);
         }
@@ -569,11 +593,9 @@ namespace ProjetoTCC
                 startFolder += "\\MindsEye";
             }
 
-            if (!Directory.Exists(startFolder + "\\Pacientes"))
-            {
-                Directory.CreateDirectory(startFolder + "\\Pacientes");
-            }
             startFolder += "\\Pacientes";
+
+            Directory.CreateDirectory(startFolder);
 
             Stream saida = File.Open(startFolder + "\\config.txt", FileMode.Create);
             StreamWriter escritor = new StreamWriter(saida);
@@ -599,11 +621,8 @@ namespace ProjetoTCC
 
             foreach (Paciente pac in l1)
             {
-                string folder = startFolder + "\\" + pac.ID;
-                if (!Directory.Exists(folder))
-                {
-                    Directory.CreateDirectory(folder);
-                }
+                string folder = startFolder + "\\P_" + pac.ID;
+                Directory.CreateDirectory(folder);
             }
         }
 
@@ -698,9 +717,10 @@ namespace ProjetoTCC
                         Paciente p = pac;
                         Especialista esp = null;
                         DateTime dataSessao = DateTime.Now;
-                        string caminhoVideo = "";
+                        string descricao = "";
                         string titulo = "";
-                        
+                        string caminhoVideo = "";
+
                         foreach (string str2 in arr2)
                         {
                             string[] s = new string[2];
@@ -727,12 +747,15 @@ namespace ProjetoTCC
                                 case "nomeVideo":
                                     caminhoVideo = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
                                     break;
+                                case "descricao":
+                                    descricao = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
+                                    break;
                                 case "titulo":
                                     titulo = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
                                     break;                                
                             }
                         }
-                        listaSessoes.Add(Sessao.create(ID, pac, esp, dataSessao, caminhoVideo, titulo));
+                        listaSessoes.Add(Sessao.create(ID, pac, esp, dataSessao, descricao, titulo, descricao));
                     }
                 }
                 catch (Exception e)
@@ -773,16 +796,9 @@ namespace ProjetoTCC
                 startFolder += "\\MindsEye";
             }
 
-            if (!Directory.Exists(startFolder + "\\Pacientes"))
-            {
-                Directory.CreateDirectory(startFolder + "\\Pacientes");
-            }
             startFolder += "\\Pacientes\\P_" + IDPaciente;
 
-            if (!Directory.Exists(startFolder))
-            {
-                Directory.CreateDirectory(startFolder);
-            }
+            Directory.CreateDirectory(startFolder);
 
             Stream saida = File.Open(startFolder + "\\config.txt", FileMode.Create);
             StreamWriter escritor = new StreamWriter(saida);
@@ -794,8 +810,9 @@ namespace ProjetoTCC
                 escritor.WriteLine("{");
                 escritor.WriteLine("[ID]:[" + ses.ID + "];");
                 escritor.WriteLine("[ID_ESP]:[" + ses.especialista.ID + "];");
-                escritor.WriteLine("[dataSessao]:[" + ses.dataSessao.ToString("dd/MM/yyyy") + "];");
+                escritor.WriteLine("[dataSessao]:[" + ses.dataSessao.ToString("dd/MM/yyyy HH:mm") + "];");
                 escritor.WriteLine("[nomeVideo]:[" + ses.nomeVideo.Trim() + "];");
+                escritor.WriteLine("[descricao]:[" + ses.descricao.Trim() + "];");
                 escritor.WriteLine("[titulo]:[" + ses.titulo.Trim() + "]");
                 escritor.WriteLine("};;");
             }
@@ -805,11 +822,8 @@ namespace ProjetoTCC
 
             foreach (Sessao ses in l1)
             {
-                string folder = startFolder + "\\" + ses.ID;
-                if (!Directory.Exists(folder))
-                {
-                    Directory.CreateDirectory(folder);
-                }
+                string folder = startFolder + "\\S_" + ses.ID;
+                Directory.CreateDirectory(folder);
             }
         }
 

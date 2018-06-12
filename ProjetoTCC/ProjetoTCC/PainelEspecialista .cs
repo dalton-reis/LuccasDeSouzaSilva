@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 
 namespace ProjetoTCC
 {
@@ -15,8 +16,8 @@ namespace ProjetoTCC
         private Panel pnlEdit;
 
         //N, L, V, S, D
-        private char btEsqState = 'N';
-        private char btDirState = 'L';
+        public char btEsqState { get; private set; } = 'N';
+        public char btDirState { get; private set; } = 'L';
 
         private List<Especialista> listaEspecialistas;
         private List<Especialista> gridListaEspecialistas;
@@ -36,6 +37,9 @@ namespace ProjetoTCC
         public void iniPainelEspecialista(List<Especialista> listaEspecialistas)
         {
             initPainel(this);
+
+            this.btEsqState = 'N';
+            this.btDirState = 'L';
 
             this.listaEspecialistas = listaEspecialistas;
             this.gridListaEspecialistas = this.listaEspecialistas.OrderBy(p => p.nome).ToList();
@@ -686,10 +690,41 @@ namespace ProjetoTCC
 
                 PictureBox pbFoto = (PictureBox)(pnlEdit.Controls.Find("pbFoto", true)[0]);
 
+                Bitmap foto = (Bitmap) Image.FromFile(this.caminhoFoto);
+                long ID = (this.especialistaSelecionado != null) ? this.especialistaSelecionado.ID : Especialista.ProxID();
+                string fileName = Biblioteca.getEspecialistasFolder() + "\\E_" + ID;
+
+                Directory.CreateDirectory(fileName);
+
+                this.caminhoFoto = fileName + "\\foto.png";
+
+                foto.Save(this.caminhoFoto, System.Drawing.Imaging.ImageFormat.Png);
+
                 Image imgEspecialista = ResizeImage(Image.FromFile(this.caminhoFoto), pbFoto.Size.Width, pbFoto.Size.Height);
                 Image imgBackup = ResizeImage(Image.FromFile(@"resources/img/foto.png"), pbFoto.Size.Width, pbFoto.Size.Height);
 
                 pbFoto.Image = imgEspecialista;
+                pbFoto.ErrorImage = imgBackup;
+                pbFoto.InitialImage = imgBackup;
+            }
+            else if (formAlteraFoto.foto != null)
+            {
+                PictureBox pbFoto = (PictureBox)(pnlEdit.Controls.Find("pbFoto", true)[0]);
+
+                Bitmap foto = formAlteraFoto.foto;
+                long ID = (this.especialistaSelecionado != null) ? this.especialistaSelecionado.ID : Especialista.ProxID();
+                string fileName = Biblioteca.getEspecialistasFolder() + "\\E_" + ID;
+
+                Directory.CreateDirectory(fileName);
+
+                this.caminhoFoto = fileName + "\\foto.png";
+
+                foto.Save(this.caminhoFoto, System.Drawing.Imaging.ImageFormat.Png);
+
+                Image imgPaciente = ResizeImage(Image.FromFile(this.caminhoFoto), pbFoto.Size.Width, pbFoto.Size.Height);
+                Image imgBackup = ResizeImage(Image.FromFile(@"resources/img/foto.png"), pbFoto.Size.Width, pbFoto.Size.Height);
+
+                pbFoto.Image = imgPaciente;
                 pbFoto.ErrorImage = imgBackup;
                 pbFoto.InitialImage = imgBackup;
             }

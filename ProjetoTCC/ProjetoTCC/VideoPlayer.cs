@@ -377,6 +377,7 @@ namespace ProjetoTCC
             setTrackBarPosition(0);
             setVideoTime(0);
             setDisplayImage(reader.ReadVideoFrame(getTrackBarPosition()));
+            this.SignalToStop();
         }
 
         //public void Start()

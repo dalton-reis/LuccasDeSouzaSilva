@@ -14,7 +14,7 @@ namespace ProjetoTCC
         public string titulo { get; private set; }
         public string descricao { get; private set; }
 
-        public Sessao(Paciente paciente, Especialista especialista, DateTime dataSessao, string caminhoVideo, string titulo)
+        public Sessao(Paciente paciente, Especialista especialista, DateTime dataSessao, string caminhoVideo, string titulo, string descricao)
         {
             Sessao.Count++;
             this.ID = Sessao.Count;
@@ -23,7 +23,7 @@ namespace ProjetoTCC
             this.dataSessao = dataSessao;
             this.nomeVideo = caminhoVideo;
             this.titulo = titulo;
-            this.descricao = "";
+            this.descricao = descricao;
         }
 
         static public long ProxID()
@@ -31,7 +31,7 @@ namespace ProjetoTCC
             return Sessao.Count+1;
         }
 
-        private Sessao(long ID, Paciente paciente, Especialista especialista, DateTime dataSessao, string caminhoVideo, string titulo)
+        private Sessao(long ID, Paciente paciente, Especialista especialista, DateTime dataSessao, string caminhoVideo, string titulo, string descricao)
         {
             this.ID = ID;
             this.paciente = paciente;
@@ -39,24 +39,25 @@ namespace ProjetoTCC
             this.dataSessao = dataSessao;
             this.nomeVideo = caminhoVideo;
             this.titulo = titulo;
-            this.descricao = "";
+            this.descricao = descricao;
         }
 
-        public static Sessao create(long ID, Paciente paciente, Especialista especialista, DateTime dataSessao, string caminhoVideo, string titulo)
+        public static Sessao create(long ID, Paciente paciente, Especialista especialista, DateTime dataSessao, string caminhoVideo, string titulo, string descricao)
         {
             if (ID > Sessao.Count)
             {
                 Sessao.Count = ID;
             }
-            return new Sessao(ID, paciente, especialista, dataSessao, caminhoVideo, titulo);
+            return new Sessao(ID, paciente, especialista, dataSessao, caminhoVideo, titulo, descricao);
         }
 
-        public void updateValues(Especialista especialista, DateTime dataSessao, string caminhoVideo, string titulo)
+        public void updateValues(Especialista especialista, DateTime dataSessao, string caminhoVideo, string titulo, string descricao)
         {
             this.especialista = especialista;
             this.dataSessao = dataSessao;
             this.nomeVideo = caminhoVideo;
             this.titulo = titulo;
+            this.descricao = descricao;
         }
 
     }

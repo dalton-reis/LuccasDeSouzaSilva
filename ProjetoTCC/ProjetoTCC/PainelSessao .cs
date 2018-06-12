@@ -27,7 +27,8 @@ namespace ProjetoTCC
 
         //N, L, V, S, D
         public char btEsqState { get; private set; } = 'N';
-        public char btDirState { get; private set; } = 'L';
+
+        public char btDirState { get; private set; } = 'L';        
 
         private List<Sessao> listaSessoes;
         private List<Sessao> gridListaSessoes;
@@ -101,6 +102,9 @@ namespace ProjetoTCC
         public void iniPainelSessao()
         {
             initPainel(this);
+
+            this.btEsqState = 'N';
+            this.btDirState = 'L';
 
             //            this.btEsq.Click += new System.EventHandler(this.btEsq_Click);
             //            this.btDir.Click += new System.EventHandler(this.btDir_Click);
@@ -262,7 +266,6 @@ namespace ProjetoTCC
                 this.btDel.Visible = false;
                 this.btDel.Enabled = false;
             }
-            this.isBrainReader = false;
 
             int spacing = 5;
 
@@ -346,6 +349,7 @@ namespace ProjetoTCC
 
             if (novoRegistro)
             {
+
                 //botoes para gravar
                 this.btStartVideo = new Button();
                 this.btStartVideo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Right
@@ -360,6 +364,9 @@ namespace ProjetoTCC
                 this.btStartVideo.UseVisualStyleBackColor = true;
                 this.btStartVideo.Click += new System.EventHandler(this.btIniciaRecordVideoClick);
                 this.btStartVideo.Enabled = true;
+
+                setBrainReader(false);
+
                 iniciaVideo(0);
 
                 //botoes para gravar
@@ -390,6 +397,8 @@ namespace ProjetoTCC
                 btPdfSessao.Text = "PDF";
                 btPdfSessao.UseVisualStyleBackColor = true;
                 btPdfSessao.Click += new System.EventHandler(this.btGeraPdfSessao);
+                btPdfSessao.Enabled = false;
+                btPdfSessao.Visible = false;
             }
 
             AnchorStyles anchorEdit = ((System.Windows.Forms.AnchorStyles)
@@ -558,30 +567,41 @@ namespace ProjetoTCC
                 
             } else
             {
-                Panel pnlMarcas = new Panel();
-                pnlFields.Controls.Add(pnlMarcas);
+                TextBox tbDescricao = new TextBox();
+                tbDescricao.Location = new System.Drawing.Point(lbEspecialista.Location.X, listEspecialista.Location.Y + listEspecialista.Size.Height + spacing + 2);
+                tbDescricao.Name = "tbDescricao";
+                tbDescricao.Size = new System.Drawing.Size(pnlFields.Size.Width - tbDescricao.Location.X - spacing - 5, pnlFields.Size.Height - tbDescricao.Location.Y - spacing - 5);
+                tbDescricao.Multiline = true;
+                tbDescricao.ScrollBars = ScrollBars.Both;
+                tbDescricao.TabIndex = 1;
+                tbDescricao.Anchor = anchorEdit;
 
-                pnlMarcas.Location = new System.Drawing.Point(lbEspecialista.Location.X, lbEspecialista.Location.Y + lbEspecialista.Size.Height + spacing + 2);
-                pnlMarcas.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom
-            | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-                pnlFields.AutoScroll = false;
+                pnlFields.Controls.Add(tbDescricao);
 
-                pnlMarcas.BackColor = this.pnlEdit.BackColor;
-                pnlMarcas.BorderStyle = this.pnlEdit.BorderStyle;
-                pnlMarcas.Size = new Size(this.pnlEdit.Size.Width, 200);
-                pnlMarcas.Location = new System.Drawing.Point(1, videoControl.Location.Y + videoControl.Size.Height);
-                pnlMarcas.Name = "pnlMarcas";
+                //    Panel pnlMarcas = new Panel();
+                //    pnlFields.Controls.Add(pnlMarcas);
 
-                ListBox listaMarcas = new ListBox();
-                pnlMarcas.Controls.Add(listaMarcas);
-                listaMarcas.ItemHeight = 16;
-                listaMarcas.ScrollAlwaysVisible = true;
-                listaMarcas.SelectionMode = SelectionMode.One;
-                listaMarcas.DrawMode = DrawMode.Normal;
-                listaMarcas.Location = new System.Drawing.Point(0, 0);
-                listaMarcas.Size = new Size(pnlMarcas.Size.Width / 2, pnlMarcas.Size.Height);
-                listaMarcas.Name = "listaMarcas";
-                listaMarcas.BorderStyle = pnlMarcas.BorderStyle;
+                //    pnlMarcas.Location = new System.Drawing.Point(lbEspecialista.Location.X, lbEspecialista.Location.Y + lbEspecialista.Size.Height + spacing + 2);
+                //    pnlMarcas.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom
+                //| System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+                //    pnlFields.AutoScroll = false;
+
+                //    pnlMarcas.BackColor = this.pnlEdit.BackColor;
+                //    pnlMarcas.BorderStyle = this.pnlEdit.BorderStyle;
+                //    pnlMarcas.Size = new Size(this.pnlEdit.Size.Width, 200);
+                //    pnlMarcas.Location = new System.Drawing.Point(1, videoControl.Location.Y + videoControl.Size.Height);
+                //    pnlMarcas.Name = "pnlMarcas";
+
+                //    ListBox listaMarcas = new ListBox();
+                //    pnlMarcas.Controls.Add(listaMarcas);
+                //    listaMarcas.ItemHeight = 16;
+                //    listaMarcas.ScrollAlwaysVisible = true;
+                //    listaMarcas.SelectionMode = SelectionMode.One;
+                //    listaMarcas.DrawMode = DrawMode.Normal;
+                //    listaMarcas.Location = new System.Drawing.Point(0, 0);
+                //    listaMarcas.Size = new Size(pnlMarcas.Size.Width / 2, pnlMarcas.Size.Height);
+                //    listaMarcas.Name = "listaMarcas";
+                //    listaMarcas.BorderStyle = pnlMarcas.BorderStyle;
             }
         }
 
@@ -966,13 +986,13 @@ namespace ProjetoTCC
             {
                 bool continua = true;
 
-                if (!continua && this.listCamera.Items.Count == 0)
+                if (continua && this.listCamera.Items.Count == 0)
                 {
                     continua = false;
                     MessageBox.Show("Nenhuma camera foi detectada, não é possível iniciar a gravação.", "Aviso");
                 }
 
-                if (!continua && isVideoRecorded)
+                if (continua && isVideoRecorded)
                 {
                     if (DialogResult.No == MessageBox.Show("Já foi realizada uma gravação para esta sessão." +
                         "\nIniciar uma nova gravação irá sobreescrever a antiga." +
@@ -982,7 +1002,7 @@ namespace ProjetoTCC
                     }
                 }
 
-                if (!continua && !isBrainReader)
+                if (continua && !isBrainReader)
                 {
                     if(DialogResult.No == MessageBox.Show("Não há conexão com o equipamento de leitura de ondas cerebrais." +
                         "\nDeseja iniciar a gravação mesmo assim?", "Aviso", MessageBoxButtons.YesNo)){
@@ -1136,7 +1156,7 @@ namespace ProjetoTCC
                     clickNovo();
                     break;
                 case 'L':
-                    clickLocaliza();
+//                    clickLocaliza();
                     break;
                 case 'V':
                     clickVolta();
@@ -1223,7 +1243,9 @@ namespace ProjetoTCC
             bool salva = true;
 
             string titulo = pnlEdit.Controls.Find("tbTitulo", true)[0].Text.Trim();
-            
+
+            string descricao = pnlEdit.Controls.Find("tbDescricao", true)[0].Text.Trim();
+
             if (titulo.Trim().Length < 1)
             {
                 MessageBox.Show("O titulo da sessao não pode ser vazia!");
@@ -1240,12 +1262,12 @@ namespace ProjetoTCC
                 {
                     string caminhoVideo = "video_sessao_" + this.sessaoSelecionada.ID + ".avi"; // Output file
 
-                    this.sessaoSelecionada.updateValues(esp, dataSessao, caminhoVideo, titulo);
+                    this.sessaoSelecionada.updateValues(esp, dataSessao, caminhoVideo, titulo, descricao);
 
                     long ID = this.sessaoSelecionada.ID;
-                    gridListaSessoes.Where(p => p.ID == ID).First().updateValues(esp, dataSessao, caminhoVideo, titulo);
+                    gridListaSessoes.Where(p => p.ID == ID).First().updateValues(esp, dataSessao, caminhoVideo, titulo, descricao);
 
-                    Biblioteca.updateSessaoSelecionada(ID, esp, dataSessao, caminhoVideo, titulo);
+                    Biblioteca.updateSessaoSelecionada(ID, esp, dataSessao, caminhoVideo, titulo, descricao);
 
                     MessageBox.Show("Sessao Atualizada com sucesso!");
                 }
@@ -1294,7 +1316,7 @@ namespace ProjetoTCC
                     string caminhoVideo = "video_sessao_" + Sessao.ProxID() + ".avi"; // Output file
 
                     Paciente pac = Biblioteca.getPacientes().Where(p => p.ID == this.IDPaciente).First();
-                    Sessao ses = new Sessao(pac, esp, dataSessao, caminhoVideo, titulo);
+                    Sessao ses = new Sessao(pac, esp, dataSessao, caminhoVideo, titulo, descricao);
                     this.addSessao(ses);
 
                     MessageBox.Show("Sessao Salva com sucesso!");
