@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using Accord.Video.DirectShow;
 
 namespace ProjetoTCC
 {
@@ -34,19 +35,32 @@ namespace ProjetoTCC
         {
         }
 
+        private void updateBtEsqState(char value)
+        {
+            btEsqState = value;
+        }
+
+        private void updateBtDirState(char value)
+        {
+            btDirState = value;
+            if (value == 'L')
+            {
+                enableBtDir(false);
+            } else
+            {
+                enableBtDir(true);
+            }
+        }
+
         public void iniPainelPaciente(List<Paciente> listaPacientes)
         {
             initPainel(this);
 
-            this.btEsqState = 'N';
-            this.btDirState = 'L';
+            updateBtEsqState('N');
+            updateBtDirState('L');
 
             this.listaPacientes = listaPacientes;
             this.gridListaPacientes = this.listaPacientes.OrderBy(p => p.nome).ToList();
-
-            //this.btEsq.Click += new System.EventHandler(this.btEsq_Click);
-            //this.btDir.Click += new System.EventHandler(this.btDir_Click);
-            //this.btDel.Click += new System.EventHandler(this.btDel_Click);
 
             this.btDel.Enabled = false;
             this.btDel.Visible = false;
@@ -84,8 +98,8 @@ namespace ProjetoTCC
 
         private void createGrid()
         {
-            btEsqState = 'N';
-            btDirState = 'L';
+            updateBtEsqState('N');
+            updateBtDirState('L');
 
             btEsq.Text = "Novo";
             btDir.Text = "Localiza";
@@ -107,11 +121,24 @@ namespace ProjetoTCC
                 this.dtGrid.RowEnter += this.dtGridRowSelectHandler;
             }
 
+            DataGridViewButtonColumn ColBt = new DataGridViewButtonColumn();
             DataGridViewTextBoxColumn ColID = new DataGridViewTextBoxColumn();
             DataGridViewTextBoxColumn ColName = new DataGridViewTextBoxColumn();
             DataGridViewTextBoxColumn ColDataNasc = new DataGridViewTextBoxColumn();
-            DataGridViewTextBoxColumn ColCpf = new DataGridViewTextBoxColumn();
-            DataGridViewButtonColumn ColBt = new DataGridViewButtonColumn();
+
+            DataGridViewTextBoxColumn ColIdadeCadastro = new DataGridViewTextBoxColumn();
+            DataGridViewTextBoxColumn ColIdadeAtual = new DataGridViewTextBoxColumn();
+
+            DataGridViewTextBoxColumn ColIdadeLing = new DataGridViewTextBoxColumn();
+            DataGridViewTextBoxColumn ColIdadeLog = new DataGridViewTextBoxColumn();
+            DataGridViewTextBoxColumn ColIdadeMat = new DataGridViewTextBoxColumn();
+
+            ColBt.HeaderText = "";
+            ColBt.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            ColBt.Name = "";
+            ColBt.Width = 25;
+            ColBt.MinimumWidth = 20;
+            ColBt.Resizable = DataGridViewTriState.False;
 
             ColID.HeaderText = "ID";
             ColID.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -135,18 +162,32 @@ namespace ProjetoTCC
             ColDataNasc.Name = "Data Nasc";
             ColDataNasc.Width = 98;
 
-            ColCpf.HeaderText = "CPF";
-            ColCpf.Name = "CPF";
-            ColCpf.Width = 100;
-            ColCpf.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            ColIdadeCadastro.HeaderText = "Idade Original";
+            ColIdadeCadastro.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            ColIdadeCadastro.Name = "IdadeOriginal";
+            ColIdadeCadastro.Width = 100;
 
-            ColBt.HeaderText = "";
-            ColBt.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            ColBt.Name = "";
-            ColBt.Width = 25;
-            ColBt.MinimumWidth = 20;
-            ColBt.Resizable = DataGridViewTriState.False;
-            
+            ColIdadeAtual.HeaderText = "Idade Atual";
+            ColIdadeAtual.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            ColIdadeAtual.Name = "Idade Atual";
+            ColIdadeAtual.Width = 100;
+
+            ColIdadeLing.HeaderText = "Linguagem";
+            ColIdadeLing.Name = "Linguagem";
+            ColIdadeLing.Width = 100;
+            ColIdadeLing.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+            ColIdadeLog.HeaderText = "Logica";
+            ColIdadeLog.Name = "Logica";
+            ColIdadeLog.Width = 100;
+            ColIdadeLog.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+            ColIdadeMat.HeaderText = "Matematica";
+            ColIdadeMat.Name = "Matematica";
+            ColIdadeMat.Width = 100;
+            ColIdadeMat.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+
             this.dtGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 
             this.dtGrid.GridColor = Color.Black;
@@ -160,7 +201,13 @@ namespace ProjetoTCC
             this.dtGrid.Columns.Add(ColID);
             this.dtGrid.Columns.Add(ColName);
             this.dtGrid.Columns.Add(ColDataNasc);
-            this.dtGrid.Columns.Add(ColCpf);
+
+            this.dtGrid.Columns.Add(ColIdadeCadastro);
+            this.dtGrid.Columns.Add(ColIdadeAtual);
+
+            this.dtGrid.Columns.Add(ColIdadeLing);
+            this.dtGrid.Columns.Add(ColIdadeLog);
+            this.dtGrid.Columns.Add(ColIdadeMat);
 
             this.dtGrid.Location = new System.Drawing.Point(0, 0);
             this.dtGrid.Name = "dataGridView1";
@@ -176,17 +223,18 @@ namespace ProjetoTCC
 
         private void createEdit()
         {
-            btEsqState = 'V';
-            btEsq.Text = "Voltar";
+            updateBtEsqState('V');
+            updateBtDirState('S');
 
-            btDirState = 'S';
+            btEsq.Text = "Voltar";
             btDir.Text = "Salvar";
 
             if (!novoRegistro)
             {
                 btDel.Visible = true;
                 btDel.Enabled = true;
-            } else
+            }
+            else
             {
                 btDel.Visible = false;
                 btDel.Enabled = false;
@@ -203,7 +251,7 @@ namespace ProjetoTCC
             this.pnlEdit.BackColor = this.pnlArea.BackColor;
             this.pnlEdit.BorderStyle = this.pnlArea.BorderStyle;
             this.pnlEdit.Location = new System.Drawing.Point(-1, 0);
-            this.pnlEdit.Name = "pnlArea";
+            this.pnlEdit.Name = "pnlEdit";
             this.pnlEdit.Size = this.pnlArea.Size;
             this.pnlEdit.TabIndex = 0;
 
@@ -231,6 +279,15 @@ namespace ProjetoTCC
             Label lbDescricao = new System.Windows.Forms.Label();
             TextBox tbDescricao = new System.Windows.Forms.TextBox();
 
+            Label lbAprLing = new System.Windows.Forms.Label();
+            ComboBox cbAprLing = new ComboBox();
+
+            Label lbAprLog = new System.Windows.Forms.Label();
+            ComboBox cbAprLog = new ComboBox();
+
+            Label lbAprMat = new System.Windows.Forms.Label();
+            ComboBox cbAprMat = new ComboBox();
+
             this.pnlEdit.Controls.Add(pbFoto);
             this.pnlEdit.Controls.Add(lbID);
             this.pnlEdit.Controls.Add(lbNome);
@@ -251,35 +308,19 @@ namespace ProjetoTCC
             this.pnlEdit.Controls.Add(lbDescricao);
             this.pnlEdit.Controls.Add(tbDescricao);
 
-            if (novoRegistro)
-            {
-                lbID.Text = "ID: " + Paciente.ProxID();
-                tbNome.Text = "";
-                dtpDataNasc.Value = DateTime.Now;
-                tbCpf.Text = "";
-                tbRg.Text = "";
-                rbSexoF.Checked = true;
-                rbSexoM.Checked = false;
-                rbSexoO.Checked = false;
-                tbDescricao.Text = "";
-            }
-            else
-            {
-                lbID.Text = "ID: " + this.pacienteSelecionado.ID;
-                tbNome.Text = this.pacienteSelecionado.nome;
-                dtpDataNasc.Value = this.pacienteSelecionado.dataNasc;
-                tbCpf.Text = this.pacienteSelecionado.cpf;
-                tbRg.Text = this.pacienteSelecionado.rg;
-                rbSexoF.Checked = (this.pacienteSelecionado.sexo.Equals("F"));
-                rbSexoM.Checked = (this.pacienteSelecionado.sexo.Equals("M"));
-                rbSexoO.Checked = (this.pacienteSelecionado.sexo.Equals("O"));
-                tbDescricao.Text = this.pacienteSelecionado.descricao;
-            }
+            this.pnlEdit.Controls.Add(lbAprLing);
+            this.pnlEdit.Controls.Add(cbAprLing);
+
+            this.pnlEdit.Controls.Add(lbAprLog);
+            this.pnlEdit.Controls.Add(cbAprLog);
+
+            this.pnlEdit.Controls.Add(lbAprMat);
+            this.pnlEdit.Controls.Add(cbAprMat);
 
             pbFoto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top
             | System.Windows.Forms.AnchorStyles.Right)));
-            pbFoto.Size = new System.Drawing.Size(270, 270);
-            pbFoto.Location = new System.Drawing.Point(this.pnlEdit.Size.Width - pbFoto.Size.Width-1, 0);
+            pbFoto.Size = new System.Drawing.Size(255, 255);
+            pbFoto.Location = new System.Drawing.Point(this.pnlEdit.Size.Width - pbFoto.Size.Width - 5, 10);
             pbFoto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pbFoto.Name = "pbFoto";
             pbFoto.TabIndex = 0;
@@ -294,11 +335,21 @@ namespace ProjetoTCC
                 if (!File.Exists(FotoFile))
                 {
                     FotoFile = @"resources/img/foto.png";
-                }                
+                }
             }
 
-            Image imgPaciente = ResizeImage(Image.FromFile(FotoFile), pbFoto.Size.Width, pbFoto.Size.Height);
-            Image imgBackup = ResizeImage(Image.FromFile(@"resources/img/foto.png"), pbFoto.Size.Width, pbFoto.Size.Height);
+            Image imgPaciente = null;
+            Image imgBackup = null;
+
+            using (var bmpTemp = new Bitmap(FotoFile))
+            {
+                imgPaciente = ResizeImage(new Bitmap(bmpTemp), pbFoto.Size.Width, pbFoto.Size.Height);
+            }
+
+            using (var bmpTemp = new Bitmap(@"resources/img/foto.png"))
+            {
+                imgBackup = ResizeImage(new Bitmap(bmpTemp), pbFoto.Size.Width, pbFoto.Size.Height);
+            }
 
             pbFoto.Image = imgPaciente;
             pbFoto.ErrorImage = imgBackup;
@@ -321,38 +372,39 @@ namespace ProjetoTCC
                 ((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Top))
             );
 
+            int spacing = 7;
+
             lbID.AutoSize = false;
             lbID.Location = new System.Drawing.Point(4, 3);
             lbID.Name = "lbID";
-            lbID.Size = new System.Drawing.Size(pnlEdit.ClientSize.Width - pbFoto.Location.X-10, 20);
+            lbID.Size = new System.Drawing.Size(pnlEdit.ClientSize.Width - pbFoto.Location.X - 10, 20);
             lbID.Anchor = anchorEdit;
 
             lbNome.AutoSize = false;
-            lbNome.Location = new System.Drawing.Point(lbID.Location.X, lbID.Location.Y + lbID.Size.Height + 5);
+            lbNome.Location = new System.Drawing.Point(lbID.Location.X, lbID.Location.Y + lbID.Size.Height + spacing);
             lbNome.Name = "lbNome";
             lbNome.Size = new System.Drawing.Size(50, 20);
             lbNome.Text = "Nome: ";
             lbNome.Anchor = anchorEdit;
 
-            tbNome.Location = new System.Drawing.Point(lbNome.Location.X + lbNome.Size.Width, lbNome.Location.Y - 3);
+            tbNome.Location = new System.Drawing.Point(lbNome.Location.X + lbNome.Size.Width, lbNome.Location.Y - (spacing / 2));
             tbNome.Name = "tbNome";
-            tbNome.Size = new System.Drawing.Size(220, lbNome.Size.Height);
+            tbNome.Size = new System.Drawing.Size(pbFoto.Location.X - tbNome.Location.X - 30, lbNome.Size.Height);
             tbNome.TabIndex = 1;
             tbNome.Anchor = anchorEdit;
 
             lbDataNasc.AutoSize = false;
-            lbDataNasc.Location = new System.Drawing.Point(lbNome.Location.X, lbNome.Location.Y + lbNome.Size.Height + 5);
+            lbDataNasc.Location = new System.Drawing.Point(lbNome.Location.X, lbNome.Location.Y + lbNome.Size.Height + spacing);
             lbDataNasc.Name = "lbDataNasc";
             lbDataNasc.Size = new System.Drawing.Size(80, 20);
             lbDataNasc.TabIndex = 0;
             lbDataNasc.Text = "Data Nasc: ";
             lbDataNasc.Anchor = anchorEdit;
 
-            dtpDataNasc.Location = new System.Drawing.Point(lbDataNasc.Location.X + lbDataNasc.Size.Width, lbDataNasc.Location.Y -3);
+            dtpDataNasc.Location = new System.Drawing.Point(lbDataNasc.Location.X + lbDataNasc.Size.Width, lbDataNasc.Location.Y - (spacing / 2));
             dtpDataNasc.Name = "dtpDataNasc";
             dtpDataNasc.Size = new System.Drawing.Size(120, 22);
             dtpDataNasc.TabIndex = 2;
-            dtpDataNasc.MaxDate = DateTime.Now;
             dtpDataNasc.ShowUpDown = false;
             dtpDataNasc.ShowCheckBox = false;
             dtpDataNasc.Format = DateTimePickerFormat.Custom;
@@ -360,35 +412,33 @@ namespace ProjetoTCC
             dtpDataNasc.Anchor = anchorEdit;
 
             lbCpf.AutoSize = false;
-            lbCpf.Location = new System.Drawing.Point(lbDataNasc.Location.X, lbDataNasc.Location.Y + lbDataNasc.Size.Height + 5);
+            lbCpf.Location = new System.Drawing.Point(lbDataNasc.Location.X, lbDataNasc.Location.Y + lbDataNasc.Size.Height + spacing);
             lbCpf.Name = "lbCpf";
             lbCpf.Size = new System.Drawing.Size(50, 20);
             lbCpf.Text = "CPF: ";
             lbCpf.Anchor = anchorEdit;
 
-            tbCpf.Location = new System.Drawing.Point(lbCpf.Location.X + lbCpf.Size.Width, lbCpf.Location.Y - 3);
+            tbCpf.Location = new System.Drawing.Point(lbCpf.Location.X + lbCpf.Size.Width, lbCpf.Location.Y - (spacing / 2));
             tbCpf.Name = "tbCpf";
-            tbCpf.Size = new System.Drawing.Size(220, lbCpf.Size.Height);
+            tbCpf.Size = new System.Drawing.Size(pbFoto.Location.X - tbCpf.Location.X - 30, lbCpf.Size.Height);
             tbCpf.TabIndex = 1;
             tbCpf.Anchor = anchorEdit;
 
             lbRg.AutoSize = false;
-            lbRg.Location = new System.Drawing.Point(lbCpf.Location.X, lbCpf.Location.Y + lbCpf.Size.Height + 5);
+            lbRg.Location = new System.Drawing.Point(lbCpf.Location.X, lbCpf.Location.Y + lbCpf.Size.Height + spacing);
             lbRg.Name = "lbRg";
             lbRg.Size = new System.Drawing.Size(50, 20);
             lbRg.Text = "RG: ";
             lbRg.Anchor = anchorEdit;
 
-            tbRg.Location = new System.Drawing.Point(lbRg.Location.X + lbRg.Size.Width, lbRg.Location.Y - 3);
+            tbRg.Location = new System.Drawing.Point(lbRg.Location.X + lbRg.Size.Width, lbRg.Location.Y - (spacing / 2));
             tbRg.Name = "tbRg";
-            tbRg.Size = new System.Drawing.Size(220, lbRg.Size.Height);
+            tbRg.Size = new System.Drawing.Size(pbFoto.Location.X - tbRg.Location.X - 30, lbRg.Size.Height);
             tbRg.TabIndex = 1;
             tbRg.Anchor = anchorEdit;
-            
-            //----------------------------------------------------------------------------------------------------------------------------
 
             lbSexo.AutoSize = false;
-            lbSexo.Location = new System.Drawing.Point(lbRg.Location.X, lbRg.Location.Y + lbRg.Size.Height + 5);
+            lbSexo.Location = new System.Drawing.Point(lbRg.Location.X, lbRg.Location.Y + lbRg.Size.Height + spacing);
             lbSexo.Name = "lbSexo";
             lbSexo.Size = new System.Drawing.Size(50, 20);
             lbSexo.TabIndex = 0;
@@ -419,21 +469,126 @@ namespace ProjetoTCC
             rbSexoO.UseVisualStyleBackColor = true;
             rbSexoO.Anchor = anchorEdit;
 
+            //-------------------------------------------------
+
+            lbAprLing.AutoSize = false;
+            lbAprLing.Location = new System.Drawing.Point(lbSexo.Location.X, lbSexo.Location.Y + lbSexo.Size.Height + spacing);
+            lbAprLing.Name = "lbAprLing";
+            lbAprLing.Size = new System.Drawing.Size(123, 20);
+            lbAprLing.TabIndex = 0;
+            lbAprLing.Text = "Idade Linguagem:";
+            lbAprLing.Anchor = anchorEdit;
+
+            cbAprLing.ItemHeight = 16;
+            cbAprLing.DrawMode = DrawMode.Normal;
+            cbAprLing.Location = new System.Drawing.Point(lbAprLing.Location.X + lbAprLing.Size.Width, lbAprLing.Location.Y - (spacing / 2));
+            cbAprLing.Size = new Size(pbFoto.Location.X - cbAprLing.Location.X - 30, 20);
+            cbAprLing.Name = "cbAprLing";
+            cbAprLing.DropDownStyle = ComboBoxStyle.DropDownList;
+            populaIdades(cbAprLing);
+
+            lbAprLog.AutoSize = false;
+            lbAprLog.Location = new System.Drawing.Point(lbAprLing.Location.X, lbAprLing.Location.Y + lbAprLing.Size.Height + spacing);
+            lbAprLog.Name = "lbAprLog";
+            lbAprLog.Size = new System.Drawing.Size(123, 20);
+            lbAprLog.TabIndex = 0;
+            lbAprLog.Text = "Idade Logica:";
+            lbAprLog.Anchor = anchorEdit;
+
+            cbAprLog.ItemHeight = 16;
+            cbAprLog.DrawMode = DrawMode.Normal;
+            cbAprLog.Location = new System.Drawing.Point(lbAprLog.Location.X + lbAprLog.Size.Width, lbAprLog.Location.Y - (spacing / 2));
+            cbAprLog.Size = new Size(pbFoto.Location.X - cbAprLog.Location.X - 30, 20);
+            cbAprLog.Name = "cbAprLog";
+            cbAprLog.DropDownStyle = ComboBoxStyle.DropDownList;
+            populaIdades(cbAprLog);
+
+            lbAprMat.AutoSize = false;
+            lbAprMat.Location = new System.Drawing.Point(lbAprLog.Location.X, lbAprLog.Location.Y + lbAprLog.Size.Height + spacing);
+            lbAprMat.Name = "lbAprMat";
+            lbAprMat.Size = new System.Drawing.Size(123, 20);
+            lbAprMat.TabIndex = 0;
+            lbAprMat.Text = "Idade Matematica:";
+            lbAprMat.Anchor = anchorEdit;
+
+            cbAprMat.ItemHeight = 16;
+            cbAprMat.DrawMode = DrawMode.Normal;
+            cbAprMat.Location = new System.Drawing.Point(lbAprMat.Location.X + lbAprMat.Size.Width, lbAprMat.Location.Y - (spacing / 2));
+            cbAprMat.Size = new Size(pbFoto.Location.X - cbAprMat.Location.X - 30, 20);
+            cbAprMat.Name = "cbAprMat";
+            cbAprMat.DropDownStyle = ComboBoxStyle.DropDownList;
+            populaIdades(cbAprMat);
+
+            //--------------------------------------------------
+
             lbDescricao.AutoSize = false;
-            lbDescricao.Location = new System.Drawing.Point(lbSexo.Location.X, lbSexo.Location.Y + lbSexo.Size.Height + 5);
+            lbDescricao.Location = new System.Drawing.Point(lbAprMat.Location.X, lbAprMat.Location.Y + lbAprMat.Size.Height + spacing + (spacing / 2));
             lbDescricao.Name = "lbDescricao";
             lbDescricao.Size = new System.Drawing.Size(100, 20);
             lbDescricao.TabIndex = 0;
             lbDescricao.Text = "Observações:";
             lbDescricao.Anchor = anchorEdit;
 
-            tbDescricao.Location = new System.Drawing.Point(lbDescricao.Location.X, lbDescricao.Location.Y + lbDescricao.Size.Height);
+            tbDescricao.Location = new System.Drawing.Point(lbDescricao.Location.X, lbDescricao.Location.Y + lbDescricao.Size.Height + (spacing / 2));
             tbDescricao.Name = "tbDescricao";
-            tbDescricao.Size = new System.Drawing.Size(300, 150);
+            tbDescricao.Size = new System.Drawing.Size(tbDescricao.Location.X + pnlEdit.Size.Width - 175, 250);
+            tbDescricao.MinimumSize = tbDescricao.Size;
             tbDescricao.Multiline = true;
             tbDescricao.ScrollBars = ScrollBars.Both;
             tbDescricao.TabIndex = 1;
             tbDescricao.Anchor = anchorEdit;
+
+            var margin = tbDescricao.Margin;
+            margin.Bottom = 10;
+            tbDescricao.Margin = margin;
+
+            /* Popula campos */
+
+            if (novoRegistro)
+            {
+                lbID.Text = "ID: " + Paciente.ProxID();
+                tbNome.Text = "";
+                dtpDataNasc.Value = DateTime.Now;
+                dtpDataNasc.MaxDate = DateTime.Now;
+                tbCpf.Text = "";
+                tbRg.Text = "";
+                rbSexoF.Checked = true;
+                rbSexoM.Checked = false;
+                rbSexoO.Checked = false;
+                tbDescricao.Text = "";
+                cbAprLing.SelectedIndex = 0;
+                cbAprLog.SelectedIndex = 0;
+                cbAprMat.SelectedIndex = 0;
+            }
+            else
+            {
+                lbID.Text = "ID: " + this.pacienteSelecionado.ID;
+                tbNome.Text = this.pacienteSelecionado.nome;
+                dtpDataNasc.Value = this.pacienteSelecionado.dataNasc;
+                tbCpf.Text = this.pacienteSelecionado.cpf;
+                tbRg.Text = this.pacienteSelecionado.rg;
+                rbSexoF.Checked = (this.pacienteSelecionado.sexo.Equals("F"));
+                rbSexoM.Checked = (this.pacienteSelecionado.sexo.Equals("M"));
+                rbSexoO.Checked = (this.pacienteSelecionado.sexo.Equals("O"));
+                tbDescricao.Text = this.pacienteSelecionado.descricao;
+                cbAprLing.SelectedIndex = ((int)this.pacienteSelecionado.idadeAprLing - 1);
+                cbAprLog.SelectedIndex = ((int)this.pacienteSelecionado.idadeAprLog - 1);
+                cbAprMat.SelectedIndex = ((int)this.pacienteSelecionado.idadeAprMat - 1);
+            }
+        
+        }
+
+        private void populaIdades(ComboBox cBox)
+        {
+            cBox.Items.Clear();
+            cBox.DisplayMember = "_DS";
+            cBox.ValueMember = "_ID";
+
+            for (int i = 1; i <= 9; i++)
+            {
+                Idade id = new Idade(i);
+                cBox.Items.Add(id);
+            }
         }
 
         private void filtraPacientes()
@@ -444,7 +599,13 @@ namespace ProjetoTCC
 
                 foreach (Paciente p in gridListaPacientes)
                 {
-                    string[] row = new string[] { "+", p.ID.ToString(), p.nome, p.dataNasc.ToString("dd/MM/yyyy"), p.cpf };
+                    //ColBt, ColID, ColName, ColDataNasc, ColIdadeLing, ColIdadeLog, ColIdadeMat, ColNomeGuardiao1
+
+                    string[] row = new string[] { "+", p.ID.ToString(), p.nome, p.dataNasc.ToString("dd/MM/yyyy"),
+                        p.getIdadeAnoMesesC(), p.getIdadeAnoMesesA(),
+                        Biblioteca.getIdadeAprendizagem(p.idadeAprLing),
+                        Biblioteca.getIdadeAprendizagem(p.idadeAprLog),
+                        Biblioteca.getIdadeAprendizagem(p.idadeAprMat)};
                     dtGrid.Rows.Add(row);
                 }
             }
@@ -534,24 +695,29 @@ namespace ProjetoTCC
                 MessageBox.Show("Não é possível excluir um paciente que possui sessões.");
             } else
             {
-                long ID = this.pacienteSelecionado.ID;
-                listaPacientes.Remove(listaPacientes.Where(p => p.ID == ID).First());
-                gridListaPacientes.Remove(gridListaPacientes.Where(p => p.ID == ID).First());
-                Biblioteca.excluiPacienteSelecionado(ID);
-
-//                MessageBox.Show("Paciente Excluído com sucesso!");
-
-                if (this.gridListaPacientes.Count > 0)
+                if(DialogResult.Yes == MessageBox.Show(this, "Deseja confirmar a exclusão desse paciente?", "Aviso", MessageBoxButtons.YesNo))
                 {
-                    this.selectedIndex = 0;
-                }
-                else
-                {
-                    this.selectedIndex = -1;
-                }
+                    long ID = this.pacienteSelecionado.ID;
+                    listaPacientes.Remove(listaPacientes.Where(p => p.ID == ID).First());
+                    gridListaPacientes.Remove(gridListaPacientes.Where(p => p.ID == ID).First());
 
-                novoRegistro = false;
-                alteraModo(0);
+                    PictureBox pbFoto = (PictureBox)(pnlEdit.Controls.Find("pbFoto", true)[0]);
+                    pbFoto.Image = null;
+
+                    if (this.gridListaPacientes.Count > 0)
+                    {
+                        this.selectedIndex = 0;
+                    }
+                    else
+                    {
+                        this.selectedIndex = -1;
+                    }
+
+                    novoRegistro = false;
+                    alteraModo(0);
+
+                    Biblioteca.excluiPacienteSelecionado(ID);
+                }
             }
         }
 
@@ -605,7 +771,7 @@ namespace ProjetoTCC
 
             DateTime dataNasc = ((DateTimePicker)(pnlEdit.Controls.Find("dtpDataNasc", true)[0])).Value;
 
-            string sexo = "";
+            string sexo = "O";
             if (((RadioButton)(pnlEdit.Controls.Find("rbSexoF", true)[0])).Checked)
             {
                 sexo = "F";
@@ -634,20 +800,29 @@ namespace ProjetoTCC
             {
                 MessageBox.Show("O RG do paciente não pode ser vazio!");
                 salva = false;
-            }            
+            }
+
+            IdadeAprendizagem idadeAprLing = (IdadeAprendizagem)((ComboBox)pnlEdit.Controls.Find("cbAprLing", true)[0]).SelectedIndex +1;
+            IdadeAprendizagem idadeAprLog = (IdadeAprendizagem)((ComboBox)pnlEdit.Controls.Find("cbAprLog", true)[0]).SelectedIndex +1;
+            IdadeAprendizagem idadeAprMat = (IdadeAprendizagem)((ComboBox)pnlEdit.Controls.Find("cbAprMat", true)[0]).SelectedIndex +1;
 
             if (salva)
             {
                 if(this.pacienteSelecionado != null) {
-                    this.pacienteSelecionado.updateValues(nome, dataNasc, this.caminhoFoto, cpf, rg, descricao, sexo);
+
+                    this.pacienteSelecionado.updateValues(nome, dataNasc, cpf, rg, descricao,
+                        sexo, idadeAprLing, idadeAprLog, idadeAprMat, this.pacienteSelecionado.dataCadastro);
 
                     long ID = this.pacienteSelecionado.ID;
-                    gridListaPacientes.Where(p => p.ID == ID).First().updateValues(nome, dataNasc, this.caminhoFoto, cpf, rg, descricao, sexo);
+                    gridListaPacientes.Where(p => p.ID == ID).First().updateValues(nome, dataNasc, cpf, rg, descricao,
+                        sexo, idadeAprLing, idadeAprLog, idadeAprMat, this.pacienteSelecionado.dataCadastro);
 
-                    Biblioteca.updatePacienteSelecionado(ID, nome, dataNasc, this.caminhoFoto, cpf, rg, descricao, sexo);
+                    Biblioteca.updatePacienteSelecionado(ID, nome, dataNasc, cpf, rg, descricao,
+                        sexo, idadeAprLing, idadeAprLog, idadeAprMat, this.pacienteSelecionado.dataCadastro);
                 } else
                 {
-                    Paciente pac = new Paciente(nome, dataNasc, "", cpf, rg, descricao, sexo);
+                    Paciente pac = new Paciente(nome, dataNasc, cpf, rg, descricao,
+                        sexo, idadeAprLing, idadeAprLog, idadeAprMat, DateTime.Now);
                     this.addPaciente(pac);
                 }
 
@@ -672,6 +847,7 @@ namespace ProjetoTCC
         private void disposeEdit()
         {
             this.pnlArea.Controls.Remove(pnlEdit);
+            pnlEdit.Dispose();
             pnlEdit = null;
         }
 
@@ -693,7 +869,6 @@ namespace ProjetoTCC
 
         public static Image ResizeImage(Image image, int width, int height)
         {
-
             Bitmap videoOutput = new Bitmap(width, height);
 
             using (Graphics gr = Graphics.FromImage(videoOutput))
@@ -704,7 +879,6 @@ namespace ProjetoTCC
                 gr.CompositingQuality = CompositingQuality.HighQuality;
                 gr.DrawImage(image, new System.Drawing.Rectangle(0, 0, width, height));
             }
-
             return videoOutput;
         }
 
@@ -720,9 +894,14 @@ namespace ProjetoTCC
 
                 PictureBox pbFoto = (PictureBox)(pnlEdit.Controls.Find("pbFoto", true)[0]);
 
-                Bitmap foto = (Bitmap)Image.FromFile(this.caminhoFoto);
+                Bitmap foto = null;
+                using (var bmpTemp = new Bitmap(this.caminhoFoto))
+                {
+                    foto = new Bitmap(bmpTemp);
+                }
+
                 long ID = (this.pacienteSelecionado != null) ? this.pacienteSelecionado.ID : Paciente.ProxID();
-                string fileName = Biblioteca.getPacientesFolder() + "\\E_" + ID;
+                string fileName = Biblioteca.getPacientesFolder() + "\\P_" + ID;
 
                 Directory.CreateDirectory(fileName);
 
@@ -730,8 +909,18 @@ namespace ProjetoTCC
 
                 foto.Save(this.caminhoFoto, System.Drawing.Imaging.ImageFormat.Png);
 
-                Image imgPaciente = ResizeImage(Image.FromFile(this.caminhoFoto), pbFoto.Size.Width, pbFoto.Size.Height);
-                Image imgBackup = ResizeImage(Image.FromFile(@"resources/img/foto.png"), pbFoto.Size.Width, pbFoto.Size.Height);
+                Image imgPaciente = null;                
+                Image imgBackup = null;
+                
+                using (var bmpTemp = new Bitmap(this.caminhoFoto))
+                {
+                    imgPaciente = ResizeImage(new Bitmap(bmpTemp), pbFoto.Size.Width, pbFoto.Size.Height);
+                }
+
+                using (var bmpTemp = new Bitmap(@"resources/img/foto.png"))
+                {
+                    imgBackup = ResizeImage(new Bitmap(bmpTemp), pbFoto.Size.Width, pbFoto.Size.Height);
+                }
 
                 pbFoto.Image = imgPaciente;
                 pbFoto.ErrorImage = imgBackup;
@@ -750,8 +939,18 @@ namespace ProjetoTCC
 
                 foto.Save(this.caminhoFoto, System.Drawing.Imaging.ImageFormat.Png);
 
-                Image imgPaciente = ResizeImage(Image.FromFile(this.caminhoFoto), pbFoto.Size.Width, pbFoto.Size.Height);
-                Image imgBackup = ResizeImage(Image.FromFile(@"resources/img/foto.png"), pbFoto.Size.Width, pbFoto.Size.Height);
+                Image imgPaciente = null;
+                Image imgBackup = null;
+
+                using (var bmpTemp = new Bitmap(this.caminhoFoto))
+                {
+                    imgPaciente = ResizeImage(new Bitmap(bmpTemp), pbFoto.Size.Width, pbFoto.Size.Height);
+                }
+
+                using (var bmpTemp = new Bitmap(@"resources/img/foto.png"))
+                {
+                    imgBackup = ResizeImage(new Bitmap(bmpTemp), pbFoto.Size.Width, pbFoto.Size.Height);
+                }
 
                 pbFoto.Image = imgPaciente;
                 pbFoto.ErrorImage = imgBackup;
@@ -778,6 +977,5 @@ namespace ProjetoTCC
 
             alteraModo(0);
         }
-
     }
 }

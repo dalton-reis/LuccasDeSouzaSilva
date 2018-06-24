@@ -55,6 +55,24 @@ namespace ProjetoTCC
             lbReduzido.SendToBack();
 
             enableBtDetalheGraph(false);
+            displayPnlCharts(false);
+        }
+
+        public void displayPnlCharts(bool value)
+        {
+            if (pnlCharts != null)
+            {
+                pnlCharts.Enabled = value;
+                pnlCharts.Visible = value;
+                if (value)
+                {
+                    this.pnlPaciente.Size = new Size(this.pnlPaciente.Size.Width, this.pnlCharts.Location.Y - 10);                    
+                } else
+                {
+                    this.pnlPaciente.Size = new Size(this.pnlPaciente.Size.Width, this.btConfig.Location.Y + this.btConfig.Size.Height - 6);
+                }
+                this.pnlPaciente.Refresh();
+            } 
         }
 
         public void initPainelSessao()
@@ -80,40 +98,22 @@ namespace ProjetoTCC
             startBrainReader = false;
             startUpdateGraphs = false;
 
-            Console.WriteLine("Dispose 1");
-
             if (this.thBrainwaveReader != null)
             {
                 this.thBrainwaveReader.Join();
             }
-
-            Console.WriteLine("Dispose 2");
-
-            //if (this.thUpdateGraphs != null)
-            //{
-            //    Thread.Sleep(10000);
-            //    this.thUpdateGraphs.Join();
-            //}
-
-            Console.WriteLine("Dispose 3");
 
             if (this.thVideoFrameReader != null)
             {
                 this.thVideoFrameReader.Join();
             }
 
-            Console.WriteLine("Dispose Sessao");
-
             pnlSessao.dispose();
-
-            Console.WriteLine("Dispose Paciente");
 
             pnlPaciente.dispose();
 
             pnlSessao.Dispose();
             pnlPaciente.Dispose();
-
-            Console.WriteLine("Dispose Fim");
         }
 
         private void videoPlayerDisplay(object sender, VideoPlayer.FrameProcessEventArgs e)
@@ -191,6 +191,10 @@ namespace ProjetoTCC
                 {
                     startBrainReader = false;
                     startUpdateGraphs = false;
+                    displayPnlCharts(false);
+                } else
+                {
+                    displayPnlCharts(true);
                 }
             }
         }
@@ -217,6 +221,13 @@ namespace ProjetoTCC
             {
                 pnlPaciente.SelecionaLinha(0);
                 pnlSessao.listaPacienteSessao(pnlPaciente.getPacienteID());
+            }
+            if (pnlPaciente.btDirState.Equals('L'))
+            {
+                pnlPaciente.enableBtDir(false);
+            } else
+            {
+                pnlPaciente.enableBtDir(true);
             }
         }
 
@@ -284,6 +295,7 @@ namespace ProjetoTCC
                 e.RowIndex >= 0)
             {
                 pnlSessao.GridCelContentClick(sender, e);
+                displayPnlCharts(true);
                 startUpdateGraphs = true;
                 GraphDataQueue = new Queue<NeuroData>();
                 iniciaThreadVideoReader();
@@ -332,7 +344,13 @@ namespace ProjetoTCC
                 NeuroData nr = null;
                     if (this.GraphDataQueue.Count > 0)
                     {
-                        nr = this.GraphDataQueue.Dequeue();
+                        try
+                        {
+                            nr = this.GraphDataQueue.Dequeue();
+                        } catch (Exception ex)
+                        {
+                            nr = null;
+                        }
                     }
                 
                 if (nr != null) {
@@ -361,7 +379,7 @@ namespace ProjetoTCC
         delegate void BoolArgReturnVoidDelegate(bool value);
 
         private void enableBtDetalheGraph(bool value)
-        {
+        {            
             if (this.btDetalheGraph.InvokeRequired)
             {
                 BoolArgReturnVoidDelegate del = new BoolArgReturnVoidDelegate(enableBtDetalheGraph);
@@ -507,16 +525,20 @@ namespace ProjetoTCC
 
         private void btConfig_Click(object sender, EventArgs e)
         {
-            FormConfig formConfig = new FormConfig();
-            formConfig.StartPosition = FormStartPosition.CenterParent;
+            FormConfig formConfig = new FormConfig
+            {
+                StartPosition = FormStartPosition.CenterParent
+            };
             formConfig.ShowDialog();
             formConfig = null;
         }
 
         private void btEspecialistas_Click(object sender, EventArgs e)
         {
-            FormEspecialistas formEspecialistas = new FormEspecialistas();
-            formEspecialistas.StartPosition = FormStartPosition.CenterParent;
+            FormEspecialistas formEspecialistas = new FormEspecialistas
+            {
+                StartPosition = FormStartPosition.CenterParent
+            };
             formEspecialistas.ShowDialog();
             formEspecialistas = null;
         }

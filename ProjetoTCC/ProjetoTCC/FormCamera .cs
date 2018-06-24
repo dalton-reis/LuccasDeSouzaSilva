@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ProjetoTCC
@@ -11,6 +12,7 @@ namespace ProjetoTCC
     public partial class FormCamera : Form
     {
         public Bitmap foto { get; private set; } = null;
+        public VideoCaptureDevice videoCamera { get; private set; } = null;
 
         public FormCamera()
         {
@@ -21,77 +23,49 @@ namespace ProjetoTCC
             pbCamera.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top
             | System.Windows.Forms.AnchorStyles.Right)));
 
-            this.pnlFoto.Location = new System.Drawing.Point(12, 12);
-            this.pnlFoto.Name = "pnlFoto";
-            this.pnlFoto.Size = new System.Drawing.Size(270, 270);
+            cbListCameras.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbListCameras.SelectedValueChanged += ListCamera_SelectedValueChanged;
 
-            iniciaVideo();
-            this.pnlFoto.Refresh();
+            atualizaCameras();
+
+            iniciaVideo(cbListCameras.SelectedIndex);
         }
 
-        private VideoCaptureDevice videoCamera = null;
+        private void ListCamera_SelectedValueChanged(object sender, EventArgs e)
+        {
+            btCapturar.Enabled = false;
+            if (videoCamera != null)
+            {
+                videoCamera.SignalToStop();
+                while (videoCamera.IsRunning)
+                {
+                    Thread.Sleep(0500);
+                }
+                videoCamera = null;
+            }
+            iniciaVideo(cbListCameras.SelectedIndex);
+            Thread.Sleep(1000);
+            btCapturar.Enabled = true;
+        }
 
-        public void iniciaVideo()
+        public void iniciaVideo(int indexCamera)
         {
             if (videoCamera == null)
-            {
-                // enumerate video devices
+            {        
                 FilterInfoCollection VideoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
-
-                if (VideoDevices.Count > 0)
+                videoCamera = new VideoCaptureDevice(VideoDevices[indexCamera].MonikerString);
+                try
                 {
-                    int indexCamera = -1;
-                    int count = 0;
-                    foreach (FilterInfo VideoCaptureDevice in VideoDevices)
-                    {
-                        Debug.WriteLine(VideoCaptureDevice.Name + " __ " + VideoCaptureDevice.MonikerString);
-                        if (VideoCaptureDevice.Name.Equals(Biblioteca.nomeCamera))
-                        {
-                            indexCamera = count;
-                            break;
-                        }
-                        else
-                        {
-                            count++;
-                        }
-                    }
-                    //Integrated Webcam __ @device:pnp:\\?\usb#vid_064e&pid_9202&mi_00#7&1cef3b3&0&0000#{65e8773d-8f56-11d0-a3b9-00a0c9223196}\global
-
-                    bool iniciaCamera = false;
-                    if (indexCamera >= 0)
-                    {
-                        videoCamera = new VideoCaptureDevice(VideoDevices[indexCamera].MonikerString);
-                        iniciaCamera = true;
-                    }
-                    else
-                    {
-                        //seleciona na hora
-                        videoCamera = new VideoCaptureDevice(VideoDevices[0].MonikerString);
-                        iniciaCamera = true;
-                    }
-                    if (iniciaCamera)
-                    {
-                        try
-                        {
-                            videoCamera.NewFrame += new NewFrameEventHandler(VideoCamera_OnNewFrame);
-                            videoCamera.Start();
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Ocorreu um problema ao iniciar a gravação." +
-                               "\nVerifique as configurações da camera e tente novamente." +
-                               "\nSituação técnica:" + ex.Message +
-                               "\nOrigem:" + ex.StackTrace.Substring(0, 255), "Aviso");
-                        }
-                        finally
-                        {
-                        }
-                    }
+                    videoCamera.NewFrame += new NewFrameEventHandler(VideoCamera_OnNewFrame);
+                    videoCamera.Start();
                 }
-                else
+                catch (Exception ex)
                 {
-
-                }
+                    MessageBox.Show("Ocorreu um problema ao iniciar a gravação." +
+                        "\nVerifique as configurações da camera e tente novamente." +
+                        "\nSituação técnica:" + ex.Message +
+                        "\nOrigem:" + ex.StackTrace.Substring(0, 255), "Aviso");
+                }                
             }
         }
 
@@ -159,6 +133,60 @@ namespace ProjetoTCC
             foto = result;
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        private void btAtualizaCameras_Click(object sender, EventArgs e)
+        {
+            atualizaCameras();
+        }
+
+        private void atualizaCameras()
+        {
+            btCapturar.Enabled = false;
+            cbListCameras.Items.Clear();
+            FilterInfoCollection VideoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+
+            if (VideoDevices.Count >= 1)
+            {
+                int indexCamera = -1;
+                int count = -1;
+                foreach (FilterInfo VideoCaptureDevice in VideoDevices)
+                {
+                    cbListCameras.Items.Add(VideoCaptureDevice.Name);
+                    if (VideoCaptureDevice.Name.Equals(Biblioteca.nomeCamera) && indexCamera < 0)
+                    {
+                        indexCamera = count;
+                    }
+                    else
+                    {
+                        count++;
+                    }
+                }
+                if(indexCamera >= 0)
+                {
+                    cbListCameras.SelectedIndex = indexCamera;
+                }
+                else
+                {
+                    cbListCameras.SelectedIndex = 0;
+                }
+
+                if (videoCamera != null)
+                {
+                    videoCamera.SignalToStop();
+                    while (videoCamera.IsRunning)
+                    {
+                        Thread.Sleep(0500);
+                    }
+                    videoCamera = null;
+                }
+                iniciaVideo(cbListCameras.SelectedIndex);
+                btCapturar.Enabled = true;
+            } else
+            {
+                MessageBox.Show("Nenhuma câmera foi encontrada." +
+                    "\nVerifique se há uma câmera conectada e pressione o botão \"Atualizar\"");
+            }
         }
     }
 }

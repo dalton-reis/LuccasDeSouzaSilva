@@ -34,12 +34,30 @@ namespace ProjetoTCC
         {
         }
 
+        private void updateBtEsqState(char value)
+        {
+            btEsqState = value;
+        }
+
+        private void updateBtDirState(char value)
+        {
+            btDirState = value;
+            if (value == 'L')
+            {
+                enableBtDir(false);
+            }
+            else
+            {
+                enableBtDir(true);
+            }
+        }
+
         public void iniPainelEspecialista(List<Especialista> listaEspecialistas)
         {
             initPainel(this);
 
-            this.btEsqState = 'N';
-            this.btDirState = 'L';
+            updateBtEsqState('N');
+            updateBtDirState('L');
 
             this.listaEspecialistas = listaEspecialistas;
             this.gridListaEspecialistas = this.listaEspecialistas.OrderBy(p => p.nome).ToList();
@@ -81,15 +99,14 @@ namespace ProjetoTCC
             if (this.selectedIndex >= 0 && this.gridListaEspecialistas.Count > this.selectedIndex)
             {
                 return long.Parse(this.dtGrid.Rows[this.selectedIndex].Cells[1].Value.ToString());
-                //                return this.gridListaEspecialistas.ElementAt(this.selectedIndex).ID;
             }
             return -1;
         }
 
         private void createGrid()
         {
-            btEsqState = 'N';
-            btDirState = 'L';
+            updateBtEsqState('N');
+            updateBtDirState('L');
 
             btEsq.Text = "Novo";
             btDir.Text = "Localiza";
@@ -187,10 +204,10 @@ namespace ProjetoTCC
 
         private void createEdit()
         {
-            btEsqState = 'V';
-            btEsq.Text = "Voltar";
+            updateBtEsqState('V');
+            updateBtDirState('S');
 
-            btDirState = 'S';
+            btEsq.Text = "Voltar";
             btDir.Text = "Salvar";
 
             if (!novoRegistro)
@@ -204,20 +221,22 @@ namespace ProjetoTCC
                 btDel.Enabled = false;
             }
 
-            this.pnlEdit = new Panel();
-            this.pnlEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top
+            this.pnlEdit = new Panel
+            {
+                Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top
             | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlEdit.AutoScroll = true;
-            this.pnlArea.Controls.Add(pnlEdit);
+            | System.Windows.Forms.AnchorStyles.Right))),
+                AutoScroll = true,
+                BackColor = this.pnlArea.BackColor,
+                BorderStyle = this.pnlArea.BorderStyle,
+                Location = new System.Drawing.Point(-1, 0),
+                Name = "pnlArea",
+                Size = this.pnlArea.Size,
+                TabIndex = 0
+            };
 
-            this.pnlEdit.BackColor = this.pnlArea.BackColor;
-            this.pnlEdit.BorderStyle = this.pnlArea.BorderStyle;
-            this.pnlEdit.Location = new System.Drawing.Point(-1, 0);
-            this.pnlEdit.Name = "pnlArea";
-            this.pnlEdit.Size = this.pnlArea.Size;
-            this.pnlEdit.TabIndex = 0;
+            this.pnlArea.Controls.Add(pnlEdit);
 
             Label lbID = new System.Windows.Forms.Label();
 
@@ -299,13 +318,28 @@ namespace ProjetoTCC
 
             string FotoFile = @"resources/img/foto.png";
 
-            if (!novoRegistro && this.especialistaSelecionado.caminhoFoto.Length > 0)
+            if (!novoRegistro && this.especialistaSelecionado != null)
             {
-                FotoFile = this.especialistaSelecionado.caminhoFoto.Trim();
+                Directory.CreateDirectory(Biblioteca.getEspecialistasFolder() + "\\E_" + this.especialistaSelecionado.ID);
+                FotoFile = Biblioteca.getEspecialistasFolder() + "\\E_" + this.especialistaSelecionado.ID + "\\foto.png";
+                if (!File.Exists(FotoFile))
+                {
+                    FotoFile = @"resources/img/foto.png";
+                }
             }
 
-            Image imgEspecialista = ResizeImage(Image.FromFile(FotoFile), pbFoto.Size.Width, pbFoto.Size.Height);
-            Image imgBackup = ResizeImage(Image.FromFile(@"resources/img/foto.png"), pbFoto.Size.Width, pbFoto.Size.Height);
+            Image imgEspecialista = null;
+            Image imgBackup = null;
+
+            using (var bmpTemp = new Bitmap(FotoFile))
+            {
+                imgEspecialista = ResizeImage(new Bitmap(bmpTemp), pbFoto.Size.Width, pbFoto.Size.Height);
+            }
+
+            using (var bmpTemp = new Bitmap(@"resources/img/foto.png"))
+            {
+                imgBackup = ResizeImage(new Bitmap(bmpTemp), pbFoto.Size.Width, pbFoto.Size.Height);
+            }
 
             pbFoto.Image = imgEspecialista;
             pbFoto.ErrorImage = imgBackup;
@@ -513,7 +547,7 @@ namespace ProjetoTCC
 
         protected void btDel_Click(object sender, EventArgs e)
         {
-            List<Sessao> sessoes = new List<Sessao>(); //Biblioteca.getEspecialistaSessoes();
+            List<Sessao> sessoes = Biblioteca.getSessoesEspecialista(this.especialistaSelecionado.ID);
 
             if (sessoes.Count > 0)
             {
@@ -525,8 +559,6 @@ namespace ProjetoTCC
                 listaEspecialistas.Remove(listaEspecialistas.Where(p => p.ID == ID).First());
                 gridListaEspecialistas.Remove(gridListaEspecialistas.Where(p => p.ID == ID).First());
                 Biblioteca.excluiEspecialistaSelecionado(ID);
-
-                MessageBox.Show("Especialista Excluído com sucesso!");
 
                 if (this.gridListaEspecialistas.Count > 0)
                 {
@@ -589,7 +621,7 @@ namespace ProjetoTCC
                 MessageBox.Show("O nome do especialista não pode ser vazio!");
                 salva = false;
             }
-
+            
             DateTime dataNasc = ((DateTimePicker)(pnlEdit.Controls.Find("dtpDataNasc", true)[0])).Value;
 
             string sexo = "";
@@ -609,36 +641,36 @@ namespace ProjetoTCC
 
             string cpf = pnlEdit.Controls.Find("tbCpf", true)[0].Text.Trim();
 
-            if (cpf.Trim().Length < 1 && false)
-            {
-                MessageBox.Show("O CPF do especialista não pode ser vazio!");
-                salva = false;
-            }
+            //if (cpf.Trim().Length < 1 && false)
+            //{ //valida cpf e verifica se nao ja existe
+            //    MessageBox.Show("O CPF do especialista não pode ser vazio!");
+            //    salva = false;
+            //}
 
             string rg = pnlEdit.Controls.Find("tbRg", true)[0].Text.Trim();
 
-            if (rg.Trim().Length < 1 && false)
-            {
-                MessageBox.Show("O RG do especialista não pode ser vazio!");
-                salva = false;
-            }
+            //if (rg.Trim().Length < 1 && false)
+            //{
+            //    MessageBox.Show("O RG do especialista não pode ser vazio!");
+            //    salva = false;
+            //}
 
             if (salva)
             {
                 if (this.especialistaSelecionado != null)
                 {
-                    this.especialistaSelecionado.updateValues(nome, dataNasc, this.caminhoFoto, cpf, rg, descricao, sexo);
+                    this.especialistaSelecionado.updateValues(nome, dataNasc, cpf, rg, descricao, sexo);
 
                     long ID = this.especialistaSelecionado.ID;
-                    gridListaEspecialistas.Where(p => p.ID == ID).First().updateValues(nome, dataNasc, this.caminhoFoto, cpf, rg, descricao, sexo);
+                    gridListaEspecialistas.Where(p => p.ID == ID).First().updateValues(nome, dataNasc, cpf, rg, descricao, sexo);
 
-                    Biblioteca.updateEspecialistaSelecionado(ID, nome, dataNasc, this.caminhoFoto, cpf, rg, descricao, sexo);
+                    Biblioteca.updateEspecialistaSelecionado(ID, nome, dataNasc, cpf, rg, descricao, sexo);
 
                     MessageBox.Show("Especialista Atualizado com sucesso!");
                 }
                 else
                 {
-                    Especialista esp = new Especialista(nome, dataNasc, "", cpf, rg, descricao, sexo);
+                    Especialista esp = new Especialista(nome, dataNasc, cpf, rg, descricao, sexo);
                     this.addEspecialista(esp);
 
                     MessageBox.Show("Especialista Salvo com sucesso!");
@@ -690,7 +722,13 @@ namespace ProjetoTCC
 
                 PictureBox pbFoto = (PictureBox)(pnlEdit.Controls.Find("pbFoto", true)[0]);
 
-                Bitmap foto = (Bitmap) Image.FromFile(this.caminhoFoto);
+                Bitmap foto = null;
+
+                using (var bmpTemp = new Bitmap(this.caminhoFoto))
+                {
+                    foto = new Bitmap(bmpTemp);
+                }
+
                 long ID = (this.especialistaSelecionado != null) ? this.especialistaSelecionado.ID : Especialista.ProxID();
                 string fileName = Biblioteca.getEspecialistasFolder() + "\\E_" + ID;
 
@@ -700,8 +738,18 @@ namespace ProjetoTCC
 
                 foto.Save(this.caminhoFoto, System.Drawing.Imaging.ImageFormat.Png);
 
-                Image imgEspecialista = ResizeImage(Image.FromFile(this.caminhoFoto), pbFoto.Size.Width, pbFoto.Size.Height);
-                Image imgBackup = ResizeImage(Image.FromFile(@"resources/img/foto.png"), pbFoto.Size.Width, pbFoto.Size.Height);
+                Image imgEspecialista = null;
+                Image imgBackup = null;
+
+                using (var bmpTemp = new Bitmap(this.caminhoFoto))
+                {
+                    imgEspecialista = ResizeImage(new Bitmap(bmpTemp), pbFoto.Size.Width, pbFoto.Size.Height);
+                }
+
+                using (var bmpTemp = new Bitmap(@"resources/img/foto.png"))
+                {
+                    imgBackup = ResizeImage(new Bitmap(bmpTemp), pbFoto.Size.Width, pbFoto.Size.Height);
+                }
 
                 pbFoto.Image = imgEspecialista;
                 pbFoto.ErrorImage = imgBackup;
@@ -712,6 +760,7 @@ namespace ProjetoTCC
                 PictureBox pbFoto = (PictureBox)(pnlEdit.Controls.Find("pbFoto", true)[0]);
 
                 Bitmap foto = formAlteraFoto.foto;
+
                 long ID = (this.especialistaSelecionado != null) ? this.especialistaSelecionado.ID : Especialista.ProxID();
                 string fileName = Biblioteca.getEspecialistasFolder() + "\\E_" + ID;
 
@@ -721,10 +770,20 @@ namespace ProjetoTCC
 
                 foto.Save(this.caminhoFoto, System.Drawing.Imaging.ImageFormat.Png);
 
-                Image imgPaciente = ResizeImage(Image.FromFile(this.caminhoFoto), pbFoto.Size.Width, pbFoto.Size.Height);
-                Image imgBackup = ResizeImage(Image.FromFile(@"resources/img/foto.png"), pbFoto.Size.Width, pbFoto.Size.Height);
+                Image imgEspecialista = null;
+                Image imgBackup = null;
 
-                pbFoto.Image = imgPaciente;
+                using (var bmpTemp = new Bitmap(this.caminhoFoto))
+                {
+                    imgEspecialista = ResizeImage(new Bitmap(bmpTemp), pbFoto.Size.Width, pbFoto.Size.Height);
+                }
+
+                using (var bmpTemp = new Bitmap(@"resources/img/foto.png"))
+                {
+                    imgBackup = ResizeImage(new Bitmap(bmpTemp), pbFoto.Size.Width, pbFoto.Size.Height);
+                }
+
+                pbFoto.Image = imgEspecialista;
                 pbFoto.ErrorImage = imgBackup;
                 pbFoto.InitialImage = imgBackup;
             }

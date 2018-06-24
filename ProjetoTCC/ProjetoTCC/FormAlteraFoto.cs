@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Accord.Video.DirectShow;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
@@ -14,6 +15,13 @@ namespace ProjetoTCC
         public FormAlteraFoto()
         {
             InitializeComponent();
+
+            FilterInfoCollection VideoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+
+            if (VideoDevices.Count < 1)
+            {
+                btCamera.Enabled = false;
+            }
         }        
 
         private void btCamera_Click(object sender, EventArgs e)
@@ -28,8 +36,6 @@ namespace ProjetoTCC
 
         private void btEscolheArquivo_Click(object sender, EventArgs e)
         {
-            //            MessageBox.Show("Abre seletor de arquivos (jpg/png)");
-            // Configure open file dialog box 
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.Filter = "";
 

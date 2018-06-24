@@ -38,7 +38,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.pbLogo = new System.Windows.Forms.PictureBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.listCamera = new System.Windows.Forms.ListBox();
+            this.listCamera = new System.Windows.Forms.ComboBox();
             this.tbNomeEstab = new System.Windows.Forms.TextBox();
             this.tbEnderecoEstab = new System.Windows.Forms.TextBox();
             this.tbFoneEstab = new System.Windows.Forms.TextBox();
@@ -265,7 +265,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.PictureBox pbLogo;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.ListBox listCamera;
+        private System.Windows.Forms.ComboBox listCamera;
         private System.Windows.Forms.TextBox tbNomeEstab;
         private System.Windows.Forms.TextBox tbEnderecoEstab;
         private System.Windows.Forms.TextBox tbFoneEstab;

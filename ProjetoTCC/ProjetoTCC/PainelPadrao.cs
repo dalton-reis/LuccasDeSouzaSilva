@@ -81,5 +81,12 @@ namespace ProjetoTCC
 
             this.ResumeLayout(false);
         }
+
+        public void enableBtDir(bool value)
+        {
+            btDir.Enabled = value;
+            btDir.Visible = value;
+        }
+
     }
 }

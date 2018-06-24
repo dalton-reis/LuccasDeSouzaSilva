@@ -166,10 +166,6 @@ namespace ProjetoTCC
             }
             startFolder += "\\Especialistas";
             iniConfigEspecialistas(startFolder);
-
-            //listaEspecialistas.Add(new Especialista("Joaquim Lettuce", DateTime.Parse("01/07/1985"), "", "", "", "", "M"));
-            //listaEspecialistas.Add(new Especialista("Marilia de Assis", DateTime.Parse("18/04/1980"), "", "", "", "", "F"));
-            //listaEspecialistas.Add(new Especialista("Esteban de Souza", DateTime.Parse("25/11/1991"), "", "", "", "", "M"));
         }
 
         private static void iniConfigEspecialistas(string folder)
@@ -205,7 +201,6 @@ namespace ProjetoTCC
                         long ID = 0;
                         string nome = "";
                         DateTime dataNasc = DateTime.Now;
-                        string caminhoFoto = "";
                         string cpf = "";
                         string rg = "";
                         string sexo = "O";
@@ -229,9 +224,6 @@ namespace ProjetoTCC
                                 case "dataNasc":
                                     dataNasc = DateTime.Parse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim());
                                     break;
-                                case "nomeFoto":
-                                    caminhoFoto = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
-                                    break;
                                 case "cpf":
                                     cpf = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
                                     break;
@@ -246,7 +238,7 @@ namespace ProjetoTCC
                                     break;
                             }
                         }
-                        listaEspecialistas.Add(Especialista.create(ID, nome, dataNasc, caminhoFoto, cpf, rg, descricao, sexo));
+                        listaEspecialistas.Add(Especialista.create(ID, nome, dataNasc, cpf, rg, descricao, sexo));
                     }
                 }
                 catch (Exception e)
@@ -309,10 +301,9 @@ namespace ProjetoTCC
                 escritor.WriteLine("[ID]:[" + esp.ID + "];");
                 escritor.WriteLine("[nome]:[" + esp.nome.Trim() + "];");
                 escritor.WriteLine("[dataNasc]:[" + esp.dataNasc.ToString("dd/MM/yyyy") + "];");
-                escritor.WriteLine("[nomeFoto]:[" + esp.caminhoFoto.Trim() + "];");
                 escritor.WriteLine("[cpf]:[" + esp.cpf.Trim() + "];");
-                escritor.WriteLine("[rg]:[" + esp.rg.Trim() + "]");
-                escritor.WriteLine("[sexo]:[" + esp.sexo.Trim() + "]");
+                escritor.WriteLine("[rg]:[" + esp.rg.Trim() + "];");
+                escritor.WriteLine("[sexo]:[" + esp.sexo.Trim() + "];");
                 escritor.WriteLine("[descricao]:[" + esp.descricao.Trim() + "]");
                 escritor.WriteLine("};;");
             }
@@ -399,33 +390,39 @@ namespace ProjetoTCC
             return startFolder;
         }
 
-        public static void updatePacienteSelecionado(long ID, string nome, DateTime dataNasc, string caminhoFoto, string cpf, string rg, string descricao, string sexo)
+        public static void updatePacienteSelecionado(long ID, string nome, DateTime dataNasc, string cpf, string rg, string descricao,
+            string sexo, IdadeAprendizagem idadeAprLig, IdadeAprendizagem idadeAprLog, IdadeAprendizagem idadeAprMat, DateTime dataCadastro)
         {
-            listaPacientes.Where(p => p.ID == ID).First().updateValues(nome, dataNasc, caminhoFoto, cpf, rg, descricao, sexo);
+            listaPacientes.Where(p => p.ID == ID).First().updateValues(nome, dataNasc, cpf, rg, descricao, 
+                sexo, idadeAprLig, idadeAprLog, idadeAprMat, dataCadastro);
             updateConfigPacientes();
         }
 
         public static void excluiPacienteSelecionado(long ID)
         {
             listaPacientes.Remove(listaPacientes.Where(p => p.ID == ID).First());
+            excluiArquivosPaciente(ID);
             updateConfigPacientes();
         }
 
-        public static void updateEspecialistaSelecionado(long ID, string nome, DateTime dataNasc, string caminhoFoto, string cpf, string rg, string descricao, string sexo)
+        public static void updateEspecialistaSelecionado(long ID, string nome, DateTime dataNasc, string cpf, string rg, string descricao, string sexo)
         {
-            listaEspecialistas.Where(e => e.ID == ID).First().updateValues(nome, dataNasc, caminhoFoto, cpf, rg, descricao, sexo);
+            listaEspecialistas.Where(e => e.ID == ID).First().updateValues(nome, dataNasc, cpf, rg, descricao, sexo);
             updateConfigEspecialistas();
         }
 
         public static void excluiEspecialistaSelecionado(long ID)
         {
             listaEspecialistas.Remove(listaEspecialistas.Where(e => e.ID == ID).First());
+//            excluiArquivosEspecialista(ID);
             updateConfigEspecialistas();
         }
 
-        public static void updateSessaoSelecionada(long ID, Especialista especialista, DateTime dataSessao, string caminhoVideo, string titulo, string descricao)
+        public static void updateSessaoSelecionada(long ID, Especialista especialista, DateTime dataSessao, string caminhoVideo, string material, 
+            string descricao, IdadeAprendizagem idadeAprLing, IdadeAprendizagem idadeAprLog, IdadeAprendizagem idadeAprMat, bool ieVerificado)
         {
-            listaSessoes.Where(s => s.ID == ID).First().updateValues(especialista, dataSessao, caminhoVideo, titulo, descricao);
+            listaSessoes.Where(s => s.ID == ID).First().updateValues(especialista, dataSessao, caminhoVideo, material, descricao,
+                idadeAprLing, idadeAprLog, idadeAprMat, ieVerificado);
             long IDPaciente = listaSessoes.Where(s => s.ID == ID).First().paciente.ID;
             updateConfigSessoesPaciente(IDPaciente);
         }
@@ -477,6 +474,33 @@ namespace ProjetoTCC
             Directory.Delete(startFolder, true);
         }
 
+        private static void excluiArquivosPaciente(long IDPaciente)
+        {
+            string startFolder = @"MindsEye";
+
+            string caminhoArquivos = Biblioteca.caminhoArquivos;
+
+            if (Directory.Exists(caminhoArquivos))
+            {
+                startFolder = caminhoArquivos;
+            }
+
+            if (startFolder.LastIndexOf("MindsEye") == -1)
+            {
+                startFolder += "\\MindsEye";
+            }
+
+            if (!Directory.Exists(startFolder + "\\Pacientes"))
+            {
+                Directory.CreateDirectory(startFolder + "\\Pacientes");
+            }
+            startFolder += "\\Pacientes\\P_" + IDPaciente;
+
+            Directory.CreateDirectory(startFolder);
+
+            Directory.Delete(startFolder, true);
+        }
+
         private static void iniConfigPacientes(string folder)
         {
             string file = folder + "\\config.txt";
@@ -506,15 +530,19 @@ namespace ProjetoTCC
                     foreach (string str1 in arr1)
                     {
                         string[] arr2 = str1.Split(';');
+//                        string[] arr2 = Regex.Split(str1, ".;-[/;]", RegexOptions.Singleline);
 
                         long ID = 0;
                         string nome = "";
                         DateTime dataNasc = DateTime.Now;
-                        string caminhoFoto = "";
                         string cpf = "";
                         string rg = "";
                         string sexo = "O";
                         string descricao = "";
+                        IdadeAprendizagem idadeAprLing = IdadeAprendizagem.Ano9;
+                        IdadeAprendizagem idadeAprLog = IdadeAprendizagem.Ano9;
+                        IdadeAprendizagem idadeAprMat = IdadeAprendizagem.Ano9;
+                        DateTime dataCadastro = DateTime.Now;
 
                         foreach (string str2 in arr2)
                         {
@@ -535,8 +563,8 @@ namespace ProjetoTCC
                                 case "dataNasc":
                                     dataNasc = DateTime.Parse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim());
                                     break;
-                                case "nomeFoto":
-                                    caminhoFoto = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
+                                case "dataCadastro":
+                                    dataCadastro = DateTime.Parse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim());
                                     break;
                                 case "cpf":
                                     cpf = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
@@ -550,9 +578,30 @@ namespace ProjetoTCC
                                 case "descricao":
                                     descricao = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
                                     break;
+                                case "idadeAprLing":
+                                    int a = -1;
+                                    if (int.TryParse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim(), out a))
+                                    {
+                                        idadeAprLing = (IdadeAprendizagem)a;
+                                    }
+                                    break;
+                                case "idadeAprLog":
+                                    int b = -1;
+                                    if (int.TryParse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim(), out b))
+                                    {
+                                        idadeAprLog = (IdadeAprendizagem)b;
+                                    }
+                                    break;
+                                case "idadeAprMat":
+                                    int c = -1;
+                                    if (int.TryParse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim(), out c))
+                                    {
+                                        idadeAprMat = (IdadeAprendizagem)c;
+                                    }
+                                    break;
                             }
                         }
-                        listaPacientes.Add(Paciente.create(ID, nome, dataNasc, caminhoFoto, cpf, rg, descricao, sexo));
+                        listaPacientes.Add(Paciente.create(ID, nome, dataNasc, cpf, rg, descricao, sexo, idadeAprLing, idadeAprLog, idadeAprMat, dataCadastro));
                     }
                 }
                 catch (Exception e)
@@ -607,12 +656,19 @@ namespace ProjetoTCC
                 escritor.WriteLine("{");
                 escritor.WriteLine("[ID]:[" + pac.ID + "];");
                 escritor.WriteLine("[nome]:[" + pac.nome.Trim() + "];");
+
                 escritor.WriteLine("[dataNasc]:[" + pac.dataNasc.ToString("dd/MM/yyyy") + "];");
-                escritor.WriteLine("[nomeFoto]:[" + pac.caminhoFoto.Trim() + "];");
+                escritor.WriteLine("[dataCadastro]:[" + pac.dataCadastro.ToString("dd/MM/yyyy") + "];");
+
                 escritor.WriteLine("[cpf]:[" + pac.cpf.Trim() + "];");
                 escritor.WriteLine("[rg]:[" + pac.rg.Trim() + "];");
                 escritor.WriteLine("[sexo]:[" + pac.sexo.Trim() + "];");
-                escritor.WriteLine("[descricao]:[" + pac.descricao.Trim() + "]");
+                escritor.WriteLine("[descricao]:[" + pac.descricao.Trim() + "];");
+
+                escritor.WriteLine("[idadeAprLing]:[" + ((int) pac.idadeAprLing) + "];");
+                escritor.WriteLine("[idadeAprLog]:[" + ((int) pac.idadeAprLog) + "];");
+                escritor.WriteLine("[idadeAprMat]:[" + ((int) pac.idadeAprMat) + "]");
+
                 escritor.WriteLine("};;");
             }
 
@@ -683,6 +739,133 @@ namespace ProjetoTCC
             iniConfigSessoesPaciente(pac, startFolder);
         }
 
+        private static List<Sessao> getSessoesPaciente(Paciente pac, string folder)
+        {
+            List<Sessao> list = new List<Sessao>();
+
+            string file = folder + "\\config.txt";
+
+            if (File.Exists(file))
+            {
+                try
+                {
+                    StringBuilder txt = new StringBuilder();
+
+                    Stream entrada = File.Open(file, FileMode.Open);
+                    StreamReader leitor = new StreamReader(entrada);
+                    string linha = leitor.ReadLine();
+                    while (linha != null)
+                    {
+                        txt.Append(linha.Trim());
+                        linha = leitor.ReadLine();
+                    }
+                    leitor.Close();
+                    entrada.Close();
+
+                    linha = txt.ToString();
+
+                    string[] arr1 = linha.Split(new string[] { ";;" }, StringSplitOptions.RemoveEmptyEntries);
+
+                    list.Clear();
+
+                    foreach (string str1 in arr1)
+                    {
+                        string[] arr2 = str1.Split(';');
+
+                        long ID = 0;
+                        Paciente p = pac;
+                        Especialista esp = null;
+                        DateTime dataSessao = DateTime.Now;
+                        string descricao = "";
+                        string material = "";
+                        string caminhoVideo = "";
+
+                        IdadeAprendizagem idadeAprLing = IdadeAprendizagem.Ano9;
+                        IdadeAprendizagem idadeAprLog = IdadeAprendizagem.Ano9;
+                        IdadeAprendizagem idadeAprMat = IdadeAprendizagem.Ano9;
+                        bool ieVerificado = false;
+
+                        foreach (string str2 in arr2)
+                        {
+                            string[] s = new string[2];
+                            s[0] = Regex.Replace(str2.Substring(0, str2.IndexOf(':')).Replace("{", "").Trim(), @"\r\n?|\n", "");
+                            s[1] = Regex.Replace(str2.Substring(str2.IndexOf(':') + 1).Trim(), @"\r\n?|\n", "");
+
+                            string s0 = s[0].Substring(s[0].IndexOf("[") + 1, s[0].LastIndexOf("]") - 1).Trim();
+                            switch (s0)
+                            {
+                                case "ID":
+                                    ID = long.Parse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim());
+                                    break;
+                                case "ID_ESP":
+                                    long ID_ESP = long.Parse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim());
+                                    List<Especialista> l1 = listaEspecialistas.Where(e => e.ID == ID_ESP).ToList();
+                                    if (l1.Count > 0)
+                                    {
+                                        esp = l1.ElementAt(0);
+                                    }
+                                    break;
+                                case "dataSessao":
+                                    dataSessao = DateTime.Parse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim());
+                                    break;
+                                case "nomeVideo":
+                                    caminhoVideo = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
+                                    break;
+                                case "descricao":
+                                    descricao = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
+                                    break;
+                                case "material":
+                                    material = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
+                                    break;
+                                case "idadeAprLing":
+                                    int a = -1;
+                                    if (int.TryParse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim(), out a))
+                                    {
+                                        idadeAprLing = (IdadeAprendizagem)a;
+                                    }
+                                    break;
+                                case "idadeAprLog":
+                                    int b = -1;
+                                    if (int.TryParse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim(), out b))
+                                    {
+                                        idadeAprLog = (IdadeAprendizagem)b;
+                                    }
+                                    break;
+                                case "idadeAprMat":
+                                    int c = -1;
+                                    if (int.TryParse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim(), out c))
+                                    {
+                                        idadeAprMat = (IdadeAprendizagem)c;
+                                    }
+                                    break;
+                                case "verificado":
+                                    string v = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
+                                    if (v.ToUpper().Equals("V"))
+                                    {
+                                        ieVerificado = true;
+                                    }
+                                    else
+                                    {
+                                        ieVerificado = false;
+                                    }
+                                    break;
+                            }
+                        }
+                        list.Add(Sessao.create(ID, pac, esp, dataSessao, descricao, material, descricao, idadeAprLing, idadeAprLog, idadeAprMat, ieVerificado));
+                    }
+                }
+                catch (Exception e)
+                {
+                    //MessageBox.Show("Não foi possível carregar o arquivo de configuração." +
+                    //    "\nTente carrega-lo novamente através da janela de configurações." +
+                    //    "\nSituação técnica:" + e.Message +
+                    //    "\nOrigem:" + e.StackTrace.Substring(0, 255), "Aviso");
+                }
+            }
+
+            return list;
+        } 
+
         private static void iniConfigSessoesPaciente(Paciente pac, string folder)
         {
             string file = folder + "\\config.txt";
@@ -718,8 +901,13 @@ namespace ProjetoTCC
                         Especialista esp = null;
                         DateTime dataSessao = DateTime.Now;
                         string descricao = "";
-                        string titulo = "";
+                        string material = "";
                         string caminhoVideo = "";
+
+                        IdadeAprendizagem idadeAprLing = IdadeAprendizagem.Ano9;
+                        IdadeAprendizagem idadeAprLog = IdadeAprendizagem.Ano9;
+                        IdadeAprendizagem idadeAprMat = IdadeAprendizagem.Ano9;
+                        bool ieVerificado = false;
 
                         foreach (string str2 in arr2)
                         {
@@ -731,7 +919,7 @@ namespace ProjetoTCC
                             switch (s0)
                             {
                                 case "ID":
-                                    ID = long.Parse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim());
+                                   ID = long.Parse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim());
                                     break;
                                 case "ID_ESP":
                                     long ID_ESP = long.Parse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim());
@@ -750,12 +938,43 @@ namespace ProjetoTCC
                                 case "descricao":
                                     descricao = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
                                     break;
-                                case "titulo":
-                                    titulo = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
-                                    break;                                
+                                case "material":
+                                    material = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
+                                    break;
+                                case "idadeAprLing":
+                                    int a = -1;
+                                    if (int.TryParse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim(), out a))
+                                    {
+                                        idadeAprLing = (IdadeAprendizagem)a;
+                                    }
+                                    break;
+                                case "idadeAprLog":
+                                    int b = -1;
+                                    if (int.TryParse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim(), out b))
+                                    {
+                                        idadeAprLog = (IdadeAprendizagem)b;
+                                    }
+                                    break;
+                                case "idadeAprMat":
+                                    int c = -1;
+                                    if (int.TryParse(s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim(), out c))
+                                    {
+                                        idadeAprMat = (IdadeAprendizagem)c;
+                                    }
+                                    break;
+                                case "verificado":
+                                    string v = s[1].Substring(s[1].IndexOf("[") + 1, s[1].LastIndexOf("]") - 1).Trim();
+                                    if (v.Trim().ToUpper().Equals("V"))
+                                    {
+                                        ieVerificado = true;
+                                    } else
+                                    {
+                                        ieVerificado = false;
+                                    }
+                                    break;
                             }
                         }
-                        listaSessoes.Add(Sessao.create(ID, pac, esp, dataSessao, descricao, titulo, descricao));
+                        listaSessoes.Add(Sessao.create(ID, pac, esp, dataSessao, descricao, material, descricao, idadeAprLing, idadeAprLog, idadeAprMat, ieVerificado));
                     }
                 }
                 catch (Exception e)
@@ -812,8 +1031,15 @@ namespace ProjetoTCC
                 escritor.WriteLine("[ID_ESP]:[" + ses.especialista.ID + "];");
                 escritor.WriteLine("[dataSessao]:[" + ses.dataSessao.ToString("dd/MM/yyyy HH:mm") + "];");
                 escritor.WriteLine("[nomeVideo]:[" + ses.nomeVideo.Trim() + "];");
-                escritor.WriteLine("[descricao]:[" + ses.descricao.Trim() + "];");
-                escritor.WriteLine("[titulo]:[" + ses.titulo.Trim() + "]");
+                escritor.WriteLine("[material]:[" + ses.material.Trim() + "];");
+
+                escritor.WriteLine("[idadeAprLing]:[" + ((int)ses.idadeAprLing) + "];");
+                escritor.WriteLine("[idadeAprLog]:[" + ((int)ses.idadeAprLog) + "];");
+                escritor.WriteLine("[idadeAprMat]:[" + ((int)ses.idadeAprMat) + "];");
+
+                escritor.WriteLine("[verificado]:[" + ses.getStringVerificado() + "];");
+
+                escritor.WriteLine("[descricao]:[" + ses.descricao.Trim() + "]");
                 escritor.WriteLine("};;");
             }
 
@@ -855,6 +1081,48 @@ namespace ProjetoTCC
             }
         }
 
+        public static List<Sessao> getSessoesEspecialista(long IDEspecialista)
+        {
+            List<Sessao> list = new List<Sessao>();
+
+            if (IDEspecialista > 0)
+            {
+                foreach (Paciente p in getPacientes())
+                {
+                    list.AddRange(getPacienteSessoes(p));
+                }
+                list = list.Where(s => s.especialista.ID == IDEspecialista).ToList();
+            }
+
+            return list;
+        }
+
+        public static List<Sessao> getPacienteSessoes(Paciente pac)
+        {
+            List<Sessao> list = new List<Sessao>();
+            if (pac.ID > 0)
+            {
+                string startFolder = @"MindsEye";
+
+                if (Directory.Exists(caminhoArquivos))
+                {
+                    startFolder = caminhoArquivos;
+                }
+
+                if (startFolder.LastIndexOf("MindsEye") == -1)
+                {
+                    startFolder += "\\MindsEye";
+                }
+
+                startFolder += "\\Pacientes\\P_" + pac.ID;
+
+                Directory.CreateDirectory(startFolder);
+
+                list.AddRange(getSessoesPaciente(pac, startFolder));
+            }
+            return list;
+        }
+
         public static List<Sessao> getPacienteSessoes()
         {
             if (listaSessoes != null)
@@ -886,6 +1154,43 @@ namespace ProjetoTCC
                 nomeCamera = "";
             }
             Biblioteca.gravaConfig();
+        }
+
+        public static string getIdadeAprendizagem(IdadeAprendizagem value)
+        {
+            switch (value)
+            {
+                case IdadeAprendizagem.Ano1:
+                    return "1o Ano";
+                case IdadeAprendizagem.Ano2:
+                    return "2o Ano";
+                case IdadeAprendizagem.Ano3:
+                    return "3o Ano";
+                case IdadeAprendizagem.Ano4:
+                    return "4o Ano";
+                case IdadeAprendizagem.Ano5:
+                    return "5o Ano";
+                case IdadeAprendizagem.Ano6:
+                    return "6o Ano";
+                case IdadeAprendizagem.Ano7:
+                    return "7o Ano";
+                case IdadeAprendizagem.Ano8:
+                    return "8o Ano";
+                case IdadeAprendizagem.Ano9:
+                    return "9o Ano";
+                default:
+                    return "";
+            }
+        }
+
+        private static string getSaveCleanText(string text)
+        {
+            return text.Replace("{","/{").Replace("}", "/}").Replace("[", "/[").Replace("]", "/]").Replace(":", "/:").Replace(";", "/;");
+        }
+
+        private static string getSaveUncleanText(string text)
+        {
+            return text.Replace("/{", "{").Replace("/}", "}").Replace("/[", "[").Replace("/]", "]").Replace("/:", ":").Replace("/;", ";");
         }
     }
 }

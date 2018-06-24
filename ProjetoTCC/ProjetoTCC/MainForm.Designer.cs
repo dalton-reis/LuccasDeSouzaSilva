@@ -180,6 +180,7 @@ namespace ProjetoTCC
             this.pnlCharts.Location = new System.Drawing.Point(12, 380);
             this.pnlCharts.Name = "pnlCharts";
             this.pnlCharts.Size = new System.Drawing.Size(592, 329);
+            this.pnlCharts.MaximumSize = new System.Drawing.Size(592, 329);
             this.pnlCharts.TabIndex = 18;
             // 
             // lbAlto
@@ -340,10 +341,10 @@ namespace ProjetoTCC
             | System.Windows.Forms.AnchorStyles.Left)));
             this.pnlPaciente.BackColor = System.Drawing.SystemColors.Control;
             this.pnlPaciente.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlPaciente.Location = new System.Drawing.Point(12, 12);
+            this.pnlPaciente.Location = new System.Drawing.Point(12, 6);
             this.pnlPaciente.MinimumSize = new System.Drawing.Size(500, 2);
             this.pnlPaciente.Name = "pnlPaciente";
-            this.pnlPaciente.Size = new System.Drawing.Size(592, 362);
+            this.pnlPaciente.Size = new System.Drawing.Size(592, 368);
             this.pnlPaciente.TabIndex = 0;
             // 
             // pnlSessao
@@ -353,9 +354,9 @@ namespace ProjetoTCC
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlSessao.BackColor = System.Drawing.SystemColors.Control;
             this.pnlSessao.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlSessao.Location = new System.Drawing.Point(611, 13);
+            this.pnlSessao.Location = new System.Drawing.Point(611, 6);
             this.pnlSessao.Name = "pnlSessao";
-            this.pnlSessao.Size = new System.Drawing.Size(639, 650);
+            this.pnlSessao.Size = new System.Drawing.Size(639, 656);
             this.pnlSessao.TabIndex = 19;
             // 
             // MainForm

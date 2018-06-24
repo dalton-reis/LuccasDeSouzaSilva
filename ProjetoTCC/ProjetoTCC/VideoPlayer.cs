@@ -19,7 +19,17 @@ namespace ProjetoTCC
         private Button btStop = null;
         private TrackBar videoTrackBar = null;
         private Label videoTimer = null;
-        public string videoURL = null;
+        public string videoURL { get; private set;} = null;
+
+        private Image PlayImage = ResizeImage(Image.FromFile(@"resources/img/play.png"), 25, 25);
+        private Image PauseImage = ResizeImage(Image.FromFile(@"resources/img/pause.png"), 25, 25);
+        private Image StopImage = ResizeImage(Image.FromFile(@"resources/img/stop.png"), 20, 20);
+
+        public void setVideoURL(string url)
+        {
+            this.videoURL = url;
+            initVideoTimer();
+        }
 
         public bool isRunning { get; private set; }  = false;
 
@@ -123,7 +133,7 @@ namespace ProjetoTCC
                 this.btStartPause = new Button();
                 this.btStartPause.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
                 this.pnlButtons.Controls.Add(this.btStartPause);
-
+                setBtStartPauseImage(PlayImage);
                 this.btStartPause.Click += new System.EventHandler(this.btStartPauseClick);
             }
             if (this.btStop == null)
@@ -131,6 +141,7 @@ namespace ProjetoTCC
                 this.btStop = new Button();
                 this.btStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
                 this.pnlButtons.Controls.Add(this.btStop);
+                setBtStopImage(StopImage);
                 this.btStop.Click += new System.EventHandler(this.btStopClick);
             }
             if (this.videoTimer == null)
@@ -141,12 +152,12 @@ namespace ProjetoTCC
             }
 
             this.btStartPause.Location = new Point(1,1);
-            this.btStartPause.Text = ">";
+            this.btStartPause.Text = "";
             this.btStartPause.MinimumSize = new Size(50, 50);
             this.btStartPause.Size = new Size(50, 50);
 
             this.btStop.Location = new Point(this.btStartPause.Location.X + this.btStartPause.Size.Width + 5, this.btStartPause.Location.Y);
-            this.btStop.Text = "|=|";
+            this.btStop.Text = "";
             this.btStop.MinimumSize = new Size(25, 25);
             this.btStop.Size = new Size(25, 25);
             
@@ -162,6 +173,8 @@ namespace ProjetoTCC
             this.videoTimer.Name = "videoTimer";
             this.videoTimer.Text = "0:00:00 / 0:00:00";
             this.videoTimer.Size = new System.Drawing.Size(200, 20);
+
+            initVideoTimer();
         }
 
         int TrackBarScrollValue = -1;
@@ -190,18 +203,26 @@ namespace ProjetoTCC
             {
                 this.PauseVideo = !this.PauseVideo;
                 this.isRunning = !this.PauseVideo;
+                if (this.PauseVideo)
+                {
+                    setBtStartPauseImage(PlayImage);
+                } else
+                {
+                    setBtStartPauseImage(PauseImage);
+                }
             }
         }
 
         private void startVideoThread()
         {
-            if(this.videoURL != null & this.videoURL.Trim().Length > 0 && this.videoURL.EndsWith(".avi"))
+            if(this.videoURL != null && this.videoURL.Trim().Length > 0 && this.videoURL.EndsWith(".avi"))
             {
                 if(File.Exists(this.videoURL))
                 {
                     Thread th = new Thread(VideoProcess);
                     this.StartVideo = true;
                     this.PauseVideo = false;
+                    setBtStartPauseImage(PauseImage);
                     th.Start();
                     this.isRunning = true;
                 } else
@@ -332,6 +353,26 @@ namespace ProjetoTCC
             return hora + ":" + min + ":" + seg;
         }
 
+        private void initVideoTimer()
+        {
+            if (this.videoURL != null && this.videoURL.Trim().Length > 0 && this.videoURL.EndsWith(".avi"))
+            {
+                if (File.Exists(this.videoURL))
+                {
+                    Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
+                    reader.Open(this.videoURL);
+                    int fps = (int)reader.FrameRate.Value;
+                    double videoTimeSeconds = reader.FrameCount / reader.FrameRate.Value;
+                    startVideoTimeSeconds((int)Math.Floor(videoTimeSeconds));
+                    reader.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Arquivo de vídeo não encontrado!");
+                }
+            }
+        }
+
         private void VideoProcess()
         {
             Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
@@ -361,7 +402,7 @@ namespace ProjetoTCC
                         setDisplayImage(frame);
                         if (i % 30 == 0)
                         {
-                            Thread.Sleep(0043);
+                            Thread.Sleep(043);
                         }
                         else
                         {
@@ -377,7 +418,36 @@ namespace ProjetoTCC
             setTrackBarPosition(0);
             setVideoTime(0);
             setDisplayImage(reader.ReadVideoFrame(getTrackBarPosition()));
+            setBtStartPauseImage(PlayImage);
             this.SignalToStop();
+        }
+
+        delegate void ImageArgVoidDelegate(Image value);
+
+        private void setBtStartPauseImage(Image value)
+        {
+            if (this.btStartPause.InvokeRequired)
+            {
+                ImageArgVoidDelegate del = new ImageArgVoidDelegate(setBtStartPauseImage);
+                this.Invoke(del, new object[] { value });
+            }
+            else
+            {
+                this.btStartPause.Image = value;
+            }
+        }
+
+        private void setBtStopImage(Image value)
+        {
+            if (this.btStop.InvokeRequired)
+            {
+                ImageArgVoidDelegate del = new ImageArgVoidDelegate(setBtStopImage);
+                this.Invoke(del, new object[] { value });
+            }
+            else
+            {
+                this.btStop.Image = value;
+            }
         }
 
         //public void Start()

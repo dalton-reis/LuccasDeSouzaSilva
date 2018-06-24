@@ -56,22 +56,40 @@ namespace ProjetoTCC
         VideoPlayer videoPlayer = null;
 
         Label lbID = null;
-        Label lbTitulo = null;
-        TextBox tbTitulo = null;
+        Label lbMaterial = null;
+        TextBox tbMaterial = null;
         Label lbDataSessao = null;
         DateTimePicker dtpDataSessao = null;
 
         Button btAtualizaCamera = null;
         Label lbCamera = null;
-        ListBox listCamera = null;
+        ComboBox listCamera = null;
 
         Label lbEspecialista = null;
-        ListBox listEspecialista = null;
+        ComboBox listEspecialista = null;
 
         Thread thWriteVideoFile = null;
 
         public PainelSessao()
         {
+        }
+
+        private void updateBtEsqState(char value)
+        {
+            btEsqState = value;
+        }
+
+        private void updateBtDirState(char value)
+        {
+            btDirState = value;
+            if (value == 'L')
+            {
+                enableBtDir(false);
+            }
+            else
+            {
+                enableBtDir(true);
+            }
         }
 
         public void setBrainReader(bool enable)
@@ -103,11 +121,9 @@ namespace ProjetoTCC
         {
             initPainel(this);
 
-            this.btEsqState = 'N';
-            this.btDirState = 'L';
+            updateBtEsqState('N');
+            updateBtDirState('L');
 
-            //            this.btEsq.Click += new System.EventHandler(this.btEsq_Click);
-            //            this.btDir.Click += new System.EventHandler(this.btDir_Click);
             this.btDel.Click += new System.EventHandler(this.btDel_Click);
 
             this.btDel.Enabled = false;
@@ -177,8 +193,8 @@ namespace ProjetoTCC
 
         private void createGrid()
         {
-            this.btEsqState = 'N';
-            this.btDirState = 'L';
+            updateBtEsqState('N');
+            updateBtDirState('L');
 
             this.btEsq.Text = "Novo";
             this.btDir.Text = "Localiza";
@@ -196,14 +212,21 @@ namespace ProjetoTCC
             | System.Windows.Forms.AnchorStyles.Right)));
 
             DataGridViewTextBoxColumn ColID = new DataGridViewTextBoxColumn();
-            DataGridViewTextBoxColumn ColTitulo = new DataGridViewTextBoxColumn();
+            DataGridViewTextBoxColumn ColMaterial = new DataGridViewTextBoxColumn();
             DataGridViewTextBoxColumn ColDataSessao = new DataGridViewTextBoxColumn();
             DataGridViewButtonColumn ColBt = new DataGridViewButtonColumn();
 
+            DataGridViewTextBoxColumn ColIdadeSessao = new DataGridViewTextBoxColumn();
+
+            DataGridViewTextBoxColumn ColIdadeLing = new DataGridViewTextBoxColumn();
+            DataGridViewTextBoxColumn ColIdadeLog = new DataGridViewTextBoxColumn();
+            DataGridViewTextBoxColumn ColIdadeMat = new DataGridViewTextBoxColumn();
+
             ColID.Visible = false;
 
-            ColTitulo.HeaderText = "Titulo";
-            ColTitulo.Name = "Titulo";
+            ColMaterial.HeaderText = "Material";
+            ColMaterial.Name = "Material";
+            ColMaterial.Width = 150;
 
             ColDataSessao.HeaderText = "Data/Hora";
             ColDataSessao.Name = "Data/Hora";
@@ -212,6 +235,26 @@ namespace ProjetoTCC
             ColBt.HeaderText = "";
             ColBt.Name = "";
             ColBt.Width = 20;
+
+            ColIdadeSessao.HeaderText = "Idade";
+            ColIdadeSessao.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            ColIdadeSessao.Name = "Idade";
+            ColIdadeSessao.Width = 100;
+
+            ColIdadeLing.HeaderText = "Linguagem";
+            ColIdadeLing.Name = "Linguagem";
+            ColIdadeLing.Width = 100;
+            ColIdadeLing.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+            ColIdadeLog.HeaderText = "Logica";
+            ColIdadeLog.Name = "Logica";
+            ColIdadeLog.Width = 100;
+            ColIdadeLog.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+            ColIdadeMat.HeaderText = "Matematica";
+            ColIdadeMat.Name = "Matematica";
+            ColIdadeMat.Width = 100;
+            ColIdadeMat.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
             this.dtGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 
@@ -224,13 +267,32 @@ namespace ProjetoTCC
 
             this.dtGrid.Columns.Add(ColBt);
             this.dtGrid.Columns.Add(ColID);
-            this.dtGrid.Columns.Add(ColTitulo);
+            this.dtGrid.Columns.Add(ColMaterial);
             this.dtGrid.Columns.Add(ColDataSessao);
+
+            this.dtGrid.Columns.Add(ColIdadeSessao);
+
+            this.dtGrid.Columns.Add(ColIdadeLing);
+            this.dtGrid.Columns.Add(ColIdadeLog);
+            this.dtGrid.Columns.Add(ColIdadeMat);
 
             foreach (Sessao s in gridListaSessoes)
             {
-                string[] row = new string[] { "+", s.ID.ToString(), s.titulo, s.dataSessao.ToString("dd/MM/yyyy HH:mm") };
-                dtGrid.Rows.Add(row);
+                string[] rowValues = new string[] { "+", s.ID.ToString(), s.material, s.dataSessao.ToString("dd/MM/yyyy HH:mm"),
+                    s.getIdadeSessaoPaciente(),
+                    Biblioteca.getIdadeAprendizagem(s.idadeAprLing),
+                    Biblioteca.getIdadeAprendizagem(s.idadeAprLog),
+                    Biblioteca.getIdadeAprendizagem(s.idadeAprMat) };
+
+                dtGrid.Rows.Add(rowValues);
+            }
+
+            foreach(DataGridViewRow row in dtGrid.Rows)
+            {
+                if ((row.Index < gridListaSessoes.Count) && !gridListaSessoes.ElementAt(row.Index).ieVerificado)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Yellow;
+                }                
             }
 
             this.dtGrid.Location = new System.Drawing.Point(0, 0);
@@ -250,10 +312,10 @@ namespace ProjetoTCC
 
         private void createEdit()
         {
-            this.btEsqState = 'V';
-            this.btEsq.Text = "Voltar";
+            updateBtEsqState('V');
+            updateBtDirState('S');
 
-            this.btDirState = 'S';
+            this.btEsq.Text = "Voltar";
             this.btDir.Text = "Salvar";
 
             if (!this.novoRegistro)
@@ -267,7 +329,7 @@ namespace ProjetoTCC
                 this.btDel.Enabled = false;
             }
 
-            int spacing = 5;
+            int spacing = 6;
 
             this.pnlEdit = new Panel();
             this.pnlEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top
@@ -326,7 +388,7 @@ namespace ProjetoTCC
 
                 this.pnlEdit.Controls.Add(videoPlayer);
 
-                videoPlayer.videoURL = this.caminhoSessao + "\\" + this.sessaoSelecionada.nomeVideo;
+                videoPlayer.setVideoURL(this.caminhoSessao + "\\video_sessao_" + this.sessaoSelecionada.ID + ".avi");
                 videoPlayer.DisplayImagePipeline += videoPlayerDisplayHandler;
 
                 videoControl = videoPlayer;
@@ -349,7 +411,6 @@ namespace ProjetoTCC
 
             if (novoRegistro)
             {
-
                 //botoes para gravar
                 this.btStartVideo = new Button();
                 this.btStartVideo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Right
@@ -366,8 +427,6 @@ namespace ProjetoTCC
                 this.btStartVideo.Enabled = true;
 
                 setBrainReader(false);
-
-                iniciaVideo(0);
 
                 //botoes para gravar
                 this.btConnectBrain = new Button();
@@ -386,19 +445,19 @@ namespace ProjetoTCC
             }
             else
             {
-                Button btPdfSessao = new Button();
-                btPdfSessao.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Right
-               | System.Windows.Forms.AnchorStyles.Bottom)));
-                pnlFields.Controls.Add(btPdfSessao);
-                btPdfSessao.Size = new System.Drawing.Size(80, 30);
-                btPdfSessao.Location = new System.Drawing.Point(pnlFields.Size.Width - btPdfSessao.Size.Width - 5, spacing);
-                btPdfSessao.Name = "btPdfSessao";
-                btPdfSessao.TabIndex = 8;
-                btPdfSessao.Text = "PDF";
-                btPdfSessao.UseVisualStyleBackColor = true;
-                btPdfSessao.Click += new System.EventHandler(this.btGeraPdfSessao);
-                btPdfSessao.Enabled = false;
-                btPdfSessao.Visible = false;
+               // Button btPdfSessao = new Button();
+               // btPdfSessao.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Right
+               //| System.Windows.Forms.AnchorStyles.Bottom)));
+               // pnlFields.Controls.Add(btPdfSessao);
+               // btPdfSessao.Size = new System.Drawing.Size(80, 30);
+               // btPdfSessao.Location = new System.Drawing.Point(pnlFields.Size.Width - btPdfSessao.Size.Width - 5, spacing);
+               // btPdfSessao.Name = "btPdfSessao";
+               // btPdfSessao.TabIndex = 8;
+               // btPdfSessao.Text = "PDF";
+               // btPdfSessao.UseVisualStyleBackColor = true;
+               // btPdfSessao.Click += new System.EventHandler(this.btGeraPdfSessao);
+               // btPdfSessao.Enabled = false;
+               // btPdfSessao.Visible = false;
             }
 
             AnchorStyles anchorEdit = ((System.Windows.Forms.AnchorStyles)
@@ -406,27 +465,27 @@ namespace ProjetoTCC
             );
 
             this.lbID = new System.Windows.Forms.Label();
-            this.lbTitulo = new System.Windows.Forms.Label();
-            this.tbTitulo = new System.Windows.Forms.TextBox();
+            this.lbMaterial = new System.Windows.Forms.Label();
+            this.tbMaterial = new System.Windows.Forms.TextBox();
             this.lbDataSessao = new System.Windows.Forms.Label();
             this.dtpDataSessao = new System.Windows.Forms.DateTimePicker();
 
             pnlFields.Controls.Add(lbID);
-            pnlFields.Controls.Add(lbTitulo);
-            pnlFields.Controls.Add(tbTitulo);
+            pnlFields.Controls.Add(lbMaterial);
+            pnlFields.Controls.Add(tbMaterial);
             pnlFields.Controls.Add(lbDataSessao);
             pnlFields.Controls.Add(dtpDataSessao);
 
             if (this.novoRegistro)
             {
                 this.lbID.Text = "ID: " + Sessao.ProxID();
-                this.tbTitulo.Text = "";
+                this.tbMaterial.Text = "";
                 this.dtpDataSessao.Value = DateTime.Now;
             }
             else
             {
                 this.lbID.Text = "ID: " + this.sessaoSelecionada.ID;
-                this.tbTitulo.Text = this.sessaoSelecionada.titulo;
+                this.tbMaterial.Text = this.sessaoSelecionada.material;
                 this.dtpDataSessao.Value = this.sessaoSelecionada.dataSessao;
             }
 
@@ -435,26 +494,24 @@ namespace ProjetoTCC
             this.lbID.Name = "lbID";
             this.lbID.Size = new System.Drawing.Size(200, 20);
             this.lbID.TabIndex = 0;
-            this.lbID.Anchor = anchorEdit;
-            
+            this.lbID.Anchor = anchorEdit;            
 
-            this.lbTitulo.AutoSize = false;
-            this.lbTitulo.Location = new System.Drawing.Point(lbID.Location.X, lbID.Location.Y + lbID.Size.Height + spacing);
-            this.lbTitulo.Name = "lbNome";
-            this.lbTitulo.Size = new System.Drawing.Size(50, 20);
-            this.lbTitulo.TabIndex = 0;
-            this.lbTitulo.Text = "Titulo:";
-            this.lbTitulo.Anchor = anchorEdit;
+            this.lbMaterial.AutoSize = false;
+            this.lbMaterial.Location = new System.Drawing.Point(lbID.Location.X, lbID.Location.Y + lbID.Size.Height + spacing);
+            this.lbMaterial.Name = "lbNome";
+            this.lbMaterial.Size = new System.Drawing.Size(65, 20);
+            this.lbMaterial.TabIndex = 0;
+            this.lbMaterial.Text = "Material:";
+            this.lbMaterial.Anchor = anchorEdit;
 
-
-            this.tbTitulo.Location = new System.Drawing.Point(lbTitulo.Location.X + lbTitulo.Size.Width, lbTitulo.Location.Y - spacing);
-            this.tbTitulo.Name = "tbTitulo";
-            this.tbTitulo.Size = new System.Drawing.Size(200, lbTitulo.Size.Height);
-            this.tbTitulo.TabIndex = 1;
-            this.tbTitulo.Anchor = anchorEdit;
+            this.tbMaterial.Location = new System.Drawing.Point(lbMaterial.Location.X + lbMaterial.Size.Width, lbMaterial.Location.Y - spacing);
+            this.tbMaterial.Name = "tbMaterial";
+            this.tbMaterial.Size = new System.Drawing.Size(200, lbMaterial.Size.Height);
+            this.tbMaterial.TabIndex = 1;
+            this.tbMaterial.Anchor = anchorEdit;
 
             this.lbDataSessao.AutoSize = false;
-            this.lbDataSessao.Location = new System.Drawing.Point(lbTitulo.Location.X, lbTitulo.Location.Y + lbTitulo.Size.Height + spacing);
+            this.lbDataSessao.Location = new System.Drawing.Point(lbMaterial.Location.X, lbMaterial.Location.Y + lbMaterial.Size.Height + spacing);
             this.lbDataSessao.Name = "lbDataSessao";
             this.lbDataSessao.Size = new System.Drawing.Size(95, 20);
             this.lbDataSessao.TabIndex = 0;
@@ -471,7 +528,7 @@ namespace ProjetoTCC
             this.dtpDataSessao.Anchor = anchorEdit;
 
             this.lbEspecialista = new Label();
-            this.listEspecialista = new ListBox();
+            this.listEspecialista = new ComboBox();
 
             pnlFields.Controls.Add(listEspecialista);
             pnlFields.Controls.Add(lbEspecialista);
@@ -485,11 +542,10 @@ namespace ProjetoTCC
             this.lbEspecialista.Anchor = anchorEdit;
 
             this.listEspecialista.ItemHeight = 16;
-            this.listEspecialista.ScrollAlwaysVisible = true;
-            this.listEspecialista.SelectionMode = SelectionMode.One;
             this.listEspecialista.DrawMode = DrawMode.Normal;
             this.listEspecialista.Location = new System.Drawing.Point(lbEspecialista.Location.X + lbEspecialista.Size.Width, lbEspecialista.Location.Y - spacing + 2);
             this.listEspecialista.Name = "listEspecialista";
+            this.listEspecialista.DropDownStyle = ComboBoxStyle.DropDownList;
 
             this.listEspecialista.Items.Clear();
 
@@ -533,7 +589,7 @@ namespace ProjetoTCC
             {
                 this.btAtualizaCamera = new Button();
                 this.lbCamera = new Label();
-                this.listCamera = new ListBox();
+                this.listCamera = new ComboBox();
 
                 pnlFields.Controls.Add(btAtualizaCamera);
                 pnlFields.Controls.Add(lbCamera);
@@ -556,19 +612,89 @@ namespace ProjetoTCC
                 this.lbCamera.Anchor = anchorEdit;
 
                 this.listCamera.ItemHeight = 16;
-                this.listCamera.ScrollAlwaysVisible = true;
-                this.listCamera.SelectionMode = SelectionMode.One;
                 this.listCamera.DrawMode = DrawMode.Normal;
                 this.listCamera.Location = new System.Drawing.Point(lbCamera.Location.X + lbCamera.Size.Width, lbCamera.Location.Y - spacing + 2);
                 this.listCamera.Name = "listCamera";
+                this.listCamera.DropDownStyle = ComboBoxStyle.DropDownList;
                 this.listCamera.SelectedValueChanged += ListCamera_SelectedValueChanged;
+                this.listCamera.Size = new Size((listEspecialista.Location.X + listEspecialista.Size.Width) - listCamera.Location.X, listEspecialista.Size.Height);
                 
                 updateCameras();
                 
             } else
             {
+                Label lbAprLing = new System.Windows.Forms.Label();
+                ComboBox cbAprLing = new ComboBox();
+
+                Label lbAprLog = new System.Windows.Forms.Label();
+                ComboBox cbAprLog = new ComboBox();
+
+                Label lbAprMat = new System.Windows.Forms.Label();
+                ComboBox cbAprMat = new ComboBox();
+
+                lbAprLing.AutoSize = false;
+                lbAprLing.Location = new System.Drawing.Point(lbEspecialista.Location.X, listEspecialista.Location.Y + listEspecialista.Size.Height + spacing - 2);
+                lbAprLing.Name = "lbAprLing";
+                lbAprLing.Size = new System.Drawing.Size(123, 20);
+                lbAprLing.TabIndex = 0;
+                lbAprLing.Text = "Idade Linguagem:";
+                lbAprLing.Anchor = anchorEdit;
+
+                cbAprLing.ItemHeight = 16;
+                cbAprLing.DrawMode = DrawMode.Normal;
+                cbAprLing.Location = new System.Drawing.Point(lbAprLing.Location.X + lbAprLing.Size.Width, lbAprLing.Location.Y - (spacing / 2));
+                cbAprLing.Size = new Size(listEspecialista.Size.Width/2, 20);
+                cbAprLing.Name = "cbAprLing";
+                cbAprLing.DropDownStyle = ComboBoxStyle.DropDownList;
+                populaIdades(cbAprLing);
+
+                lbAprLog.AutoSize = false;
+                lbAprLog.Location = new System.Drawing.Point(lbAprLing.Location.X, lbAprLing.Location.Y + lbAprLing.Size.Height + spacing);
+                lbAprLog.Name = "lbAprLog";
+                lbAprLog.Size = new System.Drawing.Size(123, 20);
+                lbAprLog.TabIndex = 0;
+                lbAprLog.Text = "Idade Logica:";
+                lbAprLog.Anchor = anchorEdit;
+
+                cbAprLog.ItemHeight = 16;
+                cbAprLog.DrawMode = DrawMode.Normal;
+                cbAprLog.Location = new System.Drawing.Point(lbAprLog.Location.X + lbAprLog.Size.Width, lbAprLog.Location.Y - (spacing / 2));
+                cbAprLog.Size = cbAprLing.Size;
+                cbAprLog.Name = "cbAprLog";
+                cbAprLog.DropDownStyle = ComboBoxStyle.DropDownList;
+                populaIdades(cbAprLog);
+
+                lbAprMat.AutoSize = false;
+                lbAprMat.Location = new System.Drawing.Point(lbAprLog.Location.X, lbAprLog.Location.Y + lbAprLog.Size.Height + spacing);
+                lbAprMat.Name = "lbAprMat";
+                lbAprMat.Size = new System.Drawing.Size(123, 20);
+                lbAprMat.TabIndex = 0;
+                lbAprMat.Text = "Idade Matematica:";
+                lbAprMat.Anchor = anchorEdit;
+
+                cbAprMat.ItemHeight = 16;
+                cbAprMat.DrawMode = DrawMode.Normal;
+                cbAprMat.Location = new System.Drawing.Point(lbAprMat.Location.X + lbAprMat.Size.Width, lbAprMat.Location.Y - (spacing / 2));
+                cbAprMat.Size = cbAprLing.Size;
+                cbAprMat.Name = "cbAprMat";
+                cbAprMat.DropDownStyle = ComboBoxStyle.DropDownList;
+                populaIdades(cbAprMat);
+
+                cbAprLing.SelectedIndex = ((int)this.sessaoSelecionada.idadeAprLing - 1);
+                cbAprLog.SelectedIndex = ((int)this.sessaoSelecionada.idadeAprLog - 1);
+                cbAprMat.SelectedIndex = ((int)this.sessaoSelecionada.idadeAprMat - 1);
+
+                Label lbDescricao = new Label();
+                lbDescricao.Text = "Descrição:";
+                lbDescricao.AutoSize = false;
+                lbDescricao.Location = new System.Drawing.Point(lbAprMat.Location.X, lbAprMat.Location.Y + lbAprMat.Size.Height + spacing - 2);
+                lbDescricao.Name = "lbDescricao";
+                lbDescricao.Size = new System.Drawing.Size(90, 20);
+                lbDescricao.TabIndex = 0;
+                lbDescricao.Anchor = anchorEdit;
+
                 TextBox tbDescricao = new TextBox();
-                tbDescricao.Location = new System.Drawing.Point(lbEspecialista.Location.X, listEspecialista.Location.Y + listEspecialista.Size.Height + spacing + 2);
+                tbDescricao.Location = new System.Drawing.Point(lbDescricao.Location.X, lbDescricao.Location.Y + lbDescricao.Size.Height + spacing);
                 tbDescricao.Name = "tbDescricao";
                 tbDescricao.Size = new System.Drawing.Size(pnlFields.Size.Width - tbDescricao.Location.X - spacing - 5, pnlFields.Size.Height - tbDescricao.Location.Y - spacing - 5);
                 tbDescricao.Multiline = true;
@@ -576,44 +702,51 @@ namespace ProjetoTCC
                 tbDescricao.TabIndex = 1;
                 tbDescricao.Anchor = anchorEdit;
 
+                pnlFields.Controls.Add(lbAprLing);
+                pnlFields.Controls.Add(cbAprLing);
+
+                pnlFields.Controls.Add(lbAprLog);
+                pnlFields.Controls.Add(cbAprLog);
+
+                pnlFields.Controls.Add(lbAprMat);
+                pnlFields.Controls.Add(cbAprMat);
+
+                pnlFields.Controls.Add(lbDescricao);
                 pnlFields.Controls.Add(tbDescricao);
+            }
 
-                //    Panel pnlMarcas = new Panel();
-                //    pnlFields.Controls.Add(pnlMarcas);
+            if (novoRegistro)
+            {
+                iniciaVideo(0);
+            }
+        }
 
-                //    pnlMarcas.Location = new System.Drawing.Point(lbEspecialista.Location.X, lbEspecialista.Location.Y + lbEspecialista.Size.Height + spacing + 2);
-                //    pnlMarcas.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom
-                //| System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-                //    pnlFields.AutoScroll = false;
+        private void populaIdades(ComboBox cBox)
+        {
+            cBox.Items.Clear();
+            cBox.DisplayMember = "_DS";
+            cBox.ValueMember = "_ID";
 
-                //    pnlMarcas.BackColor = this.pnlEdit.BackColor;
-                //    pnlMarcas.BorderStyle = this.pnlEdit.BorderStyle;
-                //    pnlMarcas.Size = new Size(this.pnlEdit.Size.Width, 200);
-                //    pnlMarcas.Location = new System.Drawing.Point(1, videoControl.Location.Y + videoControl.Size.Height);
-                //    pnlMarcas.Name = "pnlMarcas";
-
-                //    ListBox listaMarcas = new ListBox();
-                //    pnlMarcas.Controls.Add(listaMarcas);
-                //    listaMarcas.ItemHeight = 16;
-                //    listaMarcas.ScrollAlwaysVisible = true;
-                //    listaMarcas.SelectionMode = SelectionMode.One;
-                //    listaMarcas.DrawMode = DrawMode.Normal;
-                //    listaMarcas.Location = new System.Drawing.Point(0, 0);
-                //    listaMarcas.Size = new Size(pnlMarcas.Size.Width / 2, pnlMarcas.Size.Height);
-                //    listaMarcas.Name = "listaMarcas";
-                //    listaMarcas.BorderStyle = pnlMarcas.BorderStyle;
+            for (int i = 1; i <= 9; i++)
+            {
+                Idade id = new Idade(i);
+                cBox.Items.Add(id);
             }
         }
 
         private void ListCamera_SelectedValueChanged(object sender, EventArgs e)
         {
-            videoCamera.SignalToStop();
-            while (videoCamera.IsRunning)
+            btStartVideo.Enabled = false;
+            if (videoCamera != null)
             {
-                Thread.Sleep(0500);
+                videoCamera.SignalToStop();
+                while (videoCamera.IsRunning)
+                {
+                    Thread.Sleep(0500);
+                }
+                videoCamera = null;
             }
-            videoCamera = null;
-            iniciaVideo(this.listCamera.SelectedIndex);            
+            iniciaVideo(this.listCamera.SelectedIndex);
         }
 
         private void btAtualizaCamera_Click(object sender, EventArgs e)
@@ -626,24 +759,58 @@ namespace ProjetoTCC
 
         private void updateCameras()
         {
+            btStartVideo.Enabled = false;
+            enableBtConnectBrain(false);
+
             this.listCamera.Items.Clear();
             FilterInfoCollection VideoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
 
             if (VideoDevices.Count >= 1)
             {
+
+                int indexCamera = -1;
+                int count = -1;
                 foreach (FilterInfo VideoCaptureDevice in VideoDevices)
                 {
                     listCamera.Items.Add(VideoCaptureDevice.Name);
+                    if (VideoCaptureDevice.Name.Equals(Biblioteca.nomeCamera) && indexCamera < 0)
+                    {
+                        indexCamera = count;
+                    }
+                    else
+                    {
+                        count++;
+                    }
                 }
-                this.listCamera.SelectedIndex = 0;
+                if (indexCamera >= 0)
+                {
+                    listCamera.SelectedIndex = indexCamera;
+                }
+                else
+                {
+                    listCamera.SelectedIndex = 0;
+                }
+                if (videoCamera != null)
+                {
+                    videoCamera.SignalToStop();
+                    while (videoCamera.IsRunning)
+                    {
+                        Thread.Sleep(0500);
+                    }
+                    videoCamera = null;
+                }
+                iniciaVideo(listCamera.SelectedIndex);
+                btStartVideo.Enabled = true;
+                if (!isBrainReader)
+                {
+                    enableBtConnectBrain(true);
+                }
             }
             else
             {
                 MessageBox.Show("Nenhuma câmera foi encontrada." +
                     "\nVerifique se há uma câmera conectada e pressione o botão \"Atualizar\"");
-//                listCamera.Items.Add("-----");
             }
-            this.listCamera.Size = new System.Drawing.Size(300, 25 + (listCamera.Items.Count > 4 ? 60 : listCamera.Items.Count * 15));
         }
 
         private void alteraModo(int mod)
@@ -741,7 +908,7 @@ namespace ProjetoTCC
             doc.Add(pObsPaciente);
 
             //criando a variavel para paragrafo
-            Paragraph pObsSessao = new Paragraph("Sessão: " + sessaoSelecionada.titulo +
+            Paragraph pObsSessao = new Paragraph("Sessão: " + sessaoSelecionada.material +
                 "\n" +
                 "Observações:" +
                 "\n" +
@@ -925,7 +1092,7 @@ namespace ProjetoTCC
                     {
                         videoCamera.NewFrame += new NewFrameEventHandler(VideoCamera_OnNewFrame);
                         videoCamera.Start();
-                        System.Windows.Forms.PictureBox videoRecorder = (System.Windows.Forms.PictureBox)pnlEdit.Controls.Find("videoRecorder", true)[0];
+                        btStartVideo.Enabled = true;
                     }
                     catch (Exception ex)
                     {
@@ -1133,8 +1300,6 @@ namespace ProjetoTCC
             gridListaSessoes.Remove(gridListaSessoes.Where(p => p.ID == ID).First());
             Biblioteca.excluiSessaoSelecionada(ID);
 
-            MessageBox.Show("Sessao Excluída com sucesso!");
-
             if (this.gridListaSessoes.Count > 0)
             {
                 this.selectedIndex = 0;
@@ -1242,13 +1407,11 @@ namespace ProjetoTCC
         {
             bool salva = true;
 
-            string titulo = pnlEdit.Controls.Find("tbTitulo", true)[0].Text.Trim();
+            string material = pnlEdit.Controls.Find("tbmaterial", true)[0].Text.Trim();
 
-            string descricao = pnlEdit.Controls.Find("tbDescricao", true)[0].Text.Trim();
-
-            if (titulo.Trim().Length < 1)
+            if (material.Trim().Length < 1)
             {
-                MessageBox.Show("O titulo da sessao não pode ser vazia!");
+                MessageBox.Show("O material da sessao não pode ser vazio!");
                 salva = false;
             }
 
@@ -1260,16 +1423,34 @@ namespace ProjetoTCC
             {
                 if (this.sessaoSelecionada != null)
                 {
-                    string caminhoVideo = "video_sessao_" + this.sessaoSelecionada.ID + ".avi"; // Output file
+                    string descricao = pnlEdit.Controls.Find("tbDescricao", true)[0].Text.Trim();
 
-                    this.sessaoSelecionada.updateValues(esp, dataSessao, caminhoVideo, titulo, descricao);
+                    IdadeAprendizagem idadeAprLing = (IdadeAprendizagem)((ComboBox)pnlEdit.Controls.Find("cbAprLing", true)[0]).SelectedIndex + 1;
+                    IdadeAprendizagem idadeAprLog = (IdadeAprendizagem)((ComboBox)pnlEdit.Controls.Find("cbAprLog", true)[0]).SelectedIndex + 1;
+                    IdadeAprendizagem idadeAprMat = (IdadeAprendizagem)((ComboBox)pnlEdit.Controls.Find("cbAprMat", true)[0]).SelectedIndex + 1;
+
+                    bool ieVerificado = false;
+                    //                    bool ieVerificado = ((CheckBox)(pnlEdit.Controls.Find("cbVerificado", true)[0])).Checked;
+
+                    if (!ieVerificado)
+                    {
+                        if (DialogResult.Yes == MessageBox.Show(this, "Deseja marcar essa sessão como verificada?", "Aviso", MessageBoxButtons.YesNo))
+                        {
+                            ieVerificado = true;
+                        }
+                    }
+
+                    this.sessaoSelecionada.updateValues(esp, dataSessao, this.sessaoSelecionada.nomeVideo, material,
+                        descricao, idadeAprLing, idadeAprLog, idadeAprMat, ieVerificado);
 
                     long ID = this.sessaoSelecionada.ID;
-                    gridListaSessoes.Where(p => p.ID == ID).First().updateValues(esp, dataSessao, caminhoVideo, titulo, descricao);
+                    gridListaSessoes.Where(p => p.ID == ID).First().updateValues(esp, dataSessao, this.sessaoSelecionada.nomeVideo, material,
+                        descricao, idadeAprLing, idadeAprLog, idadeAprMat, ieVerificado);
 
-                    Biblioteca.updateSessaoSelecionada(ID, esp, dataSessao, caminhoVideo, titulo, descricao);
+                    Biblioteca.updateSessaoSelecionada(ID, esp, dataSessao, this.sessaoSelecionada.nomeVideo, material,
+                        descricao, idadeAprLing, idadeAprLog, idadeAprMat, ieVerificado);
 
-                    MessageBox.Show("Sessao Atualizada com sucesso!");
+//                    MessageBox.Show("Sessao Atualizada com sucesso!");
                 }
                 else
                 {
@@ -1316,7 +1497,8 @@ namespace ProjetoTCC
                     string caminhoVideo = "video_sessao_" + Sessao.ProxID() + ".avi"; // Output file
 
                     Paciente pac = Biblioteca.getPacientes().Where(p => p.ID == this.IDPaciente).First();
-                    Sessao ses = new Sessao(pac, esp, dataSessao, caminhoVideo, titulo, descricao);
+                    Sessao ses = new Sessao(pac, esp, dataSessao, caminhoVideo, material, 
+                        "", IdadeAprendizagem.Ano1, IdadeAprendizagem.Ano1, IdadeAprendizagem.Ano1, false);
                     this.addSessao(ses);
 
                     MessageBox.Show("Sessao Salva com sucesso!");
@@ -1438,12 +1620,8 @@ namespace ProjetoTCC
         {
                 if (this.videoPlayer != null && isVideoPlayerCreated())
                 {
-                    //this.videoPlayer.Ctlcontrols.pause();
-
                     try
                     {
-                        BringFormToFront();
-
                         Bitmap bitmap = VideoPlayerCopyFrame();
 
                         return bitmap;                        
