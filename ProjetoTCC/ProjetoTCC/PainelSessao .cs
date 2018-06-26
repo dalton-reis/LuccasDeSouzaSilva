@@ -426,6 +426,7 @@ namespace ProjetoTCC
                 this.btStartVideo.Click += new System.EventHandler(this.btIniciaRecordVideoClick);
                 this.btStartVideo.Enabled = true;
 
+                isVideoRecorded = false;
                 setBrainReader(false);
 
                 //botoes para gravar
@@ -1062,6 +1063,9 @@ namespace ProjetoTCC
                         if (writerOpen)
                         {
                             writer.WriteVideoFrame(frame);
+                            writer.WriteVideoFrame(frame);
+                            writer.WriteVideoFrame(frame);
+                            writer.WriteVideoFrame(frame);
                         }
 
                         lock (DataWriteFile)
@@ -1295,6 +1299,11 @@ namespace ProjetoTCC
 
         protected void btDel_Click(object sender, EventArgs e)
         {            
+            if(videoPlayer != null)
+            {
+                videoPlayer.SignalToStop();
+            }
+
             long ID = this.sessaoSelecionada.ID;
             listaSessoes.Remove(listaSessoes.Where(p => p.ID == ID).First());
             gridListaSessoes.Remove(gridListaSessoes.Where(p => p.ID == ID).First());

@@ -25,6 +25,8 @@ namespace ProjetoTCC
         private Image PauseImage = ResizeImage(Image.FromFile(@"resources/img/pause.png"), 25, 25);
         private Image StopImage = ResizeImage(Image.FromFile(@"resources/img/stop.png"), 20, 20);
 
+        private Thread thVideoProcess = null;
+
         public void setVideoURL(string url)
         {
             this.videoURL = url;
@@ -189,8 +191,8 @@ namespace ProjetoTCC
         {
             this.StartVideo = false;
             this.PauseVideo = false;
-            setTrackBarPosition(0);
             TrackBarScrollValue = 0;
+            setTrackBarPosition(0);
         }
 
         public void btStartPauseClick(object sender, EventArgs e)
@@ -219,11 +221,11 @@ namespace ProjetoTCC
             {
                 if(File.Exists(this.videoURL))
                 {
-                    Thread th = new Thread(VideoProcess);
+                    thVideoProcess = new Thread(VideoProcess);
                     this.StartVideo = true;
                     this.PauseVideo = false;
                     setBtStartPauseImage(PauseImage);
-                    th.Start();
+                    thVideoProcess.Start();
                     this.isRunning = true;
                 } else
                 {
@@ -239,7 +241,7 @@ namespace ProjetoTCC
             if (this.videoTrackBar.InvokeRequired)
             {
                 IntArgReturnVoidDelegate del = new IntArgReturnVoidDelegate(setTrackBarMax);
-                this.Invoke(del, new object[] { value });
+                this.BeginInvoke(del, new object[] { value });
             }
             else
             {
@@ -254,7 +256,7 @@ namespace ProjetoTCC
             if (this.display.InvokeRequired)
             {
                 BitmapArgReturnVoidDelegate del = new BitmapArgReturnVoidDelegate(setDisplayImage);
-                this.Invoke(del, new object[] { value });
+                this.BeginInvoke(del, new object[] { value });
             }
             else
             {
@@ -274,7 +276,7 @@ namespace ProjetoTCC
             if (this.videoTrackBar.InvokeRequired)
             {
                 IntArgReturnVoidDelegate del = new IntArgReturnVoidDelegate(setTrackBarPosition);
-                this.Invoke(del, new object[] { value });
+                this.BeginInvoke(del, new object[] { value });
             }
             else
             {
@@ -304,7 +306,7 @@ namespace ProjetoTCC
             if (this.videoTimer.InvokeRequired)
             {
                 IntArgReturnVoidDelegate del = new IntArgReturnVoidDelegate(startVideoTimeSeconds);
-                this.Invoke(del, new object[] { value });
+                this.BeginInvoke(del, new object[] { value });
             }
             else
             {
@@ -318,7 +320,7 @@ namespace ProjetoTCC
             if (this.videoTimer.InvokeRequired)
             {
                 IntArgReturnVoidDelegate del = new IntArgReturnVoidDelegate(setVideoTime);
-                this.Invoke(del, new object[] { value });
+                this.BeginInvoke(del, new object[] { value });
             } else
             {
                 string[] relogio = videoTimer.Text.Split('/');
@@ -400,14 +402,7 @@ namespace ProjetoTCC
                     if(frame != null)
                     {
                         setDisplayImage(frame);
-                        if (i % 30 == 0)
-                        {
-                            Thread.Sleep(043);
-                        }
-                        else
-                        {
-                            Thread.Sleep(0033);
-                        }
+                        Thread.Sleep(0020);
                         setTrackBarPosition(i + 1);
                     }
                     double segundos = i / fps;
@@ -415,11 +410,14 @@ namespace ProjetoTCC
                 }
             }
             this.isRunning = false;
+            this.StartVideo = false;
+            this.PauseVideo = false;
+            TrackBarScrollValue = 0;
             setTrackBarPosition(0);
             setVideoTime(0);
-            setDisplayImage(reader.ReadVideoFrame(getTrackBarPosition()));
+            setDisplayImage(reader.ReadVideoFrame(0));
             setBtStartPauseImage(PlayImage);
-            this.SignalToStop();
+            reader.Close();
         }
 
         delegate void ImageArgVoidDelegate(Image value);
@@ -429,7 +427,7 @@ namespace ProjetoTCC
             if (this.btStartPause.InvokeRequired)
             {
                 ImageArgVoidDelegate del = new ImageArgVoidDelegate(setBtStartPauseImage);
-                this.Invoke(del, new object[] { value });
+                this.BeginInvoke(del, new object[] { value });
             }
             else
             {
@@ -442,7 +440,7 @@ namespace ProjetoTCC
             if (this.btStop.InvokeRequired)
             {
                 ImageArgVoidDelegate del = new ImageArgVoidDelegate(setBtStopImage);
-                this.Invoke(del, new object[] { value });
+                this.BeginInvoke(del, new object[] { value });
             }
             else
             {
@@ -450,27 +448,16 @@ namespace ProjetoTCC
             }
         }
 
-        //public void Start()
-        //{
-        //    if (this.PauseVideo)
-        //    {
-        //        this.PauseVideo = false;
-        //    } else if (!this.StartVideo)
-        //    {
-        //        this.StartVideo = true;
-        //        this.PauseVideo = false;
-        //    }
-        //}
-
         public void SignalToStop()
         {
+            this.PauseVideo = true;
             this.StartVideo = false;
-            this.PauseVideo = false;
+            TrackBarScrollValue = -1;
+            if (thVideoProcess != null)
+            {
+                thVideoProcess.Join();
+            }
         }
 
-        //public void Pause()
-        //{
-        //    this.PauseVideo = true;
-        //}
     }
 }

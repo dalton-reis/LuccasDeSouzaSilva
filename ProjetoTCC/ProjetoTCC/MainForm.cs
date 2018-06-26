@@ -178,17 +178,21 @@ namespace ProjetoTCC
         {
             bool continua = true;
 
-            if (Biblioteca.getEspecialistas().Count == 0)
+            if (pnlSessao.btEsqState.Equals('N'))
             {
-                continua = false;
-                MessageBox.Show("Não há especialistas cadastrados no sistema. " +
-                "\nÉ necessário ao menos 1 especialista cadastrado para iniciar uma sessão.");
+                if (Biblioteca.getEspecialistas().Count == 0)
+                {
+                    continua = false;
+                    MessageBox.Show("Não há especialistas cadastrados no sistema. " +
+                    "\nÉ necessário ao menos 1 especialista cadastrado para iniciar uma sessão.");
+                }
             }
             if (continua)
             {
                 pnlSessao.btEsq_Click();
                 if (pnlSessao.btEsqState.Equals('N'))
                 {
+                    pnlSessao.setBrainReader(false);
                     startBrainReader = false;
                     startUpdateGraphs = false;
                     displayPnlCharts(false);
@@ -283,6 +287,7 @@ namespace ProjetoTCC
                     Thread.Sleep(1);
                 }
             }
+            BrainController.closeReader();
             NeuroDataQueue = null;
             GraphDataQueue = null;
         }
@@ -342,17 +347,20 @@ namespace ProjetoTCC
             while (startUpdateGraphs)
             {
                 NeuroData nr = null;
+                lock (this.GraphDataQueue)
+                {
                     if (this.GraphDataQueue.Count > 0)
                     {
                         try
                         {
                             nr = this.GraphDataQueue.Dequeue();
-                        } catch (Exception ex)
+                        }
+                        catch (Exception ex)
                         {
                             nr = null;
                         }
                     }
-                
+                }                
                 if (nr != null) {
                     this.updateProgBarMed(nr.Meditation);
                     this.updateProgBarAtt(nr.Attention);
@@ -447,6 +455,17 @@ namespace ProjetoTCC
         public void executaBtDirSessao(object sender, EventArgs e)
         {
             pnlSessao.btDir_Click();
+            if (pnlSessao.btEsqState.Equals('N'))
+            {
+                pnlSessao.setBrainReader(false);
+                startBrainReader = false;
+                startUpdateGraphs = false;
+                displayPnlCharts(false);
+            }
+            else
+            {
+                displayPnlCharts(true);
+            }
         }
 
         private void iniConfig()
