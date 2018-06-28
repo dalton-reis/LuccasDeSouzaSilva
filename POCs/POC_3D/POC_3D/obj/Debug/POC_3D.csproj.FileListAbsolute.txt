@@ -1,0 +1,16 @@
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\bin\Debug\POC_3D.exe.config
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\bin\Debug\POC_3D.exe
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\bin\Debug\POC_3D.pdb
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\bin\Debug\OpenTK.dll
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\bin\Debug\OpenTK.xml
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\obj\Debug\POC_3D.Properties.Resources.resources
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\obj\Debug\POC_3D.csproj.GenerateResource.Cache
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\obj\Debug\POC_3D.csproj.CoreCompileInputs.cache
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\obj\Debug\POC_3D.exe
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\obj\Debug\POC_3D.pdb
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\bin\Debug\resources\shaders\fragmentShader.frag
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\bin\Debug\resources\shaders\vertexShader.vert
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\obj\Debug\POC_3D.csproj.CopyComplete
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\bin\Debug\resources\shaders\fs.glsl
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\bin\Debug\resources\shaders\vs.glsl
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_3D\POC_3D\obj\Debug\POC_3D.csprojResolveAssemblyReference.cache

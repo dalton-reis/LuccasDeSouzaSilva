@@ -1,0 +1,10 @@
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\WindowsFormsAlura\WindowsFormsAlura\bin\Debug\WindowsFormsAlura.exe.config
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\WindowsFormsAlura\WindowsFormsAlura\bin\Debug\WindowsFormsAlura.exe
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\WindowsFormsAlura\WindowsFormsAlura\bin\Debug\WindowsFormsAlura.pdb
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\WindowsFormsAlura\WindowsFormsAlura\obj\Debug\POC_Cadastro.csprojResolveAssemblyReference.cache
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\WindowsFormsAlura\WindowsFormsAlura\obj\Debug\WindowsFormsAlura.Form1.resources
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\WindowsFormsAlura\WindowsFormsAlura\obj\Debug\WindowsFormsAlura.Properties.Resources.resources
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\WindowsFormsAlura\WindowsFormsAlura\obj\Debug\POC_Cadastro.csproj.GenerateResource.Cache
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\WindowsFormsAlura\WindowsFormsAlura\obj\Debug\POC_Cadastro.csproj.CoreCompileInputs.cache
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\WindowsFormsAlura\WindowsFormsAlura\obj\Debug\WindowsFormsAlura.exe
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\WindowsFormsAlura\WindowsFormsAlura\obj\Debug\WindowsFormsAlura.pdb

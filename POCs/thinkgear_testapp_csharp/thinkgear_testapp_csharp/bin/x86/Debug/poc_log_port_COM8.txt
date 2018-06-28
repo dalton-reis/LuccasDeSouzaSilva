@@ -1,0 +1,54 @@
+Inicio Teste Porta: COM8
+errCode for TG_SetStreamLog : 0
+errCode for TG_SetDataLog : 0
+22/03/2018 23:35:58 - TG_ReadPackets Attention: 0  Meditation: 0  Poor Signal: 25
+22/03/2018 23:35:59 - TG_ReadPackets Attention: 0  Meditation: 0  Poor Signal: 25
+22/03/2018 23:36:00 - TG_ReadPackets Attention: 0  Meditation: 0  Poor Signal: 0
+22/03/2018 23:36:01 - TG_ReadPackets Attention: 0  Meditation: 0  Poor Signal: 0
+22/03/2018 23:36:02 - TG_ReadPackets Attention: 0  Meditation: 0  Poor Signal: 0
+22/03/2018 23:36:03 - TG_ReadPackets Attention: 53  Meditation: 41  Poor Signal: 0
+22/03/2018 23:36:04 - TG_ReadPackets Attention: 54  Meditation: 51  Poor Signal: 0
+22/03/2018 23:36:05 - TG_ReadPackets Attention: 57  Meditation: 53  Poor Signal: 0
+22/03/2018 23:36:06 - TG_ReadPackets Attention: 60  Meditation: 54  Poor Signal: 0
+22/03/2018 23:36:07 - TG_ReadPackets Attention: 66  Meditation: 57  Poor Signal: 0
+22/03/2018 23:36:08 - TG_ReadPackets Attention: 87  Meditation: 54  Poor Signal: 0
+22/03/2018 23:36:09 - TG_ReadPackets Attention: 94  Meditation: 67  Poor Signal: 0
+22/03/2018 23:36:10 - TG_ReadPackets Attention: 100  Meditation: 70  Poor Signal: 0
+22/03/2018 23:36:11 - TG_ReadPackets Attention: 91  Meditation: 69  Poor Signal: 0
+22/03/2018 23:36:12 - TG_ReadPackets Attention: 80  Meditation: 64  Poor Signal: 0
+22/03/2018 23:36:13 - TG_ReadPackets Attention: 70  Meditation: 54  Poor Signal: 0
+22/03/2018 23:36:14 - TG_ReadPackets Attention: 63  Meditation: 50  Poor Signal: 0
+22/03/2018 23:36:15 - TG_ReadPackets Attention: 63  Meditation: 54  Poor Signal: 0
+22/03/2018 23:36:16 - TG_ReadPackets Attention: 63  Meditation: 54  Poor Signal: 51
+22/03/2018 23:36:17 - TG_ReadPackets Attention: 56  Meditation: 56  Poor Signal: 0
+22/03/2018 23:36:18 - TG_ReadPackets Attention: 63  Meditation: 54  Poor Signal: 0
+22/03/2018 23:36:19 - TG_ReadPackets Attention: 63  Meditation: 64  Poor Signal: 0
+22/03/2018 23:36:20 - TG_ReadPackets Attention: 61  Meditation: 64  Poor Signal: 0
+22/03/2018 23:36:21 - TG_ReadPackets Attention: 81  Meditation: 60  Poor Signal: 0
+22/03/2018 23:36:22 - TG_ReadPackets Attention: 84  Meditation: 64  Poor Signal: 0
+22/03/2018 23:36:23 - TG_ReadPackets Attention: 87  Meditation: 66  Poor Signal: 0
+22/03/2018 23:36:24 - TG_ReadPackets Attention: 93  Meditation: 56  Poor Signal: 0
+22/03/2018 23:36:25 - TG_ReadPackets Attention: 83  Meditation: 41  Poor Signal: 0
+22/03/2018 23:36:26 - TG_ReadPackets Attention: 66  Meditation: 37  Poor Signal: 0
+22/03/2018 23:36:27 - TG_ReadPackets Attention: 56  Meditation: 21  Poor Signal: 0
+22/03/2018 23:36:28 - TG_ReadPackets Attention: 66  Meditation: 30  Poor Signal: 0
+22/03/2018 23:36:29 - TG_ReadPackets Attention: 70  Meditation: 54  Poor Signal: 0
+22/03/2018 23:36:30 - TG_ReadPackets Attention: 74  Meditation: 56  Poor Signal: 0
+22/03/2018 23:36:31 - TG_ReadPackets Attention: 81  Meditation: 75  Poor Signal: 0
+22/03/2018 23:36:32 - TG_ReadPackets Attention: 77  Meditation: 77  Poor Signal: 0
+22/03/2018 23:36:33 - TG_ReadPackets Attention: 61  Meditation: 70  Poor Signal: 0
+22/03/2018 23:36:34 - TG_ReadPackets Attention: 70  Meditation: 70  Poor Signal: 0
+22/03/2018 23:36:35 - TG_ReadPackets Attention: 84  Meditation: 60  Poor Signal: 0
+22/03/2018 23:36:36 - TG_ReadPackets Attention: 84  Meditation: 51  Poor Signal: 0
+22/03/2018 23:36:37 - TG_ReadPackets Attention: 81  Meditation: 60  Poor Signal: 0
+22/03/2018 23:36:38 - TG_ReadPackets Attention: 74  Meditation: 61  Poor Signal: 0
+22/03/2018 23:36:39 - TG_ReadPackets Attention: 64  Meditation: 60  Poor Signal: 0
+22/03/2018 23:36:40 - TG_ReadPackets Attention: 51  Meditation: 56  Poor Signal: 0
+22/03/2018 23:36:43 - TG_ReadPackets Attention: 56  Meditation: 40  Poor Signal: 0
+22/03/2018 23:36:43 - TG_ReadPackets Attention: 54  Meditation: 47  Poor Signal: 0
+22/03/2018 23:36:44 - TG_ReadPackets Attention: 61  Meditation: 53  Poor Signal: 0
+22/03/2018 23:36:45 - TG_ReadPackets Attention: 56  Meditation: 54  Poor Signal: 0
+22/03/2018 23:36:46 - TG_ReadPackets Attention: 69  Meditation: 69  Poor Signal: 0
+22/03/2018 23:36:47 - TG_ReadPackets Attention: 70  Meditation: 67  Poor Signal: 0
+22/03/2018 23:36:48 - TG_ReadPackets Attention: 67  Meditation: 80  Poor Signal: 0
+Fim Teste Porta: COM8

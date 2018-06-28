@@ -1,0 +1,11 @@
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_TelaDupla\POC_TelaDupla\obj\Debug\POC_TelaDupla.csprojResolveAssemblyReference.cache
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_TelaDupla\POC_TelaDupla\obj\Debug\POC_TelaDupla.Properties.Resources.resources
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_TelaDupla\POC_TelaDupla\obj\Debug\POC_TelaDupla.TelaMain.resources
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_TelaDupla\POC_TelaDupla\obj\Debug\POC_TelaDupla.TelaSide.resources
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_TelaDupla\POC_TelaDupla\obj\Debug\POC_TelaDupla.csproj.GenerateResource.Cache
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_TelaDupla\POC_TelaDupla\obj\Debug\POC_TelaDupla.csproj.CoreCompileInputs.cache
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_TelaDupla\POC_TelaDupla\bin\Debug\POC_TelaDupla.exe.config
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_TelaDupla\POC_TelaDupla\bin\Debug\POC_TelaDupla.exe
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_TelaDupla\POC_TelaDupla\bin\Debug\POC_TelaDupla.pdb
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_TelaDupla\POC_TelaDupla\obj\Debug\POC_TelaDupla.exe
+C:\Users\Luccas\Desktop\TCC_PROJETO\Projeto_2\luccassouzasilva\POCs\POC_TelaDupla\POC_TelaDupla\obj\Debug\POC_TelaDupla.pdb

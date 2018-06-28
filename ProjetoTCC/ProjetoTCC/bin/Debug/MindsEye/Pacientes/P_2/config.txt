@@ -1,0 +1,12 @@
+{
+[ID]:[1];
+[ID_ESP]:[2];
+[dataSessao]:[26/06/2018 17:39];
+[nomeVideo]:[video_sessao_1.avi];
+[material]:[Teste 1];
+[idadeAprLing]:[1];
+[idadeAprLog]:[1];
+[idadeAprMat]:[1];
+[verificado]:[F];
+[descricao]:[]
+};;

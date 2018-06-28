@@ -1,5 +1,0 @@
-2018-02-24 22:43:46.4081|INFO|ThinkGear.Libraries.Bridge|Device COM8 connected.
-2018-02-24 22:44:22.2067|INFO|ThinkGear.Libraries.Bridge|Device COM8 connected.
-2018-02-24 22:50:11.5937|INFO|ThinkGear.Libraries.Bridge|Device COM8 connected.
-2018-02-24 22:50:52.4071|INFO|ThinkGear.Libraries.Bridge|Device COM8 connected.
-2018-02-24 22:51:45.2363|INFO|ThinkGear.Libraries.Bridge|Device COM8 connected.

@@ -1,0 +1,8 @@
+{
+[caminhoArquivos]:[];
+[nomeEstab]:[];
+[enderecoEstab]:[];
+[foneEstab]:[];
+[nomeCamera]:[];
+[caminhoLogo]:[]
+}
