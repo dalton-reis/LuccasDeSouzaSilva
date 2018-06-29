@@ -1,9 +1,0 @@
-{
-[ID]:[2];
-[nome]:[Marli];
-[dataNasc]:[26/06/2000];
-[cpf]:[];
-[rg]:[];
-[sexo]:[F];
-[descricao]:[]
-};;
