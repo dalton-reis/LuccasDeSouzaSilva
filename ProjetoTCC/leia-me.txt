@@ -1,0 +1,24 @@
+###############################
+
+###    Software MindsEye
+
+###############################
+
+Os executávais se encontram dentro dos arquivos compactados. Todos os arquivos na pasta do executável são necessários para o correto funcionamento da aplicação.
+
+Como configurar:
+
+1. Abrir a aplicação (normal ou x86) através do executável (.exe) MindsEye.
+
+2a. Caso não haja registros, uma pasta de nome "MindsEye" será criada na mesma localização do executável, para conter os registros da aplicação.
+
+2b. Caso já possua registros de pacientes e especialistas, mas não foram carregados, pressione o botão "Config". Na tela que se abrirá preencha o campo "Local dos arquivos" com a localização da pasta "MindsEye" que contém os dados já salvos. Essa localização ficará salva em um arquivo de configuração na mesma pasta do executável.
+
+3b. Feche a aplicação e abra-a novamente, para que os dados sejam carregados. Tentar utilizar o sistema sem fechar a aplicação poderá ocasionar erros.
+
+
+
+
+
+
+
