@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="ProjetoTCC.BaseDados" Collapsed="true">
+    <Position X="24" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAgEAQogGDA4BiCACAEBCBAAAAAggAAYRw0CMACDA=</HashCode>
+      <FileName>Biblioteca.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.Especialista">
+    <Position X="17.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAACAAAAABAIAAAAAA=</HashCode>
+      <FileName>Especialista.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.FormAguarde" Collapsed="true">
+    <Position X="25.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAGAAAAAAAACAAAACAABAAAAAAEQAAAQAABA=</HashCode>
+      <FileName>FormAguarde.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.FormAlteraFoto" Collapsed="true">
+    <Position X="27.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAACEAAABAAACAAAACAAAAAAAIAAEAAAAAAEA=</HashCode>
+      <FileName>FormAlteraFoto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.FormCamera" Collapsed="true">
+    <Position X="29.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAWAADAEAIQCAAAAiAAAAAAAAEAAAIAgAAEA=</HashCode>
+      <FileName>FormCamera .cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.FormConfig" Collapsed="true">
+    <Position X="31" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AUAAAEIAAGAAwBAAAADARAACIAGIEAACAJAAAIBCAAA=</HashCode>
+      <FileName>FormConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.FormEspecialistas" Collapsed="true">
+    <Position X="24" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAABAAAAACAAAACAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>FormEspecialistas .cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.FormGraphs" Collapsed="true">
+    <Position X="25.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAEBIAAAGBAAgACAACEAIAiAQAAAANAiQAAEAIgAAE=</HashCode>
+      <FileName>FormGraphs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.MainForm">
+    <Position X="27.75" Y="1.5" Width="7.75" />
+    <NestedTypes>
+      <Delegate Name="ProjetoTCC.MainForm.BoolArgReturnVoidDelegate" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MainForm.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ProjetoTCC.MainForm.IntArgReturnVoidDelegate" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MainForm.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>EQQAQhAQA3AgxIAoIQShRAoGGIDxAQBAEAeIDLCMFKg=</HashCode>
+      <FileName>MainForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.NativeThinkgear">
+    <Position X="35.75" Y="0.5" Width="5" />
+    <NestedTypes>
+      <Enum Name="ProjetoTCC.NativeThinkgear.Baudrate" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>NativeThinkgear.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="ProjetoTCC.NativeThinkgear.SerialDataFormat" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>NativeThinkgear.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="ProjetoTCC.NativeThinkgear.DataType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>NativeThinkgear.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="ProjetoTCC.NativeThinkgear.FilterType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>NativeThinkgear.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AACAACBBAAAQEIMAAAAACCAAAAAAAAQAAAAJABACgAA=</HashCode>
+      <FileName>NativeThinkgear.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.NeuroController" Collapsed="true">
+    <Position X="24" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAQAAgAAAAAAAACAAABAEEAAAAIACAADA=</HashCode>
+      <FileName>NeuroController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.NeuroData">
+    <Position X="42" Y="0.75" Width="4" />
+    <TypeIdentifier>
+      <HashCode>QAABAAMAFAAAAAAAAAEAAAAAAAAAABAIAAAAAAABAAA=</HashCode>
+      <FileName>NeuroData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.Paciente">
+    <Position X="15" Y="4.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAIAAAAAAAAAAwAEAAACAgAAABQIBACAAA=</HashCode>
+      <FileName>Paciente.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.PainelEspecialista" Collapsed="true">
+    <Position X="26" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQEEAAAAACQAoJCCADCIEAIggAgigAGCGBAIgAEAgA=</HashCode>
+      <FileName>PainelEspecialista .cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.PainelPaciente" Collapsed="true">
+    <Position X="19.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQFAAgAAACACoJiAAFiBEAIggAgigAGCEBDIiQEAgA=</HashCode>
+      <FileName>PainelPaciente .cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.PainelPadrao" Collapsed="true">
+    <Position X="19.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAABAgAAAAAEAgAAAAAAAAABAA=</HashCode>
+      <FileName>PainelPadrao.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.PainelSessao">
+    <Position X="19.25" Y="3.25" Width="4.5" />
+    <NestedTypes>
+      <Delegate Name="ProjetoTCC.PainelSessao.BoolArgReturnVoidDelegate" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>PainelSessao .cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ProjetoTCC.PainelSessao.VoidDelegate" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>PainelSessao .cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="ProjetoTCC.PainelSessao.BitmapDelegate" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>PainelSessao .cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>gQREJAgqgYDQCoNjIMMWxAiYgskIiggWIZIFcwSOAgU=</HashCode>
+      <FileName>PainelSessao .cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.Pessoa">
+    <Position X="17" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAEAAACAgAAAAwAAAAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Pessoa.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.Sessao">
+    <Position X="12.75" Y="2.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAIgAEACwAAAAQAAABACAAAAADQIRBCAAA=</HashCode>
+      <FileName>Sessao.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoTCC.VideoPlayer" Collapsed="true">
+    <Position X="25.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAACCAChAIhTEBVAMAAAAQEABwAIAAAIEITkAiA=</HashCode>
+      <FileName>VideoPlayer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="ProjetoTCC.IdadeAprendizagemEnum">
+    <Position X="24" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAw3AMAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IdadeAprendizagemEnum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

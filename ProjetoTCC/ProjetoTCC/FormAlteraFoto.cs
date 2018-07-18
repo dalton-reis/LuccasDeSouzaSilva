@@ -12,6 +12,8 @@ namespace ProjetoTCC
 
         public Bitmap foto = null;
 
+        private FormCamera formCamera = null;
+
         public FormAlteraFoto()
         {
             InitializeComponent();
@@ -22,11 +24,17 @@ namespace ProjetoTCC
             {
                 btCamera.Enabled = false;
             }
+
+            this.MaximumSize = this.Size;
+            this.MinimumSize = this.Size;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
         }        
 
         private void btCamera_Click(object sender, EventArgs e)
         {
-            FormCamera formCamera = new FormCamera();
+            formCamera = new FormCamera();
             formCamera.StartPosition = FormStartPosition.CenterParent;
             if (DialogResult.OK == formCamera.ShowDialog()) {
                 this.foto = formCamera.foto;   

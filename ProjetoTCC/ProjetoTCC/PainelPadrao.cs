@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace ProjetoTCC
 {
@@ -8,8 +9,9 @@ namespace ProjetoTCC
         protected Button btDir = null;
         protected Button btDel = null;
         protected Panel pnlArea = null;
+        protected Label titleText = null;
         
-        protected void initPainel(Panel pnlOrigem)
+        protected void initPainel(Panel pnlOrigem, string title)
         {
             this.btEsq = new Button();
             this.btDir = new Button();
@@ -62,6 +64,20 @@ namespace ProjetoTCC
             this.btDel.TabIndex = 9;
             this.btDel.Text = "btDel";
             this.btDel.UseVisualStyleBackColor = true;
+
+            titleText = new Label()
+            {
+                AutoSize = false,
+                TextAlign = System.Drawing.ContentAlignment.MiddleCenter,
+                Dock = DockStyle.None,
+                Left = 10,
+                Location = new System.Drawing.Point(this.btEsq.Location.X, 5),
+                Width = this.Width - 10,
+                Text = title,
+                Font = new Font("Arial", 12, FontStyle.Bold)
+        };
+
+            this.Controls.Add(titleText);
 
             this.Controls.Add(pnlArea);
 

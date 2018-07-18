@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using System.Drawing;
+using System.Text;
 
 namespace ProjetoTCC
 {
@@ -23,6 +24,14 @@ namespace ProjetoTCC
 
         Queue<NeuroData> NeuroDataQueue = null;
         Queue<NeuroData> GraphDataQueue = null;
+
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MainForm());
+        }
 
         public MainForm()
         { 
@@ -66,6 +75,9 @@ namespace ProjetoTCC
                 pnlCharts.Visible = value;
                 if (value)
                 {
+                    updateProgBarQlty(0);
+                    updateProgBarAtt(0);
+                    updateProgBarMed(0);
                     this.pnlPaciente.Size = new Size(this.pnlPaciente.Size.Width, this.pnlCharts.Location.Y - 10);                    
                 } else
                 {
@@ -89,6 +101,8 @@ namespace ProjetoTCC
             pnlSessao.setGridCelContentClick(pnlSessaoGridCelContentClick);
 
             pnlSessao.setVideoPlayerDisplayHandler(videoPlayerDisplay);
+
+            pnlSessao.setExcluirSessaoEvent(excluirSessaoEvent);
         }
 
         private void onFormClosing(object sender, FormClosingEventArgs e)
@@ -121,57 +135,38 @@ namespace ProjetoTCC
             Bitmap frame = e.videoFrame;
 
             NeuroData nr = FrameToNeuro(frame);
-
-            lock (GraphDataQueue)
+            
+            if(nr != null)
             {
-                GraphDataQueue.Enqueue(nr);
+                lock (GraphDataQueue)
+                {
+                    GraphDataQueue.Enqueue(nr);
+                }
             }
         }        
 
-        private NeuroData FrameToNeuro(Bitmap frame)
-        {
-            int PoorSignal, Meditation, Attention, Alpha1, Alpha2, Beta1, Beta2, Gamma1, Gamma2, Delta, Theta = 0;
-
+        private NeuroData FrameToNeuro(Bitmap frame) {            
             byte[] aux = null;
 
+            int[] nrData = new int[11];
+            //PoorSignal, Meditation, Attention, Alpha1,
+            //Alpha2, Beta1, Beta2, Gamma1, Gamma2, Delta, 
+            //Theta;
+
             Color c = frame.GetPixel(0, 0);
-            PoorSignal = c.A;
-            Meditation = c.R;
-            Attention = c.B;
+            nrData[0] = c.R;
+            nrData[1] = c.G;
+            nrData[2] = c.B;
 
-            c = frame.GetPixel(1, 0);
-            aux = new byte[]{ c.A, c.R, c.G, c.B };
-            Alpha1 = BitConverter.ToInt32(aux, 0);
+            for (int i = 1; i <= 7; i++)
+            {
+                c = frame.GetPixel(i, 0);
+                aux = new byte[] { c.A, c.R, c.G, c.B };
+                nrData[i+2] = BitConverter.ToInt32(aux, 0);
+            }
 
-            c = frame.GetPixel(2, 0);
-            aux = new byte[] { c.A, c.R, c.G, c.B };
-            Alpha2 = BitConverter.ToInt32(aux, 0);
-
-            c = frame.GetPixel(3, 0);
-            aux = new byte[] { c.A, c.R, c.G, c.B };
-            Beta1 = BitConverter.ToInt32(aux, 0);
-
-            c = frame.GetPixel(4, 0);
-            aux = new byte[] { c.A, c.R, c.G, c.B };
-            Beta2 = BitConverter.ToInt32(aux, 0);
-
-            c = frame.GetPixel(5, 0);
-            aux = new byte[] { c.A, c.R, c.G, c.B };
-            Gamma1 = BitConverter.ToInt32(aux, 0);
-
-            c = frame.GetPixel(6, 0);
-            aux = new byte[] { c.A, c.R, c.G, c.B };
-            Gamma2 = BitConverter.ToInt32(aux, 0);
-
-            c = frame.GetPixel(7, 0);
-            aux = new byte[] { c.A, c.R, c.G, c.B };
-            Delta = BitConverter.ToInt32(aux, 0);
-
-            c = frame.GetPixel(8, 0);
-            aux = new byte[] { c.A, c.R, c.G, c.B };
-            Theta = BitConverter.ToInt32(aux, 0);
-
-            return new NeuroData(PoorSignal, Attention, Meditation, Alpha1, Alpha2, Beta1, Beta2, Delta, Gamma1, Gamma2, Theta);
+            return new NeuroData(nrData[0], nrData[1], nrData[2], nrData[3],
+                nrData[4], nrData[5], nrData[6], nrData[7], nrData[8], nrData[9], nrData[10]);            
         }
 
         public void executaBtEsqSessao(object sender, EventArgs e)
@@ -180,7 +175,7 @@ namespace ProjetoTCC
 
             if (pnlSessao.btEsqState.Equals('N'))
             {
-                if (Biblioteca.getEspecialistas().Count == 0)
+                if (BaseDados.getEspecialistas().Count == 0)
                 {
                     continua = false;
                     MessageBox.Show("Não há especialistas cadastrados no sistema. " +
@@ -235,6 +230,22 @@ namespace ProjetoTCC
             }
         }
 
+        public void executaBtDirSessao(object sender, EventArgs e)
+        {
+            pnlSessao.btDir_Click();
+            if (pnlSessao.btEsqState.Equals('N'))
+            {
+                pnlSessao.setBrainReader(false);
+                startBrainReader = false;
+                startUpdateGraphs = false;
+                displayPnlCharts(false);
+            }
+            else
+            {
+                displayPnlCharts(true);
+            }
+        }
+
         public void iniciaThreadBrainwave()
         {
             startBrainReader = true;
@@ -248,42 +259,27 @@ namespace ProjetoTCC
             startBrainReader = true;
             NeuroDataQueue = new Queue<NeuroData>();
             GraphDataQueue = new Queue<NeuroData>();
-            bool[] toReadData = new bool[11] { true, true, true, true, true, true, true, true, true, true, true };
-
+            bool[] toReadData = new bool[11] { true, true, true,
+                true, true, true, true, true, true, true, true };
             bool sleep = false;
 
-            while (startBrainReader)
-            {
+            while (startBrainReader) {
                 NeuroData nr = BrainController.readData(toReadData);
-                if (nr != null)
-                {
-                    if (nr.getTotalPower() > 0)
-                    {
-                        sleep = false;
-                    }
-                    else
-                    {
-                        sleep = true;
-                    }
-                    lock (NeuroDataQueue)
-                    {
+                if (nr != null && nr.getTotalPower() > 0) {
+                    sleep = false;
+                    lock (NeuroDataQueue) {
                         NeuroDataQueue.Enqueue(nr);
                     }
-                    lock (GraphDataQueue)
-                    {
+                    lock (GraphDataQueue) {
                         GraphDataQueue.Enqueue(nr);
                     }
-                    if (pnlSessao.isRecording)
-                    {
+                    if (pnlSessao.isRecording) {
                         pnlSessao.addNeuroDataVideo(nr);
                     }
-                }
-                else
-                {
+                } else {
                     sleep = true;
                 }
-                if (sleep)
-                {
+                if (sleep) {
                     Thread.Sleep(1);
                 }
             }
@@ -303,35 +299,10 @@ namespace ProjetoTCC
                 displayPnlCharts(true);
                 startUpdateGraphs = true;
                 GraphDataQueue = new Queue<NeuroData>();
-                iniciaThreadVideoReader();
+//                iniciaThreadVideoReader();
                 iniciaThreadGraphs();
             }
-        }
-
-        public void iniciaThreadVideoReader()
-        {
-            thVideoFrameReader = new Thread(VideoFrameReader);
-            thVideoFrameReader.Start();
-        }
-
-        public void VideoFrameReader()
-        {
-            while (pnlSessao.isVideoPlayerCreated())
-            {
-                Bitmap frame = pnlSessao.getCurrentVideoFrame();
-
-                if(frame != null)
-                {
-                    int i = DateTime.Now.Second;
-                    NeuroData nr = new NeuroData(i,i,i,i,i,i,i,i,i,i,i);
-
-                    lock (GraphDataQueue)
-                    {
-                        GraphDataQueue.Enqueue(nr);
-                    }
-                }
-            }
-        }        
+        }      
 
         public void iniciaThreadGraphs()
         {
@@ -342,44 +313,46 @@ namespace ProjetoTCC
 
         FormGraphs formGraph = null;
 
-        public void GraphsUpdater()
-        {
-            while (startUpdateGraphs)
-            {
+        public void GraphsUpdater() {
+            while (startUpdateGraphs) {
                 NeuroData nr = null;
-                lock (this.GraphDataQueue)
-                {
-                    if (this.GraphDataQueue.Count > 0)
-                    {
-                        try
-                        {
+                lock (this.GraphDataQueue) {
+                    if (this.GraphDataQueue != null 
+                        && this.GraphDataQueue.Count > 0) {
+                        try {
                             nr = this.GraphDataQueue.Dequeue();
-                        }
-                        catch (Exception ex)
-                        {
+                        } catch (Exception ex) {
                             nr = null;
                         }
                     }
                 }                
                 if (nr != null) {
-                    this.updateProgBarMed(nr.Meditation);
-                    this.updateProgBarAtt(nr.Attention);
+                    if(nr.Meditation <= 100) {
+                        this.updateProgBarMed(nr.Meditation);
+                    }
+                    if (nr.Attention <= 100) {
+                        this.updateProgBarAtt(nr.Attention);
+                    }
 
-                    int p = nr.PoorSignal;
-                    if (p > 200)
-                    {
+                    int p = (int) (((nr.PoorSignal*100)/255)*2);
+
+                    if (p > 100 && (nr.Meditation > 15 || nr.Attention > 15)) {
+                        p -= 100;
+                    }
+
+                    if (p > 200) {
                         p = 200;
+                    } else if(p < 0) {
+                        p = 0;
                     }
 
                     this.updateProgBarQlty(200 - p);
-                    if (this.formGraph != null && this.formGraph.isGraphReady)
-                    {
+                    if (this.formGraph != null && this.formGraph.isGraphReady) {
                         this.formGraph.updateGraphs(nr);
                     }
                 }
             }
-            if (!isClosing)
-            {
+            if (!isClosing) {
                 this.enableBtDetalheGraph(false);
             }
         }
@@ -452,31 +425,15 @@ namespace ProjetoTCC
             }
         }
 
-        public void executaBtDirSessao(object sender, EventArgs e)
-        {
-            pnlSessao.btDir_Click();
-            if (pnlSessao.btEsqState.Equals('N'))
-            {
-                pnlSessao.setBrainReader(false);
-                startBrainReader = false;
-                startUpdateGraphs = false;
-                displayPnlCharts(false);
-            }
-            else
-            {
-                displayPnlCharts(true);
-            }
-        }
-
         private void iniConfig()
         {
-            Biblioteca.iniConfig();
+            BaseDados.iniConfig();
         }
         
         private void initPainelPacientes()
         {
-            Biblioteca.updatePacientes();
-            pnlPaciente.iniPainelPaciente(Biblioteca.getPacientes());
+            BaseDados.updatePacientes();
+            pnlPaciente.iniPainelPaciente(BaseDados.getPacientes());
 
             pnlPaciente.setBtEsqAction(executaBtEsqPaciente);
             pnlPaciente.setBtDirAction(executaBtDirPaciente);
@@ -521,7 +478,7 @@ namespace ProjetoTCC
 
         private void initListaEspecialistas()
         {
-            Biblioteca.updateEspecialistas();
+            BaseDados.updateEspecialistas();
         }
 
         protected void excluirPacienteEvent(object sender, EventArgs e)
@@ -529,6 +486,14 @@ namespace ProjetoTCC
             pnlPaciente.excluirPacienteSelecionado();
             pnlPaciente.SelecionaLinha(0);
             pnlSessao.listaPacienteSessao(pnlPaciente.getPacienteID());
+        }
+
+        protected void excluirSessaoEvent(object sender, EventArgs e)
+        {
+            pnlSessao.setBrainReader(false);
+            startBrainReader = false;
+            startUpdateGraphs = false;
+            displayPnlCharts(false);
         }
 
         protected void rowSelectionChange(object sender, DataGridViewCellEventArgs e)

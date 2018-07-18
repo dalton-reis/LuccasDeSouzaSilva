@@ -54,7 +54,7 @@ namespace ProjetoTCC
 
         public void iniPainelPaciente(List<Paciente> listaPacientes)
         {
-            initPainel(this);
+            initPainel(this, "Pacientes");
 
             updateBtEsqState('N');
             updateBtDirState('L');
@@ -330,8 +330,8 @@ namespace ProjetoTCC
 
             if (!novoRegistro && this.pacienteSelecionado != null)
             {
-                Directory.CreateDirectory(Biblioteca.getPacientesFolder() + "\\P_" + this.pacienteSelecionado.ID);
-                FotoFile = Biblioteca.getPacientesFolder() + "\\P_" + this.pacienteSelecionado.ID + "\\foto.png";
+                Directory.CreateDirectory(BaseDados.getPacientesFolder() + "\\P_" + this.pacienteSelecionado.ID);
+                FotoFile = BaseDados.getPacientesFolder() + "\\P_" + this.pacienteSelecionado.ID + "\\foto.png";
                 if (!File.Exists(FotoFile))
                 {
                     FotoFile = @"resources/img/foto.png";
@@ -603,9 +603,9 @@ namespace ProjetoTCC
 
                     string[] row = new string[] { "+", p.ID.ToString(), p.nome, p.dataNasc.ToString("dd/MM/yyyy"),
                         p.getIdadeAnoMesesC(), p.getIdadeAnoMesesA(),
-                        Biblioteca.getIdadeAprendizagem(p.idadeAprLing),
-                        Biblioteca.getIdadeAprendizagem(p.idadeAprLog),
-                        Biblioteca.getIdadeAprendizagem(p.idadeAprMat)};
+                        BaseDados.getIdadeAprendizagem(p.idadeAprLing),
+                        BaseDados.getIdadeAprendizagem(p.idadeAprLog),
+                        BaseDados.getIdadeAprendizagem(p.idadeAprMat)};
                     dtGrid.Rows.Add(row);
                 }
             }
@@ -688,7 +688,7 @@ namespace ProjetoTCC
 
         public void excluirPacienteSelecionado()
         {            
-            List<Sessao> sessoes = Biblioteca.getPacienteSessoes();
+            List<Sessao> sessoes = BaseDados.getPacienteSessoes();
 
             if(sessoes.Count > 0)
             {
@@ -716,7 +716,7 @@ namespace ProjetoTCC
                     novoRegistro = false;
                     alteraModo(0);
 
-                    Biblioteca.excluiPacienteSelecionado(ID);
+                    BaseDados.excluiPacienteSelecionado(ID);
                 }
             }
         }
@@ -817,7 +817,7 @@ namespace ProjetoTCC
                     gridListaPacientes.Where(p => p.ID == ID).First().updateValues(nome, dataNasc, cpf, rg, descricao,
                         sexo, idadeAprLing, idadeAprLog, idadeAprMat, this.pacienteSelecionado.dataCadastro);
 
-                    Biblioteca.updatePacienteSelecionado(ID, nome, dataNasc, cpf, rg, descricao,
+                    BaseDados.updatePacienteSelecionado(ID, nome, dataNasc, cpf, rg, descricao,
                         sexo, idadeAprLing, idadeAprLog, idadeAprMat, this.pacienteSelecionado.dataCadastro);
                 } else
                 {
@@ -901,7 +901,7 @@ namespace ProjetoTCC
                 }
 
                 long ID = (this.pacienteSelecionado != null) ? this.pacienteSelecionado.ID : Paciente.ProxID();
-                string fileName = Biblioteca.getPacientesFolder() + "\\P_" + ID;
+                string fileName = BaseDados.getPacientesFolder() + "\\P_" + ID;
 
                 Directory.CreateDirectory(fileName);
 
@@ -931,7 +931,7 @@ namespace ProjetoTCC
 
                 Bitmap foto = formAlteraFoto.foto;
                 long ID = (this.pacienteSelecionado != null) ? this.pacienteSelecionado.ID : Paciente.ProxID();
-                string fileName = Biblioteca.getPacientesFolder() + "\\P_" + ID;
+                string fileName = BaseDados.getPacientesFolder() + "\\P_" + ID;
 
                 Directory.CreateDirectory(fileName);
 
@@ -961,7 +961,7 @@ namespace ProjetoTCC
 
         private void addPaciente(Paciente pac)
         {
-            Biblioteca.addPaciente(pac);
+            BaseDados.addPaciente(pac);
 
             this.listaPacientes.Add(pac);
             this.gridListaPacientes = this.listaPacientes.OrderBy(p => p.nome).ToList();

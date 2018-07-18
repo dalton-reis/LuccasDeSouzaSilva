@@ -17,7 +17,6 @@ namespace ProjetoTCC
         public FormCamera()
         {
             InitializeComponent();
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.FormClosing += new FormClosingEventHandler(this.onFormClosing);
 
             pbCamera.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top
@@ -29,6 +28,12 @@ namespace ProjetoTCC
             atualizaCameras();
 
             iniciaVideo(cbListCameras.SelectedIndex);
+
+            this.MaximumSize = this.Size;
+            this.MinimumSize = this.Size;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
         }
 
         private void ListCamera_SelectedValueChanged(object sender, EventArgs e)
@@ -153,7 +158,7 @@ namespace ProjetoTCC
                 foreach (FilterInfo VideoCaptureDevice in VideoDevices)
                 {
                     cbListCameras.Items.Add(VideoCaptureDevice.Name);
-                    if (VideoCaptureDevice.Name.Equals(Biblioteca.nomeCamera) && indexCamera < 0)
+                    if (VideoCaptureDevice.Name.Equals(BaseDados.nomeCamera) && indexCamera < 0)
                     {
                         indexCamera = count;
                     }

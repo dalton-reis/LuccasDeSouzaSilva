@@ -375,8 +375,7 @@ namespace ProjetoTCC
             }
         }
 
-        private void VideoProcess()
-        {
+        private void VideoProcess() {
             Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
             reader.Open(this.videoURL);
             int fps = (int) reader.FrameRate.Value;
@@ -386,21 +385,16 @@ namespace ProjetoTCC
             setTrackBarPosition(0);
             int i = 0;
             Bitmap frame = reader.ReadVideoFrame(i);
-            while ((this.StartVideo && frame != null) || (TrackBarScrollValue >= 0))
-            {
-                if (!this.PauseVideo)
-                {
-                    if(TrackBarScrollValue >= 0)
-                    {
+            while ((this.StartVideo && frame != null) || (TrackBarScrollValue >= 0)) {
+                if (!this.PauseVideo) {
+                    if(TrackBarScrollValue >= 0) {
                         i = TrackBarScrollValue;
                         TrackBarScrollValue = -1;
-                    } else
-                    {
+                    } else {
                         i = getTrackBarPosition();
                     }
                     frame = reader.ReadVideoFrame(i);
-                    if(frame != null)
-                    {
+                    if(frame != null) {
                         setDisplayImage(frame);
                         Thread.Sleep(0020);
                         setTrackBarPosition(i + 1);

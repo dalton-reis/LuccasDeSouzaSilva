@@ -39,7 +39,7 @@ namespace ProjetoTCC
             this.time = DateTime.UtcNow;
         }
 
-        public double getTotalPower()
+        public int getTotalPower()
         {
             return this.Alpha1 + this.Alpha2
                 + this.Beta1 + this.Beta2

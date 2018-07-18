@@ -54,7 +54,7 @@ namespace ProjetoTCC
 
         public void iniPainelEspecialista(List<Especialista> listaEspecialistas)
         {
-            initPainel(this);
+            initPainel(this, "Especialistas");
 
             updateBtEsqState('N');
             updateBtDirState('L');
@@ -159,7 +159,7 @@ namespace ProjetoTCC
 
             ColCpf.HeaderText = "CPF";
             ColCpf.Name = "CPF";
-            ColCpf.Width = 100;
+            ColCpf.Width = 120;
             ColCpf.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
             ColBt.HeaderText = "";
@@ -249,7 +249,7 @@ namespace ProjetoTCC
             DateTimePicker dtpDataNasc = new System.Windows.Forms.DateTimePicker();
 
             Label lbCpf = new System.Windows.Forms.Label();
-            TextBox tbCpf = new System.Windows.Forms.TextBox();
+            MaskedTextBox tbCpf = new System.Windows.Forms.MaskedTextBox();
 
             Label lbRg = new System.Windows.Forms.Label();
             TextBox tbRg = new System.Windows.Forms.TextBox();
@@ -299,7 +299,7 @@ namespace ProjetoTCC
                 lbID.Text = "ID: " + this.especialistaSelecionado.ID;
                 tbNome.Text = this.especialistaSelecionado.nome;
                 dtpDataNasc.Value = this.especialistaSelecionado.dataNasc;
-                tbCpf.Text = this.especialistaSelecionado.cpf;
+                tbCpf.Text = this.especialistaSelecionado.cpf.Replace(".", ",");
                 tbRg.Text = this.especialistaSelecionado.rg;
                 rbSexoF.Checked = (this.especialistaSelecionado.sexo.Equals("F"));
                 rbSexoM.Checked = (this.especialistaSelecionado.sexo.Equals("M"));
@@ -320,8 +320,8 @@ namespace ProjetoTCC
 
             if (!novoRegistro && this.especialistaSelecionado != null)
             {
-                Directory.CreateDirectory(Biblioteca.getEspecialistasFolder() + "\\E_" + this.especialistaSelecionado.ID);
-                FotoFile = Biblioteca.getEspecialistasFolder() + "\\E_" + this.especialistaSelecionado.ID + "\\foto.png";
+                Directory.CreateDirectory(BaseDados.getEspecialistasFolder() + "\\E_" + this.especialistaSelecionado.ID);
+                FotoFile = BaseDados.getEspecialistasFolder() + "\\E_" + this.especialistaSelecionado.ID + "\\foto.png";
                 if (!File.Exists(FotoFile))
                 {
                     FotoFile = @"resources/img/foto.png";
@@ -409,6 +409,7 @@ namespace ProjetoTCC
 
             tbCpf.Location = new System.Drawing.Point(lbCpf.Location.X + lbCpf.Size.Width, lbCpf.Location.Y - 3);
             tbCpf.Name = "tbCpf";
+            tbCpf.Mask = "000.000.000-00";
             tbCpf.Size = new System.Drawing.Size(220, lbCpf.Size.Height);
             tbCpf.TabIndex = 1;
             tbCpf.Anchor = anchorEdit;
@@ -547,7 +548,7 @@ namespace ProjetoTCC
 
         protected void btDel_Click(object sender, EventArgs e)
         {
-            List<Sessao> sessoes = Biblioteca.getSessoesEspecialista(this.especialistaSelecionado.ID);
+            List<Sessao> sessoes = BaseDados.getSessoesEspecialista(this.especialistaSelecionado.ID);
 
             if (sessoes.Count > 0)
             {
@@ -558,7 +559,7 @@ namespace ProjetoTCC
                 long ID = this.especialistaSelecionado.ID;
                 listaEspecialistas.Remove(listaEspecialistas.Where(p => p.ID == ID).First());
                 gridListaEspecialistas.Remove(gridListaEspecialistas.Where(p => p.ID == ID).First());
-                Biblioteca.excluiEspecialistaSelecionado(ID);
+                BaseDados.excluiEspecialistaSelecionado(ID);
 
                 if (this.gridListaEspecialistas.Count > 0)
                 {
@@ -618,11 +619,17 @@ namespace ProjetoTCC
 
             if (nome.Trim().Length < 1)
             {
-                MessageBox.Show("O nome do especialista não pode ser vazio!");
-                salva = false;
+                MessageBox.Show("O nome do especialista é obrigatório!");
+                return;
             }
             
             DateTime dataNasc = ((DateTimePicker)(pnlEdit.Controls.Find("dtpDataNasc", true)[0])).Value;
+
+            if (DateTime.Compare(dataNasc, DateTime.Today) > -1)
+            {
+                MessageBox.Show("A data de nascimento deve ser menor que a data atual!");
+                return;
+            }
 
             string sexo = "";
             if (((RadioButton)(pnlEdit.Controls.Find("rbSexoF", true)[0])).Checked)
@@ -639,13 +646,20 @@ namespace ProjetoTCC
             }
             string descricao = pnlEdit.Controls.Find("tbDescricao", true)[0].Text.Trim();
 
-            string cpf = pnlEdit.Controls.Find("tbCpf", true)[0].Text.Trim();
+            string cpf = pnlEdit.Controls.Find("tbCpf", true)[0].Text.Trim().Replace(",",".");
 
-            //if (cpf.Trim().Length < 1 && false)
-            //{ //valida cpf e verifica se nao ja existe
-            //    MessageBox.Show("O CPF do especialista não pode ser vazio!");
-            //    salva = false;
-            //}
+            if (cpf.Trim().Length < 1 && false)
+            { //valida cpf e verifica se nao ja existe
+                MessageBox.Show("O CPF deve ser informado!");
+                return;
+            } else
+            {   if (!BaseDados.validaCpf(cpf))
+                {
+                    //CPF invalido
+                    MessageBox.Show("O CPF informado não é válido!");
+                    return;
+                }
+            }
 
             string rg = pnlEdit.Controls.Find("tbRg", true)[0].Text.Trim();
 
@@ -664,16 +678,16 @@ namespace ProjetoTCC
                     long ID = this.especialistaSelecionado.ID;
                     gridListaEspecialistas.Where(p => p.ID == ID).First().updateValues(nome, dataNasc, cpf, rg, descricao, sexo);
 
-                    Biblioteca.updateEspecialistaSelecionado(ID, nome, dataNasc, cpf, rg, descricao, sexo);
+                    BaseDados.updateEspecialistaSelecionado(ID, nome, dataNasc, cpf, rg, descricao, sexo);
 
-                    MessageBox.Show("Especialista Atualizado com sucesso!");
+                    MessageBox.Show(this, "Especialista Atualizado com sucesso!");
                 }
                 else
                 {
                     Especialista esp = new Especialista(nome, dataNasc, cpf, rg, descricao, sexo);
                     this.addEspecialista(esp);
 
-                    MessageBox.Show("Especialista Salvo com sucesso!");
+                    MessageBox.Show(this, "Especialista Salvo com sucesso!");
                 }
 
                 novoRegistro = false;
@@ -730,7 +744,7 @@ namespace ProjetoTCC
                 }
 
                 long ID = (this.especialistaSelecionado != null) ? this.especialistaSelecionado.ID : Especialista.ProxID();
-                string fileName = Biblioteca.getEspecialistasFolder() + "\\E_" + ID;
+                string fileName = BaseDados.getEspecialistasFolder() + "\\E_" + ID;
 
                 Directory.CreateDirectory(fileName);
 
@@ -762,7 +776,7 @@ namespace ProjetoTCC
                 Bitmap foto = formAlteraFoto.foto;
 
                 long ID = (this.especialistaSelecionado != null) ? this.especialistaSelecionado.ID : Especialista.ProxID();
-                string fileName = Biblioteca.getEspecialistasFolder() + "\\E_" + ID;
+                string fileName = BaseDados.getEspecialistasFolder() + "\\E_" + ID;
 
                 Directory.CreateDirectory(fileName);
 
@@ -792,7 +806,7 @@ namespace ProjetoTCC
 
         private void addEspecialista(Especialista pac)
         {
-            Biblioteca.addEspecialista(pac);
+            BaseDados.addEspecialista(pac);
 
             this.listaEspecialistas.Add(pac);
             this.gridListaEspecialistas = this.listaEspecialistas.OrderBy(p => p.nome).ToList();

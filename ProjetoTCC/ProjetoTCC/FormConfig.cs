@@ -17,11 +17,9 @@ namespace ProjetoTCC
         public FormConfig()
         {
             InitializeComponent();
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.FormClosing += new FormClosingEventHandler(this.onFormClosing);
 
             lbFileFolder1.Text = "Local dos arquivos:";
-            lbFileFolder2.Text = Biblioteca.caminhoArquivos.Trim();
+            lbFileFolder2.Text = BaseDados.caminhoArquivos.Trim();
             if(lbFileFolder2.Text.Length > 50)
             {
                 lbFileFolder2.Text = lbFileFolder2.Text.Substring(0, 46) + "...";
@@ -46,11 +44,11 @@ namespace ProjetoTCC
             }
             listCamera.SelectedIndex = 0;
 
-            tbNomeEstab.Text = Biblioteca.nomeEstab;
-            tbEnderecoEstab.Text = Biblioteca.enderecoEstab;
-            tbFoneEstab.Text = Biblioteca.foneEstab;
+            tbNomeEstab.Text = BaseDados.nomeEstab;
+            tbEnderecoEstab.Text = BaseDados.enderecoEstab;
+            tbFoneEstab.Text = BaseDados.foneEstab;
 
-            string logo = Biblioteca.caminhoLogo.Trim();
+            string logo = BaseDados.caminhoLogo.Trim();
 
             lbFileLogo1.Text = "Imagem para Logo:";
             lbFileLogo2.Text = logo;
@@ -62,11 +60,19 @@ namespace ProjetoTCC
             {
                 this.updateConfigLogo(logo);
             }
+
+            this.MaximumSize = this.Size;
+            this.MinimumSize = this.Size;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.FormClosing += new FormClosingEventHandler(this.onFormClosing);
+
         }
 
         private void btSalvar_Click(object sender, EventArgs e)
         {
-            Biblioteca.updateConfig(lbFileFolder2.Text, listCamera.SelectedIndex, tbNomeEstab.Text, tbEnderecoEstab.Text, tbFoneEstab.Text, lbFileLogo2.Text);
+            BaseDados.updateConfig(lbFileFolder2.Text, listCamera.SelectedIndex, tbNomeEstab.Text, tbEnderecoEstab.Text, tbFoneEstab.Text, lbFileLogo2.Text);
             this.configAlt = false;
             this.Close();
         }
@@ -164,7 +170,7 @@ namespace ProjetoTCC
 
                 if (result.Equals(DialogResult.Yes))
                 {
-                    Biblioteca.updateConfig(lbFileFolder2.Text, listCamera.SelectedIndex, tbNomeEstab.Text, tbEnderecoEstab.Text, tbFoneEstab.Text, lbFileLogo2.Text);
+                    BaseDados.updateConfig(lbFileFolder2.Text, listCamera.SelectedIndex, tbNomeEstab.Text, tbEnderecoEstab.Text, tbFoneEstab.Text, lbFileLogo2.Text);
                 } else if (result.Equals(DialogResult.Cancel))
                 {
                     e.Cancel = true;

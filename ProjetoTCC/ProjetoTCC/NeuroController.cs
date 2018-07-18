@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Ports;
+using System.Text;
 using System.Threading;
 
 namespace ProjetoTCC
 {
     public class NeuroController
     {
-        private static Queue<NeuroData> DataQueue;  
         private string Port;
         private NativeThinkgear thinkgear = new NativeThinkgear();
         private int ConnectionID;
@@ -18,7 +18,6 @@ namespace ProjetoTCC
 
         public NeuroController()
         {
-            DataQueue = new Queue<NeuroData>();
             Port = "";
             IsPreReadData = false;
             IsTestConnection = false;
@@ -56,16 +55,16 @@ namespace ProjetoTCC
 
             if (connectionID < 0)
             {
-                Debug.WriteLine("ERROR: TG_GetNewConnectionId() returned: " + connectionID);
+                Debug.WriteLine("ERROR: TG_GetNewConnectionId() returned: " + connectionID + " for port: " + port);
                 return false;
             }
-
+            
             int errCode = 0;
             /* Set/open stream (raw bytes) log file for connection */
             errCode = NativeThinkgear.TG_SetStreamLog(connectionID, "streamLog.txt");
             if (errCode < 0)
             {
-                Debug.WriteLine("ERROR: TG_SetStreamLog() returned: " + errCode);
+                Debug.WriteLine("ERROR: TG_SetStreamLog() returned: " + errCode + " for port: " + port);
                 closeCurrentConnection();
                 return false;
             }
@@ -74,19 +73,42 @@ namespace ProjetoTCC
             errCode = NativeThinkgear.TG_SetDataLog(connectionID, "dataLog.txt");
             if (errCode < 0)
             {
-                Debug.WriteLine("ERROR: TG_SetDataLog() returned: " + errCode);
+                Debug.WriteLine("ERROR: TG_SetDataLog() returned: " + errCode + " for port: " + port);
                 closeCurrentConnection();
                 return false;
             }
 
             string comPortName = "\\\\.\\" + port;
+            NativeThinkgear.Baudrate baudRate = NativeThinkgear.Baudrate.TG_BAUD_57600;
+            NativeThinkgear.SerialDataFormat dataFormat = NativeThinkgear.SerialDataFormat.TG_STREAM_PACKETS;
+
             errCode = NativeThinkgear.TG_Connect(connectionID,
                           comPortName,
-                          NativeThinkgear.Baudrate.TG_BAUD_57600,
-                          NativeThinkgear.SerialDataFormat.TG_STREAM_PACKETS);
+                          baudRate,
+                          dataFormat);
             if (errCode < 0)
             {
-                Debug.WriteLine("ERROR: TG_Connect() returned: " + errCode);
+                StringBuilder str = new StringBuilder("ERROR TG_Connect(): ");
+                switch (errCode)
+                {
+                    case -1:
+                        str.Append("-1 -> connectionID(").Append(connectionID).Append(") does not refer to a valid ThinkGear Connection ID handle");
+                        break;
+                    case -2:
+                        str.Append("-2 -> comPortName(").Append(comPortName).Append(") could not be opened as a serial communication port for any reason");
+                        break;
+                    case -3:
+                        str.Append("-3 -> Baudrate(").Append(baudRate).Append(") is not a valid TG_BAUD_ value");
+                        break;
+                    case -4:
+                        str.Append("-4 -> SerialDataFormat(").Append(dataFormat).Append(") is not a valid TG_STREAM_ value");
+                        break;
+                    default:
+                        str.Append(errCode).Append(" -> not an expected errCode, unknown error");
+                        break;
+                }
+                str.Append(" -> in port: ").Append(port);
+                Debug.WriteLine(str.ToString());
                 closeCurrentConnection();
                 return false;
             }
@@ -94,7 +116,6 @@ namespace ProjetoTCC
             int packets = 0;
 
             Stopwatch sw = new Stopwatch();
-
             sw.Start();
             while (sw.ElapsedMilliseconds < 5000)
             {
@@ -103,50 +124,41 @@ namespace ProjetoTCC
                 {
                     int[] values = new int[11] {0,0,0,0,0,0,0,0,0,0,0};
 
-
-                    //read PoorSignal
                     if (NativeThinkgear.TG_GetValueStatus(connectionID, NativeThinkgear.DataType.TG_DATA_POOR_SIGNAL) != 0)
                     {
                         values[0] = (int)NativeThinkgear.TG_GetValue(connectionID, NativeThinkgear.DataType.TG_DATA_POOR_SIGNAL);
                     }
 
-                    //read Attention
                     if (NativeThinkgear.TG_GetValueStatus(connectionID, NativeThinkgear.DataType.TG_DATA_ATTENTION) != 0)
                     {
                         values[1] = (int)NativeThinkgear.TG_GetValue(connectionID, NativeThinkgear.DataType.TG_DATA_ATTENTION);
                     }
 
-                    //read Meditation
                     if (NativeThinkgear.TG_GetValueStatus(connectionID, NativeThinkgear.DataType.TG_DATA_MEDITATION) != 0)
                     {
                         values[2] = (int)NativeThinkgear.TG_GetValue(connectionID, NativeThinkgear.DataType.TG_DATA_MEDITATION);
                     }
 
-                    //read Alpha1
                     if (NativeThinkgear.TG_GetValueStatus(connectionID, NativeThinkgear.DataType.TG_DATA_ALPHA1) != 0)
                     {
                         values[3] = (int)NativeThinkgear.TG_GetValue(connectionID, NativeThinkgear.DataType.TG_DATA_ALPHA1);
                     }
 
-                    //read Alpha2
                     if (NativeThinkgear.TG_GetValueStatus(connectionID, NativeThinkgear.DataType.TG_DATA_ALPHA2) != 0)
                     {
                         values[4] = (int)NativeThinkgear.TG_GetValue(connectionID, NativeThinkgear.DataType.TG_DATA_ALPHA2);
                     }
 
-                    //read Beta1
                     if (NativeThinkgear.TG_GetValueStatus(connectionID, NativeThinkgear.DataType.TG_DATA_BETA1) != 0)
                     {
                         values[5] = (int)NativeThinkgear.TG_GetValue(connectionID, NativeThinkgear.DataType.TG_DATA_BETA1);
                     }
 
-                    //read Beta2
                     if (NativeThinkgear.TG_GetValueStatus(connectionID, NativeThinkgear.DataType.TG_DATA_BETA2) != 0)
                     {
                         values[6] = (int)NativeThinkgear.TG_GetValue(connectionID, NativeThinkgear.DataType.TG_DATA_BETA2);
                     }
 
-                    //read Delta
                     if (NativeThinkgear.TG_GetValueStatus(connectionID, NativeThinkgear.DataType.TG_DATA_DELTA) != 0)
                     {
                         values[7] = (int)NativeThinkgear.TG_GetValue(connectionID, NativeThinkgear.DataType.TG_DATA_DELTA);
@@ -186,6 +198,7 @@ namespace ProjetoTCC
                 return true;
             } else
             {
+                Debug.WriteLine("ERROR: Connection established but no packet returned for port: " + comPortName);
                 return false;
             }
         }
@@ -222,19 +235,11 @@ namespace ProjetoTCC
             if (!IsTestConnection)
             {
                 testConnection();
-                //if (!testConnection())
-                //{
-                //    return null;
-                //}
             }
 
             if (!IsPreReadData)
             {
                 preReadData();
-                //if (!preReadData())
-                //{
-                //    return null;
-                //}
             }
 
             int[] values = new int[11] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -330,19 +335,6 @@ namespace ProjetoTCC
                         values[3], values[4], values[5],
                         values[6], values[7], values[8],
                         values[9], values[10]);
-
-            //Debug.WriteLine(DateTime.Now
-            //   + " Poor Signal: " + nr.PoorSignal
-            //   + " Attention: " + nr.Attention
-            //   + " Meditation: " + nr.Meditation
-            //   + " Alpha1: " + +nr.Alpha1
-            //   + " Alpha2: " + nr.Alpha2
-            //   + " Beta1: " + nr.Beta1
-            //   + " Beta2: " + nr.Beta2
-            //   + " Gamma1: " + nr.Gamma1
-            //   + " Gamma2: " + nr.Gamma2
-            //   + " Delta: " + nr.Delta
-            //   + " Theta: " + nr.Theta);
             }
 
             if (errCode == -1)
@@ -376,7 +368,7 @@ namespace ProjetoTCC
         public void closeCurrentConnection()
         {
             NativeThinkgear.TG_Disconnect(ConnectionID);
-            NativeThinkgear.TG_FreeConnection(ConnectionID);
+            NativeThinkgear.TG_FreeConnection(ConnectionID);            
         }
     }
 }

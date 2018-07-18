@@ -13,6 +13,7 @@ using System.Drawing.Drawing2D;
 using Accord.Video;
 using Accord.Video.FFMPEG;
 using static ProjetoTCC.VideoPlayer;
+using System.Text;
 
 namespace ProjetoTCC
 {
@@ -28,7 +29,7 @@ namespace ProjetoTCC
         //N, L, V, S, D
         public char btEsqState { get; private set; } = 'N';
 
-        public char btDirState { get; private set; } = 'L';        
+        public char btDirState { get; private set; } = 'L';
 
         private List<Sessao> listaSessoes;
         private List<Sessao> gridListaSessoes;
@@ -110,7 +111,8 @@ namespace ProjetoTCC
                     {
                         this.Invoke(del, new object[] { enable });
                     }
-                } else
+                }
+                else
                 {
                     this.btConnectBrain.Enabled = enable;
                 }
@@ -119,7 +121,7 @@ namespace ProjetoTCC
 
         public void iniPainelSessao()
         {
-            initPainel(this);
+            initPainel(this, "Sessões");
 
             updateBtEsqState('N');
             updateBtDirState('L');
@@ -138,8 +140,8 @@ namespace ProjetoTCC
                 ativaPainel();
                 this.Enabled = true;
                 this.IDPaciente = pacienteID;
-                Biblioteca.updateSessoesPaciente(this.IDPaciente);
-                this.listaSessoes = Biblioteca.getPacienteSessoes();
+                BaseDados.updateSessoesPaciente(this.IDPaciente);
+                this.listaSessoes = BaseDados.getPacienteSessoes();
                 this.gridListaSessoes = this.listaSessoes.OrderBy(s => s.dataSessao).ToList();
                 alteraModo(0);
                 if (this.gridListaSessoes.Count > 0)
@@ -150,7 +152,8 @@ namespace ProjetoTCC
                 {
                     this.selectedIndex = -1;
                 }
-            } else
+            }
+            else
             {
                 inativaPainel();
                 this.Enabled = false;
@@ -280,19 +283,19 @@ namespace ProjetoTCC
             {
                 string[] rowValues = new string[] { "+", s.ID.ToString(), s.material, s.dataSessao.ToString("dd/MM/yyyy HH:mm"),
                     s.getIdadeSessaoPaciente(),
-                    Biblioteca.getIdadeAprendizagem(s.idadeAprLing),
-                    Biblioteca.getIdadeAprendizagem(s.idadeAprLog),
-                    Biblioteca.getIdadeAprendizagem(s.idadeAprMat) };
+                    BaseDados.getIdadeAprendizagem(s.idadeAprLing),
+                    BaseDados.getIdadeAprendizagem(s.idadeAprLog),
+                    BaseDados.getIdadeAprendizagem(s.idadeAprMat) };
 
                 dtGrid.Rows.Add(rowValues);
             }
 
-            foreach(DataGridViewRow row in dtGrid.Rows)
+            foreach (DataGridViewRow row in dtGrid.Rows)
             {
                 if ((row.Index < gridListaSessoes.Count) && !gridListaSessoes.ElementAt(row.Index).ieVerificado)
                 {
                     row.DefaultCellStyle.BackColor = Color.Yellow;
-                }                
+                }
             }
 
             this.dtGrid.Location = new System.Drawing.Point(0, 0);
@@ -373,7 +376,8 @@ namespace ProjetoTCC
                 this.pnlEdit.Controls.Add(videoRecorder);
 
                 videoControl = videoRecorder;
-            } else
+            }
+            else
             {
                 videoPlayer = new VideoPlayer();
                 videoPlayer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top
@@ -436,7 +440,7 @@ namespace ProjetoTCC
                 pnlFields.Controls.Add(btConnectBrain);
 
                 this.btConnectBrain.Size = new System.Drawing.Size(120, 30);
-                this.btConnectBrain.Location = new System.Drawing.Point(pnlFields.Size.Width - btConnectBrain.Size.Width - 5, 
+                this.btConnectBrain.Location = new System.Drawing.Point(pnlFields.Size.Width - btConnectBrain.Size.Width - 5,
                     btStartVideo.Location.Y + btStartVideo.Size.Height + spacing);
                 this.btConnectBrain.Name = "btConnectBrain";
                 this.btConnectBrain.TabIndex = 8;
@@ -446,19 +450,19 @@ namespace ProjetoTCC
             }
             else
             {
-               // Button btPdfSessao = new Button();
-               // btPdfSessao.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Right
-               //| System.Windows.Forms.AnchorStyles.Bottom)));
-               // pnlFields.Controls.Add(btPdfSessao);
-               // btPdfSessao.Size = new System.Drawing.Size(80, 30);
-               // btPdfSessao.Location = new System.Drawing.Point(pnlFields.Size.Width - btPdfSessao.Size.Width - 5, spacing);
-               // btPdfSessao.Name = "btPdfSessao";
-               // btPdfSessao.TabIndex = 8;
-               // btPdfSessao.Text = "PDF";
-               // btPdfSessao.UseVisualStyleBackColor = true;
-               // btPdfSessao.Click += new System.EventHandler(this.btGeraPdfSessao);
-               // btPdfSessao.Enabled = false;
-               // btPdfSessao.Visible = false;
+                // Button btPdfSessao = new Button();
+                // btPdfSessao.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Right
+                //| System.Windows.Forms.AnchorStyles.Bottom)));
+                // pnlFields.Controls.Add(btPdfSessao);
+                // btPdfSessao.Size = new System.Drawing.Size(80, 30);
+                // btPdfSessao.Location = new System.Drawing.Point(pnlFields.Size.Width - btPdfSessao.Size.Width - 5, spacing);
+                // btPdfSessao.Name = "btPdfSessao";
+                // btPdfSessao.TabIndex = 8;
+                // btPdfSessao.Text = "PDF";
+                // btPdfSessao.UseVisualStyleBackColor = true;
+                // btPdfSessao.Click += new System.EventHandler(this.btGeraPdfSessao);
+                // btPdfSessao.Enabled = false;
+                // btPdfSessao.Visible = false;
             }
 
             AnchorStyles anchorEdit = ((System.Windows.Forms.AnchorStyles)
@@ -495,7 +499,7 @@ namespace ProjetoTCC
             this.lbID.Name = "lbID";
             this.lbID.Size = new System.Drawing.Size(200, 20);
             this.lbID.TabIndex = 0;
-            this.lbID.Anchor = anchorEdit;            
+            this.lbID.Anchor = anchorEdit;
 
             this.lbMaterial.AutoSize = false;
             this.lbMaterial.Location = new System.Drawing.Point(lbID.Location.X, lbID.Location.Y + lbID.Size.Height + spacing);
@@ -523,7 +527,6 @@ namespace ProjetoTCC
             this.dtpDataSessao.Name = "dtpDataSessao";
             this.dtpDataSessao.Size = new System.Drawing.Size(150, 22);
             this.dtpDataSessao.TabIndex = 2;
-            this.dtpDataSessao.MaxDate = DateTime.Now;
             this.dtpDataSessao.Format = DateTimePickerFormat.Custom;
             this.dtpDataSessao.CustomFormat = "dd/MM/yyyy HH:mm";
             this.dtpDataSessao.Anchor = anchorEdit;
@@ -550,7 +553,7 @@ namespace ProjetoTCC
 
             this.listEspecialista.Items.Clear();
 
-            List<Especialista> listEsp = Biblioteca.getEspecialistas();
+            List<Especialista> listEsp = BaseDados.getEspecialistas();
 
             if (listEsp.Count >= 1)
             {
@@ -559,14 +562,14 @@ namespace ProjetoTCC
 
                 foreach (Especialista esp in listEsp)
                 {
-                    listEspecialista.Items.Add(esp);                    
+                    listEspecialista.Items.Add(esp);
                 }
 
                 listEspecialista.SelectedIndex = 0;
 
                 long ID = this.sessaoSelecionada != null ? this.sessaoSelecionada.especialista.ID : -1L;
 
-                if(ID > -1)
+                if (ID > -1)
                 {
                     for (int i = 0; i < listEsp.Count; i++)
                     {
@@ -619,10 +622,11 @@ namespace ProjetoTCC
                 this.listCamera.DropDownStyle = ComboBoxStyle.DropDownList;
                 this.listCamera.SelectedValueChanged += ListCamera_SelectedValueChanged;
                 this.listCamera.Size = new Size((listEspecialista.Location.X + listEspecialista.Size.Width) - listCamera.Location.X, listEspecialista.Size.Height);
-                
+
                 updateCameras();
-                
-            } else
+
+            }
+            else
             {
                 Label lbAprLing = new System.Windows.Forms.Label();
                 ComboBox cbAprLing = new ComboBox();
@@ -644,7 +648,7 @@ namespace ProjetoTCC
                 cbAprLing.ItemHeight = 16;
                 cbAprLing.DrawMode = DrawMode.Normal;
                 cbAprLing.Location = new System.Drawing.Point(lbAprLing.Location.X + lbAprLing.Size.Width, lbAprLing.Location.Y - (spacing / 2));
-                cbAprLing.Size = new Size(listEspecialista.Size.Width/2, 20);
+                cbAprLing.Size = new Size(listEspecialista.Size.Width / 2, 20);
                 cbAprLing.Name = "cbAprLing";
                 cbAprLing.DropDownStyle = ComboBoxStyle.DropDownList;
                 populaIdades(cbAprLing);
@@ -702,6 +706,7 @@ namespace ProjetoTCC
                 tbDescricao.ScrollBars = ScrollBars.Both;
                 tbDescricao.TabIndex = 1;
                 tbDescricao.Anchor = anchorEdit;
+                tbDescricao.Text = this.sessaoSelecionada.descricao;
 
                 pnlFields.Controls.Add(lbAprLing);
                 pnlFields.Controls.Add(cbAprLing);
@@ -758,57 +763,42 @@ namespace ProjetoTCC
             }
         }
 
-        private void updateCameras()
-        {
+        private void updateCameras() {
             btStartVideo.Enabled = false;
             enableBtConnectBrain(false);
 
             this.listCamera.Items.Clear();
             FilterInfoCollection VideoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
 
-            if (VideoDevices.Count >= 1)
-            {
-
+            if (VideoDevices.Count >= 1) {
                 int indexCamera = -1;
                 int count = -1;
-                foreach (FilterInfo VideoCaptureDevice in VideoDevices)
-                {
+                foreach (FilterInfo VideoCaptureDevice in VideoDevices) {
                     listCamera.Items.Add(VideoCaptureDevice.Name);
-                    if (VideoCaptureDevice.Name.Equals(Biblioteca.nomeCamera) && indexCamera < 0)
-                    {
+                    if (VideoCaptureDevice.Name.Equals(BaseDados.nomeCamera) && indexCamera < 0) {
                         indexCamera = count;
-                    }
-                    else
-                    {
+                    } else {
                         count++;
                     }
                 }
-                if (indexCamera >= 0)
-                {
+                if (indexCamera >= 0) {
                     listCamera.SelectedIndex = indexCamera;
-                }
-                else
-                {
+                } else {
                     listCamera.SelectedIndex = 0;
                 }
-                if (videoCamera != null)
-                {
+                if (videoCamera != null) {
                     videoCamera.SignalToStop();
-                    while (videoCamera.IsRunning)
-                    {
+                    while (videoCamera.IsRunning) {
                         Thread.Sleep(0500);
                     }
                     videoCamera = null;
                 }
                 iniciaVideo(listCamera.SelectedIndex);
                 btStartVideo.Enabled = true;
-                if (!isBrainReader)
-                {
+                if (!isBrainReader) {
                     enableBtConnectBrain(true);
                 }
-            }
-            else
-            {
+            } else {
                 MessageBox.Show("Nenhuma câmera foi encontrada." +
                     "\nVerifique se há uma câmera conectada e pressione o botão \"Atualizar\"");
             }
@@ -818,7 +808,7 @@ namespace ProjetoTCC
         {
             modo = mod;
 
-            if(modo == 0)
+            if (modo == 0)
             {
                 if (this.dtGrid != null)
                 {
@@ -832,7 +822,8 @@ namespace ProjetoTCC
                 this.nomeCamera = "";
 
                 createGrid();
-            } else //modo == 1
+            }
+            else //modo == 1
             {
                 if (novoRegistro)
                 {
@@ -848,7 +839,7 @@ namespace ProjetoTCC
                 this.pnlArea.Controls.Remove(dtGrid);
                 this.disposeGrid();
 
-                this.nomeCamera = Biblioteca.nomeCamera;
+                this.nomeCamera = BaseDados.nomeCamera;
 
                 createEdit();
             }
@@ -917,7 +908,7 @@ namespace ProjetoTCC
             //etipulando o alinhamneto
             pObsSessao.Alignment = Element.ALIGN_JUSTIFIED; //Alinhamento Justificado
             doc.Add(pObsSessao);
-                        
+
             //criando a variavel para paragrafo
             Paragraph pNivelAtencaoMedia = new Paragraph("Nível médio de atenção: 45 (normal)" +
                 "\n", new iTextSharp.text.Font(iTextSharp.text.Font.NORMAL, 14));
@@ -962,7 +953,7 @@ namespace ProjetoTCC
 
         public void VideoCamera_OnNewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-            if(this.pnlEdit != null)
+            if (this.pnlEdit != null)
             {
                 if (this.novoRegistro)
                 {
@@ -1006,12 +997,12 @@ namespace ProjetoTCC
                         DataWriteFile.Enqueue(frameData);
                     }
                 }
-            }            
+            }
         }
 
         public void writeVideoFile()
         {
-            if(DataWriteFile == null)
+            if (DataWriteFile == null)
             {
                 DataWriteFile = new Queue<object[]>();
             }
@@ -1020,22 +1011,23 @@ namespace ProjetoTCC
                 object[] frameData = null;
                 lock (DataWriteFile)
                 {
-                    if(DataWriteFile.Count > 0)
+                    if (DataWriteFile.Count > 0)
                     {
                         frameData = DataWriteFile.Peek();
                         //[0] -> Bitmap
                         //[1] -> NeuroData
                     }
                 }
-                    if (writer != null && writerOpen && frameData != null)
+                if (writer != null && writerOpen && frameData != null)
+                {
+                    Bitmap frame = (Bitmap)frameData[0];
+                    NeuroData nr = (NeuroData)frameData[1];
+
+                    if (nr.Meditation > 0 || nr.Attention > 0)
                     {
-                        Bitmap frame = (Bitmap)frameData[0];
-                        NeuroData nr = (NeuroData)frameData[1];
+                        frame.SetPixel(0, 0, Color.FromArgb(1, nr.PoorSignal, nr.Meditation, nr.Attention));
 
                         byte[] aux = null;
-
-                        frame.SetPixel(0, 0, Color.FromArgb(nr.PoorSignal, nr.Meditation, nr.Attention, 0));
-
                         aux = BitConverter.GetBytes(nr.Alpha1);
                         frame.SetPixel(1, 0, Color.FromArgb(Convert.ToInt32(aux[0]), Convert.ToInt32(aux[1]), Convert.ToInt32(aux[2]), Convert.ToInt32(aux[3])));
 
@@ -1058,24 +1050,29 @@ namespace ProjetoTCC
                         frame.SetPixel(7, 0, Color.FromArgb(Convert.ToInt32(aux[0]), Convert.ToInt32(aux[1]), Convert.ToInt32(aux[2]), Convert.ToInt32(aux[3])));
 
                         aux = BitConverter.GetBytes(nr.Theta);
-                        frame.SetPixel(8, 0, Color.FromArgb(Convert.ToInt32(aux[0]), Convert.ToInt32(aux[1]), Convert.ToInt32(aux[2]), Convert.ToInt32(aux[3])));
+                        frame.SetPixel(8, 0, Color.FromArgb(Convert.ToInt32(aux[0]), Convert.ToInt32(aux[1]), Convert.ToInt32(aux[2]), Convert.ToInt32(aux[3])));                        
+                    }
+                    else
+                    {
+                        frame.SetPixel(0, 0, Color.FromArgb(255, 255, 255, 255));
+                    }
 
-                        if (writerOpen)
-                        {
-                            writer.WriteVideoFrame(frame);
-                            writer.WriteVideoFrame(frame);
-                            writer.WriteVideoFrame(frame);
-                            writer.WriteVideoFrame(frame);
-                        }
+                    if (writerOpen)
+                    {
+                        writer.WriteVideoFrame(frame);
+                        writer.WriteVideoFrame(frame);
+                        writer.WriteVideoFrame(frame);
+                        writer.WriteVideoFrame(frame);
+                    }
 
-                        lock (DataWriteFile)
-                        {
-                            DataWriteFile.Dequeue();
-                        }
+                    lock (DataWriteFile)
+                    {
+                        DataWriteFile.Dequeue();
+                    }
                 }
             }
         }
-  
+
         public void iniciaVideo(int indexCamera)
         {
             if (videoCamera == null)
@@ -1084,14 +1081,14 @@ namespace ProjetoTCC
                 FilterInfoCollection VideoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
 
                 if (VideoDevices.Count > 0)
-                {                    
+                {
                     if (indexCamera < 0)
                     {
                         indexCamera = 0;
                     }
 
                     videoCamera = new VideoCaptureDevice(VideoDevices[indexCamera].MonikerString);
-                    
+
                     try
                     {
                         videoCamera.NewFrame += new NewFrameEventHandler(VideoCamera_OnNewFrame);
@@ -1105,7 +1102,7 @@ namespace ProjetoTCC
                             "\nSituação técnica:" + ex.Message +
                             "\nOrigem:" + ex.StackTrace.Substring(0, 255), "Aviso");
                         videoCamera = null;
-                    }                    
+                    }
                 }
                 else
                 {
@@ -1126,7 +1123,7 @@ namespace ProjetoTCC
                 bool stopFileWriter = false;
                 lock (DataWriteFile)
                 {
-                    if(DataWriteFile.Count > 0)
+                    if (DataWriteFile.Count > 0)
                     {
                         stopFileWriter = true;
                     }
@@ -1138,7 +1135,8 @@ namespace ProjetoTCC
                         if (DataWriteFile.Count > 0)
                         {
                             stopFileWriter = true;
-                        } else
+                        }
+                        else
                         {
                             stopFileWriter = false;
                         }
@@ -1153,7 +1151,8 @@ namespace ProjetoTCC
                 this.btConnectBrain.Enabled = true;
                 this.btStartVideo.Text = "Iniciar Gravação";
                 this.isVideoRecorded = true;
-            } else
+            }
+            else
             {
                 bool continua = true;
 
@@ -1175,8 +1174,9 @@ namespace ProjetoTCC
 
                 if (continua && !isBrainReader)
                 {
-                    if(DialogResult.No == MessageBox.Show("Não há conexão com o equipamento de leitura de ondas cerebrais." +
-                        "\nDeseja iniciar a gravação mesmo assim?", "Aviso", MessageBoxButtons.YesNo)){
+                    if (DialogResult.No == MessageBox.Show("Não há conexão com o equipamento de leitura de ondas cerebrais." +
+                        "\nDeseja iniciar a gravação mesmo assim?", "Aviso", MessageBoxButtons.YesNo))
+                    {
                         continua = false;
                     }
                 }
@@ -1203,10 +1203,10 @@ namespace ProjetoTCC
                         }
 
                         string destinationfile = caminhoSessao + "\\video_sessao_" + IDSessao + ".avi"; // Output file
-                                                                                                        //                    writer.FrameRate = fps;
+
                         writer.Open(destinationfile, size.Width, size.Height, fps, VideoCodec.MPEG4, 30);
                         writerOpen = true;
-
+                        
                         isRecording = true;
                         NeuroDataVideo = new Queue<NeuroData>();
                         Queue<object[]> DataWriteFile = new Queue<object[]>();
@@ -1220,7 +1220,7 @@ namespace ProjetoTCC
                         this.btConnectBrain.Enabled = false;
                         this.btStartVideo.Text = "Finalizar gravação";
                     }
-                }                
+                }
             }
         }
 
@@ -1229,10 +1229,16 @@ namespace ProjetoTCC
             if (isRecording)
             {
                 ControlPaint.DrawBorder(e.Graphics, ((System.Windows.Forms.PictureBox)sender).ClientRectangle, Color.Red, ButtonBorderStyle.Solid);
-            } else
+            }
+            else
             {
                 ControlPaint.DrawBorder(e.Graphics, ((System.Windows.Forms.PictureBox)sender).ClientRectangle, Color.Black, ButtonBorderStyle.Solid);
             }
+        }
+
+        public void setExcluirSessaoEvent(EventHandler handler)
+        {
+            this.btDel.Click += new System.EventHandler(handler);
         }
 
         public void SelecionaLinha(int index)
@@ -1274,7 +1280,7 @@ namespace ProjetoTCC
 
         public void setConnectBrainEvent(EventHandler handler)
         {
-             ConnectBrainEvent = handler;
+            ConnectBrainEvent = handler;
         }
 
         public void setBtEsqAction(EventHandler handler)
@@ -1286,20 +1292,20 @@ namespace ProjetoTCC
         {
             this.btDir.Click += new System.EventHandler(handler);
         }
-        
+
         public void btEsq_Click()
         {
-            executeBtClick(btEsqState);            
+            executeBtClick(btEsqState);
         }
-        
+
         public void btDir_Click()
         {
             executeBtClick(btDirState);
         }
 
         protected void btDel_Click(object sender, EventArgs e)
-        {            
-            if(videoPlayer != null)
+        {
+            if (videoPlayer != null)
             {
                 videoPlayer.SignalToStop();
             }
@@ -1307,7 +1313,7 @@ namespace ProjetoTCC
             long ID = this.sessaoSelecionada.ID;
             listaSessoes.Remove(listaSessoes.Where(p => p.ID == ID).First());
             gridListaSessoes.Remove(gridListaSessoes.Where(p => p.ID == ID).First());
-            Biblioteca.excluiSessaoSelecionada(ID);
+            BaseDados.excluiSessaoSelecionada(ID);
 
             if (this.gridListaSessoes.Count > 0)
             {
@@ -1319,7 +1325,7 @@ namespace ProjetoTCC
             }
 
             novoRegistro = false;
-            alteraModo(0);            
+            alteraModo(0);
         }
 
         private void executeBtClick(char btState)
@@ -1330,7 +1336,7 @@ namespace ProjetoTCC
                     clickNovo();
                     break;
                 case 'L':
-//                    clickLocaliza();
+                    //                    clickLocaliza();
                     break;
                 case 'V':
                     clickVolta();
@@ -1354,7 +1360,7 @@ namespace ProjetoTCC
         {
             string startFolder = @"MindsEye";
 
-            string caminhoArquivos = Biblioteca.caminhoArquivos;
+            string caminhoArquivos = BaseDados.caminhoArquivos;
 
             if (Directory.Exists(caminhoArquivos))
             {
@@ -1379,7 +1385,7 @@ namespace ProjetoTCC
 
             long IDSessao = Sessao.ProxID();
 
-            if(this.sessaoSelecionada != null)
+            if (this.sessaoSelecionada != null)
             {
                 IDSessao = this.sessaoSelecionada.ID;
             }
@@ -1401,7 +1407,7 @@ namespace ProjetoTCC
 
         protected void clickVolta()
         {
-            if(videoCamera != null)
+            if (videoCamera != null)
             {
                 videoCamera.SignalToStop();
             }
@@ -1420,13 +1426,13 @@ namespace ProjetoTCC
 
             if (material.Trim().Length < 1)
             {
-                MessageBox.Show("O material da sessao não pode ser vazio!");
+                MessageBox.Show("O material da sessão não pode ser vazio!");
                 salva = false;
             }
 
             DateTime dataSessao = ((DateTimePicker)(pnlEdit.Controls.Find("dtpDataSessao", true)[0])).Value;
 
-            Especialista esp = (Especialista) listEspecialista.SelectedItem;
+            Especialista esp = (Especialista)listEspecialista.SelectedItem;
 
             if (salva)
             {
@@ -1438,8 +1444,8 @@ namespace ProjetoTCC
                     IdadeAprendizagem idadeAprLog = (IdadeAprendizagem)((ComboBox)pnlEdit.Controls.Find("cbAprLog", true)[0]).SelectedIndex + 1;
                     IdadeAprendizagem idadeAprMat = (IdadeAprendizagem)((ComboBox)pnlEdit.Controls.Find("cbAprMat", true)[0]).SelectedIndex + 1;
 
-                    bool ieVerificado = false;
-                    //                    bool ieVerificado = ((CheckBox)(pnlEdit.Controls.Find("cbVerificado", true)[0])).Checked;
+                    
+                    bool ieVerificado = this.sessaoSelecionada.ieVerificado;
 
                     if (!ieVerificado)
                     {
@@ -1456,10 +1462,10 @@ namespace ProjetoTCC
                     gridListaSessoes.Where(p => p.ID == ID).First().updateValues(esp, dataSessao, this.sessaoSelecionada.nomeVideo, material,
                         descricao, idadeAprLing, idadeAprLog, idadeAprMat, ieVerificado);
 
-                    Biblioteca.updateSessaoSelecionada(ID, esp, dataSessao, this.sessaoSelecionada.nomeVideo, material,
+                    BaseDados.updateSessaoSelecionada(ID, esp, dataSessao, this.sessaoSelecionada.nomeVideo, material,
                         descricao, idadeAprLing, idadeAprLog, idadeAprMat, ieVerificado);
 
-//                    MessageBox.Show("Sessao Atualizada com sucesso!");
+                    //                    MessageBox.Show("Sessao Atualizada com sucesso!");
                 }
                 else
                 {
@@ -1505,12 +1511,10 @@ namespace ProjetoTCC
 
                     string caminhoVideo = "video_sessao_" + Sessao.ProxID() + ".avi"; // Output file
 
-                    Paciente pac = Biblioteca.getPacientes().Where(p => p.ID == this.IDPaciente).First();
-                    Sessao ses = new Sessao(pac, esp, dataSessao, caminhoVideo, material, 
+                    Paciente pac = BaseDados.getPacientes().Where(p => p.ID == this.IDPaciente).First();
+                    Sessao ses = new Sessao(pac, esp, dataSessao, caminhoVideo, material,
                         "", IdadeAprendizagem.Ano1, IdadeAprendizagem.Ano1, IdadeAprendizagem.Ano1, false);
-                    this.addSessao(ses);
-
-                    MessageBox.Show("Sessao Salva com sucesso!");
+                    this.addSessao(ses);                    
                 }
 
                 novoRegistro = false;
@@ -1570,10 +1574,10 @@ namespace ProjetoTCC
                     }
                 }
                 writerOpen = false;
-                writer.Close();                
+                writer.Close();
             }
 
-            if(this.videoCamera != null && this.videoCamera.IsRunning)
+            if (this.videoCamera != null && this.videoCamera.IsRunning)
             {
                 this.videoCamera.SignalToStop();
             }
@@ -1582,7 +1586,7 @@ namespace ProjetoTCC
             {
                 thWriteVideoFile.Join();
             }
-            
+
             if (this.dtGrid != null)
             {
                 disposeGrid();
@@ -1596,7 +1600,7 @@ namespace ProjetoTCC
 
         private void addSessao(Sessao ses)
         {
-            Biblioteca.addSessao(ses);
+            BaseDados.addSessao(ses);
 
             this.listaSessoes.Add(ses);
             this.gridListaSessoes = this.listaSessoes.OrderBy(s => s.dataSessao).ToList();
@@ -1627,24 +1631,25 @@ namespace ProjetoTCC
 
         public Bitmap getCurrentVideoFrame()
         {
-                if (this.videoPlayer != null && isVideoPlayerCreated())
+            if (this.videoPlayer != null)
+            {
+                try
                 {
-                    try
-                    {
-                        Bitmap bitmap = VideoPlayerCopyFrame();
+                    Bitmap bitmap = VideoPlayerCopyFrame();
 
-                        return bitmap;                        
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.Message);
-                        return null;
-                    }
-                } else
+                    return bitmap;
+                }
+                catch (Exception ex)
                 {
+                    Debug.WriteLine(ex.Message);
                     return null;
                 }
-            
+            }
+            else
+            {
+                return null;
+            }
+
         }
 
         delegate void VoidDelegate();
@@ -1677,7 +1682,8 @@ namespace ProjetoTCC
                 {
                     this.Invoke(del, new object[] { });
                 }
-            } else
+            }
+            else
             {
                 // take picture BEFORE saveFileDialog pops up!!
                 Bitmap bitmap = new Bitmap(this.videoPlayer.Width, this.videoPlayer.Height);

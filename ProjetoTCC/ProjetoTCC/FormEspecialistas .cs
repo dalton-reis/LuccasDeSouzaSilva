@@ -17,8 +17,14 @@ namespace ProjetoTCC
             this.pnlEspecialista.Location = new Point(0, 0);
             this.pnlEspecialista.Size = new Size((int)(this.ClientSize.Width), this.ClientSize.Height);
 
-            Biblioteca.updateEspecialistas();
-            pnlEspecialista.iniPainelEspecialista(Biblioteca.getEspecialistas());
+            BaseDados.updateEspecialistas();
+            pnlEspecialista.iniPainelEspecialista(BaseDados.getEspecialistas());
+
+            this.MaximumSize = this.Size;
+            this.MinimumSize = this.Size;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
         }
     }
 }

@@ -82,8 +82,8 @@ namespace ProjetoTCC
             this.material = titulo;
             this.descricao = descricao;
             this.idadeAprLing = idadeAprLing;
-            this.idadeAprLog = idadeAprLing;
-            this.idadeAprMat = idadeAprLing;
+            this.idadeAprLog = idadeAprLog;
+            this.idadeAprMat = idadeAprMat;
             this.ieVerificado = ieVerificado;
         }
 
@@ -107,8 +107,8 @@ namespace ProjetoTCC
             this.material = titulo;
             this.descricao = descricao;
             this.idadeAprLing = idadeAprLing;
-            this.idadeAprLog = idadeAprLing;
-            this.idadeAprMat = idadeAprLing;
+            this.idadeAprLog = idadeAprLog;
+            this.idadeAprMat = idadeAprMat;
             this.ieVerificado = ieVerificado;
         }
 
