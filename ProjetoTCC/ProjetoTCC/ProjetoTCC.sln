@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2043
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetoTCC", "ProjetoTCC\ProjetoTCC.csproj", "{1BAEAB4B-57B9-475B-98D0-C675DCEB6DCB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1BAEAB4B-57B9-475B-98D0-C675DCEB6DCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BAEAB4B-57B9-475B-98D0-C675DCEB6DCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BAEAB4B-57B9-475B-98D0-C675DCEB6DCB}.Debug|x86.ActiveCfg = Debug|x86
+		{1BAEAB4B-57B9-475B-98D0-C675DCEB6DCB}.Debug|x86.Build.0 = Debug|x86
+		{1BAEAB4B-57B9-475B-98D0-C675DCEB6DCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BAEAB4B-57B9-475B-98D0-C675DCEB6DCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BAEAB4B-57B9-475B-98D0-C675DCEB6DCB}.Release|x86.ActiveCfg = Release|x86
+		{1BAEAB4B-57B9-475B-98D0-C675DCEB6DCB}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {06E42A3F-1642-476A-8987-6AF6C63C8D1E}
+	EndGlobalSection
+EndGlobal

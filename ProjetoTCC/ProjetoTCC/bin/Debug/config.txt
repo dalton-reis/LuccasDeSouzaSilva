@@ -1,8 +1,0 @@
-{
-[caminhoArquivos]:[C:\Users\Luccas\Desktop];
-[nomeEstab]:[];
-[enderecoEstab]:[];
-[foneEstab]:[];
-[nomeCamera]:[Integrated Webcam];
-[caminhoLogo]:[C:\Users\Luccas\Pictures\BnS\Screenshot_160129_000.jpg]
-}
